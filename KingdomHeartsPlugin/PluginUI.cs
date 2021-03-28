@@ -4,6 +4,7 @@ using Dalamud.Game.ClientState.Actors.Types;
 using Dalamud.Plugin;
 using ImGuiNET;
 using KingdomHeartsPlugin.HealthBar;
+using KingdomHeartsPlugin.Utilities;
 
 namespace KingdomHeartsPlugin
 {
@@ -39,6 +40,7 @@ namespace KingdomHeartsPlugin
         public void Dispose()
         {
             _healthFrame?.Dispose();
+            ImageDrawing.Dispose();
         }
 
         public void OnUpdate(DalamudPluginInterface pi)

@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Numerics;
+using System.Threading.Tasks;
+using Dalamud.Data.LuminaExtensions;
+using Dalamud.Plugin;
 using ImGuiNET;
 using ImGuiScene;
 
@@ -8,6 +12,7 @@ namespace KingdomHeartsPlugin.Utilities
     internal static class ImageDrawing
     {
 
+        private static readonly Dictionary<ushort, TextureWrap> IconTextures = new Dictionary<ushort, TextureWrap>();
         private static Vector2 ImRotate(Vector2 v, float cos_a, float sin_a)
         {
             return new Vector2(v.X * cos_a - v.Y * sin_a, v.X * sin_a + v.Y * cos_a);
@@ -51,6 +56,54 @@ namespace KingdomHeartsPlugin.Utilities
 
             d.AddImage(image.ImGuiHandle, finalPosition, finalPosition + size, finalPosition + new Vector2(imageArea.X / imageWidth, imageArea.Y / imageHeight), finalPosition + new Vector2((imageArea.X + imageArea.Z) / imageWidth,
                 (imageArea.Y + imageArea.W) / imageHeight), color);
+        }
+
+
+
+        internal static void DrawIcon(DalamudPluginInterface pi, ImDrawListPtr d, ushort icon, Vector2 size, Vector2 position)
+        {
+            if (icon < 65000 && icon > 62000)
+            {
+                if (IconTextures.ContainsKey(icon))
+                {
+                    var tex = IconTextures[icon];
+                    if (tex != null && tex.ImGuiHandle != IntPtr.Zero)
+                    {
+                        DrawImage(d, IconTextures[icon], size, position, new Vector4(0, 0, IconTextures[icon].Width, IconTextures[icon].Height));
+                    }
+                }
+                else
+                {
+
+                    IconTextures[icon] = null;
+
+                    Task.Run(() => {
+                        try
+                        {
+                            var iconTex = pi.Data.GetIcon(icon);
+                            var tex = pi.UiBuilder.LoadImageRaw(iconTex.GetRgbaImageData(), iconTex.Header.Width, iconTex.Header.Height, 4);
+                            if (tex != null && tex.ImGuiHandle != IntPtr.Zero)
+                            {
+                                IconTextures[icon] = tex;
+                            }
+                        }
+                        catch
+                        {
+                            // Ignore
+                        }
+                    });
+                }
+            }
+        }
+
+        public static void Dispose()
+        {
+            foreach (var tex in IconTextures)
+            {
+                tex.Value?.Dispose();
+            }
+
+            IconTextures.Clear();
         }
     }
 }

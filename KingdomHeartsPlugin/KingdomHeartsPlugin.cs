@@ -3,14 +3,15 @@ using System.Reflection;
 using Dalamud.Game.Command;
 using Dalamud.Game.Internal;
 using Dalamud.Plugin;
+using KingdomHeartsPlugin.Utilities;
 
 namespace KingdomHeartsPlugin
 {
     public class KingdomHeartsPlugin : IDalamudPlugin
     {
-        public string Name => "Sample Plugin";
+        public string Name => "Kingdom Hearts UI Plugin";
 
-        private const string commandName = "/xlkhb";
+        private const string commandName = "/khb";
 
         public DalamudPluginInterface Pi;
         private Configuration _configuration;
