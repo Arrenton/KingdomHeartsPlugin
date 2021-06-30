@@ -69,7 +69,8 @@ namespace KingdomHeartsPlugin.Utilities
                     var tex = IconTextures[icon];
                     if (tex != null && tex.ImGuiHandle != IntPtr.Zero)
                     {
-                        DrawImage(d, IconTextures[icon], size, position, new Vector4(0, 0, IconTextures[icon].Width, IconTextures[icon].Height));
+                        var iconSize = new Vector2(IconTextures[icon].Width, IconTextures[icon].Height) * size;
+                        DrawImage(d, IconTextures[icon], iconSize, position - new Vector2((int)Math.Floor(iconSize.X / 2f), (int)Math.Floor(iconSize.Y / 2f)), new Vector4(0, 0, IconTextures[icon].Width, IconTextures[icon].Height));
                     }
                 }
                 else

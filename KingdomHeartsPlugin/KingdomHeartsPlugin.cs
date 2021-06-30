@@ -47,6 +47,8 @@ namespace KingdomHeartsPlugin
             Pi.CommandManager.RemoveHandler(commandName);
 
             Pi.Framework.OnUpdateEvent -= OnUpdate;
+            
+            Pi.UiBuilder.OnBuildUi -= DrawUI;
 
             Pi?.Dispose();
         }

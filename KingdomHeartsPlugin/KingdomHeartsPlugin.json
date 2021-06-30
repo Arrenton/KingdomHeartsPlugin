@@ -2,10 +2,10 @@
   "Author": "Gotest",
   "Name": "Kingdom Hearts UI Bars",
   "Description": "A plugin that makes Kingdom Hearts UI stuff, such as a health bar for the player.",
-  "InternalName": "samplePlugin",
+  "InternalName": "KingdomHeartsPlugin",
   "AssemblyVersion": "1.0.0.0",
   "RepoUrl": "https://github.com/yourName/yourRepo",
   "ApplicableVersion": "any",
-  "Tags": ["health", "ui", "kh"],
-  "DalamudApiLevel": 2
+  "Tags": ["health", "ui", "kh", "Kingdom Hearts"],
+  "DalamudApiLevel": 3
 }

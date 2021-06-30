@@ -1,5 +1,8 @@
 ﻿using System;
+using System.IO;
 using System.Numerics;
+using System.Reflection;
+using Dalamud.Game.ClientState.Actors;
 using Dalamud.Game.ClientState.Actors.Types;
 using Dalamud.Plugin;
 using ImGuiNET;
@@ -66,6 +69,7 @@ namespace KingdomHeartsPlugin
             {
                 return;
             }
+
 
             ImGuiWindowFlags window_flags = 0;
             window_flags |= ImGuiWindowFlags.NoTitleBar;
@@ -152,11 +156,126 @@ namespace KingdomHeartsPlugin
                     }
 
                     var minLength = Configuration.MinimumHpForLength;
-                    if (ImGui.InputInt("HP for minimum total length", ref minLength, 5, 50))
+                    if (ImGui.InputInt("HP for minimum length", ref minLength, 5, 50))
                     {
                         Configuration.MinimumHpForLength = minLength;
                         if (Configuration.MinimumHpForLength < 1)
                             Configuration.MinimumHpForLength = 1;
+                    }
+
+                    var truncate = Configuration.TruncateHp;
+                    if (ImGui.Checkbox("Truncate HP Text Value", ref truncate))
+                    {
+                        Configuration.TruncateHp = truncate;
+                    }
+                    if (ImGui.IsItemHovered())
+                    {
+                        Vector2 m = ImGui.GetIO().MousePos;
+                        ImGui.SetNextWindowPos(new Vector2(m.X + 20, m.Y + 20));
+                        ImGui.Begin("TT1", ImGuiWindowFlags.Tooltip | ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoTitleBar);
+                        ImGui.Text("Truncate HP value over 10000 to 10.0K and 100000 to 100K");
+                        ImGui.End();
+                    }
+
+                    ImGui.EndTabItem();
+                }
+
+                if (ImGui.BeginTabItem("MP/GP/CP"))
+                {
+                    ImGui.Text("MP");
+                    ImGui.Separator();
+                    var mpPerPixel = Configuration.MpPerPixelLength;
+                    if (ImGui.InputFloat("MP per pixel for bar length", ref mpPerPixel, 0.1f, 0.5f, "%f"))
+                    {
+                        Configuration.MpPerPixelLength = mpPerPixel;
+                        if (Configuration.MpPerPixelLength < 0.0001f)
+                            Configuration.MpPerPixelLength = 0.0001f;
+                    }
+
+                    var maximumMpLength = Configuration.MaximumMpLength;
+                    if (ImGui.InputInt("MP for maximum length", ref maximumMpLength, 1, 25))
+                    {
+                        Configuration.MaximumMpLength = maximumMpLength;
+                        if (Configuration.MaximumMpLength < 1)
+                            Configuration.MaximumMpLength = 1;
+                    }
+
+                    var minimumMpLength = Configuration.MinimumMpLength;
+                    if (ImGui.InputInt("MP for minimum length", ref minimumMpLength, 1, 25))
+                    {
+                        Configuration.MinimumMpLength = minimumMpLength;
+                        if (Configuration.MinimumMpLength < 1)
+                            Configuration.MinimumMpLength = 1;
+                    }
+
+                    var truncate = Configuration.TruncateMp;
+                    if (ImGui.Checkbox("Truncate MP Value", ref truncate))
+                    {
+                        Configuration.TruncateMp = truncate;
+                    }
+                    if (ImGui.IsItemHovered())
+                    {
+                        Vector2 m = ImGui.GetIO().MousePos;
+                        ImGui.SetNextWindowPos(new Vector2(m.X + 20, m.Y + 20));
+                        ImGui.Begin("TT1", ImGuiWindowFlags.Tooltip | ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoTitleBar);
+                        ImGui.Text("Truncate MP from 10000 to 100.");
+                        ImGui.End();
+                    }
+
+                    ImGui.NewLine();
+                    ImGui.Text("GP");
+                    ImGui.Separator();
+
+                    var gpPerPixel = Configuration.GpPerPixelLength;
+                    if (ImGui.InputFloat("GP per pixel for bar length", ref gpPerPixel, 0.1f, 0.5f, "%f"))
+                    {
+                        Configuration.GpPerPixelLength = gpPerPixel;
+                        if (Configuration.GpPerPixelLength < 0.0001f)
+                            Configuration.GpPerPixelLength = 0.0001f;
+                    }
+
+                    var maximumGpLength = Configuration.MaximumGpLength;
+                    if (ImGui.InputInt("GP for maximum length", ref maximumGpLength, 1, 25))
+                    {
+                        Configuration.MaximumGpLength = maximumGpLength;
+                        if (Configuration.MaximumGpLength < 1)
+                            Configuration.MaximumGpLength = 1;
+                    }
+
+                    var minimumGpLength = Configuration.MinimumGpLength;
+                    if (ImGui.InputInt("GP for minimum length", ref minimumGpLength, 1, 25))
+                    {
+                        Configuration.MinimumGpLength = minimumGpLength;
+                        if (Configuration.MinimumGpLength < 1)
+                            Configuration.MinimumGpLength = 1;
+                    }
+
+                    ImGui.NewLine();
+                    ImGui.Text("CP");
+                    ImGui.Separator();
+
+                    var cpPerPixel = Configuration.CpPerPixelLength;
+                    if (ImGui.InputFloat("CP per pixel for bar length", ref cpPerPixel, 0.1f, 0.5f, "%f"))
+                    {
+                        Configuration.CpPerPixelLength = cpPerPixel;
+                        if (Configuration.CpPerPixelLength < 0.0001f)
+                            Configuration.CpPerPixelLength = 0.0001f;
+                    }
+
+                    var maximumCpLength = Configuration.MaximumCpLength;
+                    if (ImGui.InputInt("CP for maximum length", ref maximumCpLength, 1, 25))
+                    {
+                        Configuration.MaximumCpLength = maximumCpLength;
+                        if (Configuration.MaximumCpLength < 1)
+                            Configuration.MaximumCpLength = 1;
+                    }
+
+                    var minimumCpLength = Configuration.MinimumCpLength;
+                    if (ImGui.InputInt("CP for minimum length", ref minimumCpLength, 1, 25))
+                    {
+                        Configuration.MinimumCpLength = minimumCpLength;
+                        if (Configuration.MinimumCpLength < 1)
+                            Configuration.MinimumCpLength = 1;
                     }
 
                     ImGui.EndTabItem();
