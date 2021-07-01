@@ -4,7 +4,7 @@
   "Description": "A plugin that makes Kingdom Hearts UI stuff, such as a health bar for the player.",
   "InternalName": "KingdomHeartsPlugin",
   "AssemblyVersion": "1.0.0.0",
-  "RepoUrl": "https://github.com/yourName/yourRepo",
+  "RepoUrl": "https://github.com/Arrenton/KingdomHeartsPlugin",
   "ApplicableVersion": "any",
   "Tags": ["health", "ui", "kh", "Kingdom Hearts"],
   "DalamudApiLevel": 3
