@@ -127,7 +127,7 @@ namespace KingdomHeartsPlugin.HealthBar
             string hpVal = (Ui.Configuration.TruncateHp && player.CurrentHp >= 10000)
                 ? player.CurrentHp >= 100000 ? $"{hp:0}K" : $"{hp:0.#}K"
                 : $"{hp}";
-            ImGuiAdditions.TextCenteredShadowed(hpVal, 1.25f, new Vector2(-196, 128), new Vector4(255 / 255f, 255 / 255f, 255 / 255f, 1f), new Vector4(0 / 255f, 0 / 255f, 0 / 255f, 0.25f), 3);
+            ImGuiAdditions.TextCenteredShadowed(hpVal, 1.25f * Ui.Configuration.Scale, new Vector2(-196 + 22 * (Ui.Configuration.Scale - 1), 128 * Ui.Configuration.Scale), new Vector4(255 / 255f, 255 / 255f, 255 / 255f, 1f), new Vector4(0 / 255f, 0 / 255f, 0 / 255f, 0.25f), 3);
             
             Timer.Restart();
         }
@@ -286,7 +286,7 @@ namespace KingdomHeartsPlugin.HealthBar
         {
             int size = (int)Math.Ceiling(256 * Ui.Configuration.Scale);
             int rest = Marshal.ReadInt32(_expAddonPtr + 0x280);
-            var drawPosition = ImGui.GetItemRectMin() + new Vector2(0, (int)HealthY);
+            var drawPosition = ImGui.GetItemRectMin() + new Vector2(0, (int)(HealthY * Ui.Configuration.Scale));
 
             ExperienceRingBg.Draw(drawList, 1, drawPosition, 4, Ui.Configuration.Scale);
 
@@ -301,10 +301,10 @@ namespace KingdomHeartsPlugin.HealthBar
             drawList.PopClipRect();
 
 
-            int iconSize = 3;
-            ImageDrawing.DrawIcon(Pi, drawList, (ushort)(62000 + Pi.ClientState.LocalPlayer.ClassJob.Id), new Vector2(iconSize, iconSize), new Vector2((int)(size / 2f), (int)(size / 2f + 18)) + new Vector2(0, (int)HealthY));
+            float iconSize = 3f * Ui.Configuration.Scale;
+            ImageDrawing.DrawIcon(Pi, drawList, (ushort)(62000 + Pi.ClientState.LocalPlayer.ClassJob.Id), new Vector2(iconSize, iconSize), new Vector2((int)(size / 2f), (int)(size / 2f + 18 * Ui.Configuration.Scale)) + new Vector2(0, (int)(HealthY * Ui.Configuration.Scale)));
 
-            ImGuiAdditions.TextShadowedDrawList(drawList, 32f, $"Lv{Pi.ClientState.LocalPlayer.Level}", drawPosition + new Vector2(size / 2 - 26, size / 2 - 52), new Vector4(249 / 255f, 247 / 255f, 232 / 255f, 0.9f), new Vector4(96 / 255f, 78 / 255f, 23 / 255f, 0.25f), 3);
+            ImGuiAdditions.TextShadowedDrawList(drawList, 32f * Ui.Configuration.Scale, $"Lv{Pi.ClientState.LocalPlayer.Level}", drawPosition + new Vector2(size / 2f - 26 * Ui.Configuration.Scale, size / 2f - 52 * Ui.Configuration.Scale), new Vector4(249 / 255f, 247 / 255f, 232 / 255f, 0.9f), new Vector4(96 / 255f, 78 / 255f, 23 / 255f, 0.25f), 3);
         }
 
         private void DrawHealth(ImDrawListPtr drawList, int hp, int maxHp)
@@ -318,22 +318,22 @@ namespace KingdomHeartsPlugin.HealthBar
             var drawPosition = ImGui.GetItemRectMin();
             var maxHealthPercent = maxHp / (float)Ui.Configuration.HpForFullRing * HpLengthMultiplier;
 
-            DrawRingEdgesAndTrack(drawList, maxHealthPercent, drawPosition + new Vector2(0, (int)HealthY));
+            DrawRingEdgesAndTrack(drawList, maxHealthPercent, drawPosition + new Vector2(0, (int)(HealthY * Ui.Configuration.Scale)));
 
-            HealthRingBg.Draw(drawList, maxHealthPercent, drawPosition + new Vector2(0, (int)HealthY), 3, Ui.Configuration.Scale);
+            HealthRingBg.Draw(drawList, maxHealthPercent, drawPosition + new Vector2(0, (int)(HealthY * Ui.Configuration.Scale)), 3, Ui.Configuration.Scale);
 
             if (DamagedHealthAlpha > 0)
             {
                 HealthLostRing.Alpha = DamagedHealthAlpha;
-                HealthLostRing.Draw(drawList, HpBeforeDamaged / (float) Ui.Configuration.HpForFullRing * HpLengthMultiplier, drawPosition + new Vector2(0, (int)HealthY), 3, Ui.Configuration.Scale);
+                HealthLostRing.Draw(drawList, HpBeforeDamaged / (float) Ui.Configuration.HpForFullRing * HpLengthMultiplier, drawPosition + new Vector2(0, (int)(HealthY * Ui.Configuration.Scale)), 3, Ui.Configuration.Scale);
             }
 
             if (HpTemp < hp)
-                HealthRestoredRing.Draw(drawList, hp / (float)Ui.Configuration.HpForFullRing * HpLengthMultiplier, drawPosition + new Vector2(0, (int)HealthY), 3, Ui.Configuration.Scale);
+                HealthRestoredRing.Draw(drawList, hp / (float)Ui.Configuration.HpForFullRing * HpLengthMultiplier, drawPosition + new Vector2(0, (int)(HealthY * Ui.Configuration.Scale)), 3, Ui.Configuration.Scale);
 
-            HealthRing.Draw(drawList, HpTemp / Ui.Configuration.HpForFullRing * HpLengthMultiplier, drawPosition + new Vector2(0, (int)HealthY), 3, Ui.Configuration.Scale);
+            HealthRing.Draw(drawList, HpTemp / Ui.Configuration.HpForFullRing * HpLengthMultiplier, drawPosition + new Vector2(0, (int)(HealthY * Ui.Configuration.Scale)), 3, Ui.Configuration.Scale);
 
-            RingOutline.Draw(drawList, maxHealthPercent, drawPosition + new Vector2(0, (int)HealthY), 3, Ui.Configuration.Scale);
+            RingOutline.Draw(drawList, maxHealthPercent, drawPosition + new Vector2(0, (int)(HealthY * Ui.Configuration.Scale)), 3, Ui.Configuration.Scale);
 
             DrawLongHealthBar(drawList, drawPosition, hp, maxHp);
 
@@ -372,20 +372,20 @@ namespace KingdomHeartsPlugin.HealthBar
 
             var lengthMultiplier = valMax < minLength ? minLength / (float)valMax : valMax > maxLength ? (float)maxLength / valMax : 1f;
             var drawPosition = ImGui.GetItemRectMin();
-            var barHeight = 20f;
-            var outlineHeight = 30f;
-            var barMaxLength = (int) Math.Ceiling(valMax / lengthRate * lengthMultiplier);
-            var barLength = (int) Math.Ceiling(val / lengthRate * lengthMultiplier);
+            var barHeight = 20f * Ui.Configuration.Scale;
+            var outlineHeight = 30 * Ui.Configuration.Scale;
+            var barMaxLength = (int) Math.Ceiling(valMax / lengthRate * lengthMultiplier * Ui.Configuration.Scale);
+            var barLength = (int) Math.Ceiling(val / lengthRate * lengthMultiplier * Ui.Configuration.Scale);
 
             var outlineSize = new Vector2(barMaxLength, outlineHeight);
-            var edgeSize = new Vector2(5, 30);
-            var edgeOffset = new Vector2(-barMaxLength - 5, 0);
-            var barOffset = new Vector2(40, 205);
-            var outlineOffset = new Vector2(40, 200);
-            var baseSize = new Vector2(73, 30);
+            var edgeSize = new Vector2((int) Math.Ceiling(5 * Ui.Configuration.Scale), (int) Math.Ceiling(30 * Ui.Configuration.Scale));
+            var edgeOffset = new Vector2((int) Math.Ceiling(-barMaxLength - 5 * Ui.Configuration.Scale), 0);
+            var barOffset = new Vector2((int) Math.Ceiling(40 * Ui.Configuration.Scale), (int) Math.Ceiling(205 * Ui.Configuration.Scale));
+            var outlineOffset = new Vector2((int) Math.Ceiling(40 * Ui.Configuration.Scale), (int) Math.Ceiling(200 * Ui.Configuration.Scale));
+            var baseSize = new Vector2((int) Math.Ceiling(73 * Ui.Configuration.Scale), (int) Math.Ceiling(30 * Ui.Configuration.Scale));
 
             ImageDrawing.DrawImage(drawList, BarTextures, baseSize, outlineOffset, new Vector4(1, 44, 73, 30));
-            ImageDrawing.DrawImage(drawList, BarTextures, -edgeSize, outlineOffset + baseSize + new Vector2(5, 0), new Vector4(23, 1, 5, 30f));
+            ImageDrawing.DrawImage(drawList, BarTextures, -edgeSize, outlineOffset + baseSize + new Vector2((int) Math.Ceiling(5 * Ui.Configuration.Scale), 0), new Vector4(23, 1, 5, 30f));
 
             drawList.PushClipRect(drawPosition + outlineOffset + edgeOffset, drawPosition + outlineOffset + edgeOffset + edgeSize);
             ImageDrawing.DrawImage(drawList, BarTextures, edgeSize, outlineOffset + edgeOffset, new Vector4(23, 1, 5, 30f));
@@ -402,10 +402,10 @@ namespace KingdomHeartsPlugin.HealthBar
 
             if (barLength > 0)
             {
-                DrawBar(drawList, drawPosition, barOffset, new Vector2(barLength, barHeight), new Vector4(34, 6, 1, 20f));
+                DrawBar(drawList, drawPosition, barOffset, new Vector2(barLength, barHeight), new Vector4(34, 6, 1, 20f));                
             }
 
-            ImGuiAdditions.TextShadowedDrawList(drawList, 24f, $"{val}", drawPosition + outlineOffset - new Vector2(32, 16), new Vector4(255 / 255f, 255 / 255f, 255 / 255f, 1f), new Vector4(0 / 255f, 0 / 255f, 0 / 255f, 0.25f), 3);
+            ImGuiAdditions.TextShadowedDrawList(drawList, 24f * Ui.Configuration.Scale, $"{val}", drawPosition + outlineOffset - new Vector2(32 * Ui.Configuration.Scale, 16 * Ui.Configuration.Scale), new Vector4(255 / 255f, 255 / 255f, 255 / 255f, 1f), new Vector4(0 / 255f, 0 / 255f, 0 / 255f, 0.25f), 3);
         }
 
         private void DrawLongHealthBar(ImDrawListPtr drawList, Vector2 position, int hp, int maxHp)
@@ -419,8 +419,8 @@ namespace KingdomHeartsPlugin.HealthBar
             var outlineSize = new Vector2(maxHealthLength, outlineHeight);
             var edgeSize = new Vector2(5, 42);
             var maxHealthSize = new Vector2(maxHealthLength, barHeight);
-            var barOffset = new Vector2(128, 216) + new Vector2(0, (int)HealthY);
-            var outlineOffset = new Vector2(128, 213) + new Vector2(0, (int)HealthY);
+            var barOffset = new Vector2(128, 216) + new Vector2(0, (int)(HealthY * Ui.Configuration.Scale));
+            var outlineOffset = new Vector2(128, 213) + new Vector2(0, (int)(HealthY * Ui.Configuration.Scale));
 
 
             if (maxHealthLength > 0)
@@ -462,12 +462,12 @@ namespace KingdomHeartsPlugin.HealthBar
 
         private void DrawRingEdgesAndTrack(ImDrawListPtr drawList, float percent, Vector2 position)
         {
-            var size = 256;
+            var size = 256 * Ui.Configuration.Scale;
 
             drawList.PushClipRect(position, position + new Vector2(size, size));
             drawList.AddImage(RingTrackTexture.ImGuiHandle, position, position + new Vector2(size, size));
             drawList.AddImage(RingBaseTexture.ImGuiHandle, position, position + new Vector2(size, size));
-            ImageDrawing.ImageRotated(drawList, RingEndTexture.ImGuiHandle, new Vector2(position.X + size / 2f, position.Y + size / 2f), new Vector2(RingEndTexture.Width, RingEndTexture.Height), Math.Min(percent, 1) * 0.75f * (float)Math.PI * 2);
+            ImageDrawing.ImageRotated(drawList, RingEndTexture.ImGuiHandle, new Vector2(position.X + size / 2f, position.Y + size / 2f), new Vector2(RingEndTexture.Width * Ui.Configuration.Scale, RingEndTexture.Height * Ui.Configuration.Scale), Math.Min(percent, 1) * 0.75f * (float)Math.PI * 2);
             drawList.PopClipRect();
         }
 
