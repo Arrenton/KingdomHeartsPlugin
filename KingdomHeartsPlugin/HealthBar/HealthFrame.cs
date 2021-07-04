@@ -37,7 +37,7 @@ namespace KingdomHeartsPlugin.HealthBar
             HealthVerticalSpeed = 0f;
             Timer = Stopwatch.StartNew();
             _expAddonPtr = Pi.Framework.Gui.GetUiObjectByName("_Exp", 1);
-            var imagesPath = "" + Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            var imagesPath = KingdomHeartsPlugin.TemplateLocation;
             HealthRingSegmentTexture = pi.UiBuilder.LoadImage(Path.Combine(imagesPath, @"Textures\ring_health_segment.png"));
             RingValueSegmentTexture = pi.UiBuilder.LoadImage(Path.Combine(imagesPath, @"Textures\ring_value_segment.png"));
             RingOutlineTexture = pi.UiBuilder.LoadImage(Path.Combine(imagesPath, @"Textures\ring_outline_segment.png"));
@@ -410,17 +410,17 @@ namespace KingdomHeartsPlugin.HealthBar
 
         private void DrawLongHealthBar(ImDrawListPtr drawList, Vector2 position, int hp, int maxHp)
         {
-            var barHeight = 37f;
-            var outlineHeight = 42f;
-            var healthLength = (int)Math.Ceiling((HpTemp * HpLengthMultiplier - Ui.Configuration.HpForFullRing) / Ui.Configuration.HpPerPixelLongBar);
-            var damagedHealthLength = (int)Math.Ceiling((HpBeforeDamaged * HpLengthMultiplier - Ui.Configuration.HpForFullRing) / Ui.Configuration.HpPerPixelLongBar);
-            var restoredHealthLength = (int)Math.Ceiling((hp * HpLengthMultiplier - Ui.Configuration.HpForFullRing) / Ui.Configuration.HpPerPixelLongBar);
-            var maxHealthLength = (int)Math.Ceiling((maxHp * HpLengthMultiplier - Ui.Configuration.HpForFullRing) / Ui.Configuration.HpPerPixelLongBar);
+            var barHeight = (int)Math.Ceiling(37f * Ui.Configuration.Scale);
+            var outlineHeight = (int)Math.Ceiling(42f * Ui.Configuration.Scale);
+            var healthLength = (int)Math.Ceiling((HpTemp * HpLengthMultiplier - Ui.Configuration.HpForFullRing) / Ui.Configuration.HpPerPixelLongBar * Ui.Configuration.Scale);
+            var damagedHealthLength = (int)Math.Ceiling((HpBeforeDamaged * HpLengthMultiplier - Ui.Configuration.HpForFullRing) / Ui.Configuration.HpPerPixelLongBar * Ui.Configuration.Scale);
+            var restoredHealthLength = (int)Math.Ceiling((hp * HpLengthMultiplier - Ui.Configuration.HpForFullRing) / Ui.Configuration.HpPerPixelLongBar * Ui.Configuration.Scale);
+            var maxHealthLength = (int)Math.Ceiling((maxHp * HpLengthMultiplier - Ui.Configuration.HpForFullRing) / Ui.Configuration.HpPerPixelLongBar * Ui.Configuration.Scale);
             var outlineSize = new Vector2(maxHealthLength, outlineHeight);
-            var edgeSize = new Vector2(5, 42);
+            var edgeSize = new Vector2((int)Math.Ceiling(5 * Ui.Configuration.Scale), (int)Math.Ceiling(42 * Ui.Configuration.Scale));
             var maxHealthSize = new Vector2(maxHealthLength, barHeight);
-            var barOffset = new Vector2(128, 216) + new Vector2(0, (int)(HealthY * Ui.Configuration.Scale));
-            var outlineOffset = new Vector2(128, 213) + new Vector2(0, (int)(HealthY * Ui.Configuration.Scale));
+            var barOffset = new Vector2((int)Math.Ceiling(128 * Ui.Configuration.Scale), (int)Math.Ceiling(216 * Ui.Configuration.Scale)) + new Vector2(0, (int)(HealthY * Ui.Configuration.Scale));
+            var outlineOffset = new Vector2((int)Math.Ceiling(128 * Ui.Configuration.Scale), (int)Math.Ceiling(213 * Ui.Configuration.Scale)) + new Vector2(0, (int)(HealthY * Ui.Configuration.Scale));
 
 
             if (maxHealthLength > 0)
@@ -446,7 +446,7 @@ namespace KingdomHeartsPlugin.HealthBar
             if (maxHealthLength > 0)
             {
                 DrawBar(drawList, position, outlineOffset, outlineSize, new Vector4(2, 1, 1, 42f));
-                var edgeOffset = new Vector2(-maxHealthLength - 5, 0);
+                var edgeOffset = new Vector2(-maxHealthLength - (int)Math.Ceiling(5 * Ui.Configuration.Scale), 0);
                 drawList.PushClipRect(position + outlineOffset + edgeOffset, position + outlineOffset + edgeOffset + edgeSize);
                 ImageDrawing.DrawImage(drawList, BarTextures, edgeSize, outlineOffset + edgeOffset, new Vector4(17, 1, 5, 42f));
                 drawList.PopClipRect();

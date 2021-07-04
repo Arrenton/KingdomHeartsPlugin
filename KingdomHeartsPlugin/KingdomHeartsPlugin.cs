@@ -12,17 +12,23 @@ namespace KingdomHeartsPlugin
         public string Name => "Kingdom Hearts UI Plugin";
 
         private const string commandName = "/khb";
+        
+        // When loaded by LivePluginLoader, the executing assembly will be wrong.
+        // Supplying this property allows LivePluginLoader to supply the correct location, so that
+        // you have full compatibility when loaded normally and through LPL.
+        public string AssemblyLocation { get => assemblyLocation; set => assemblyLocation = value; }
+        private string assemblyLocation = System.Reflection.Assembly.GetExecutingAssembly().Location;
 
         public DalamudPluginInterface Pi;
         private Configuration _configuration;
         private PluginUI _ui;
-        public string TemplateLocation;
+        public static string TemplateLocation;
 
         public void Initialize(DalamudPluginInterface pluginInterface)
         {
             Pi = pluginInterface;
 
-            TemplateLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            TemplateLocation = Path.GetDirectoryName(assemblyLocation);
             
             _configuration = Pi.GetPluginConfig() as Configuration ?? new Configuration();
             _configuration.Initialize(Pi);

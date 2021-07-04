@@ -4,6 +4,7 @@ using System.Numerics;
 using System.Reflection;
 using Dalamud.Game.ClientState.Actors;
 using Dalamud.Game.ClientState.Actors.Types;
+using Dalamud.Interface;
 using Dalamud.Plugin;
 using ImGuiNET;
 using KingdomHeartsPlugin.HealthBar;
@@ -85,6 +86,7 @@ namespace KingdomHeartsPlugin
 
             var size = new Vector2(320, 180);
             ImGui.SetNextWindowSize(size, ImGuiCond.FirstUseEver);
+            ImGuiHelpers.ForceNextWindowMainViewport();
             ImGui.SetNextWindowSizeConstraints(size, new Vector2(float.MaxValue, float.MaxValue));
             
             if (ImGui.Begin("KH Frame", ref this.visible, window_flags))
