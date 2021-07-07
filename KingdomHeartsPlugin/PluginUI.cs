@@ -178,12 +178,23 @@ namespace KingdomHeartsPlugin
                         ImGui.Text("Truncate HP value over 10000 to 10.0K and 100000 to 100K");
                         ImGui.End();
                     }
+                    
+                    var showHpVal = Configuration.ShowHpVal;
+                    if (ImGui.Checkbox("Show HP Value", ref showHpVal))
+                    {
+                        Configuration.ShowHpVal = showHpVal;
+                    }
 
                     ImGui.EndTabItem();
                 }
 
                 if (ImGui.BeginTabItem("MP/GP/CP"))
                 {
+                    var showVal = Configuration.ShowResourceVal;
+                    if (ImGui.Checkbox("Show Resource Value", ref showVal))
+                    {
+                        Configuration.ShowResourceVal = showVal;
+                    }
                     ImGui.Text("MP");
                     ImGui.Separator();
                     var mpPerPixel = Configuration.MpPerPixelLength;

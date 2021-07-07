@@ -38,6 +38,10 @@ namespace KingdomHeartsPlugin
         public bool TruncateMp { get; set; } = true;
 
         public bool TruncateHp { get; set; } = true;
+        
+        public bool ShowHpVal { get; set; } = true;
+        
+        public bool ShowResourceVal { get; set; } = true;
 
         public bool Locked { get; set; } = false;
 

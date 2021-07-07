@@ -121,14 +121,22 @@ namespace KingdomHeartsPlugin.HealthBar
                 DrawParameterResourceBar(drawList, ParameterType.Gp, player.CurrentGp, player.MaxGp);
             }
 
-            // Draw HP Value
-            ImGui.SameLine(0, 0);
-            float hp = (Ui.Configuration.TruncateHp && player.CurrentHp >= 10000) ? player.CurrentHp / 1000f : player.CurrentHp;
-            string hpVal = (Ui.Configuration.TruncateHp && player.CurrentHp >= 10000)
-                ? player.CurrentHp >= 100000 ? $"{hp:0}K" : $"{hp:0.#}K"
-                : $"{hp}";
-            ImGuiAdditions.TextCenteredShadowed(hpVal, 1.25f * Ui.Configuration.Scale, new Vector2(-196 + 22 * (Ui.Configuration.Scale - 1), 128 * Ui.Configuration.Scale), new Vector4(255 / 255f, 255 / 255f, 255 / 255f, 1f), new Vector4(0 / 255f, 0 / 255f, 0 / 255f, 0.25f), 3);
-            
+            if (Ui.Configuration.ShowHpVal)
+            {
+                // Draw HP Value
+                ImGui.SameLine(0, 0);
+                float hp = (Ui.Configuration.TruncateHp && player.CurrentHp >= 10000)
+                    ? player.CurrentHp / 1000f
+                    : player.CurrentHp;
+                string hpVal = (Ui.Configuration.TruncateHp && player.CurrentHp >= 10000)
+                    ? player.CurrentHp >= 100000 ? $"{hp:0}K" : $"{hp:0.#}K"
+                    : $"{hp}";
+                ImGuiAdditions.TextCenteredShadowed(hpVal, 1.25f * Ui.Configuration.Scale,
+                    new Vector2(-196 + 22 * (Ui.Configuration.Scale - 1), 128 * Ui.Configuration.Scale),
+                    new Vector4(255 / 255f, 255 / 255f, 255 / 255f, 1f),
+                    new Vector4(0 / 255f, 0 / 255f, 0 / 255f, 0.25f), 3);
+            }
+
             Timer.Restart();
         }
 
@@ -405,7 +413,8 @@ namespace KingdomHeartsPlugin.HealthBar
                 DrawBar(drawList, drawPosition, barOffset, new Vector2(barLength, barHeight), new Vector4(34, 6, 1, 20f));                
             }
 
-            ImGuiAdditions.TextShadowedDrawList(drawList, 24f * Ui.Configuration.Scale, $"{val}", drawPosition + outlineOffset - new Vector2(32 * Ui.Configuration.Scale, 16 * Ui.Configuration.Scale), new Vector4(255 / 255f, 255 / 255f, 255 / 255f, 1f), new Vector4(0 / 255f, 0 / 255f, 0 / 255f, 0.25f), 3);
+            if (Ui.Configuration.ShowResourceVal)
+                ImGuiAdditions.TextShadowedDrawList(drawList, 24f * Ui.Configuration.Scale, $"{val}", drawPosition + outlineOffset - new Vector2(32 * Ui.Configuration.Scale, 16 * Ui.Configuration.Scale), new Vector4(255 / 255f, 255 / 255f, 255 / 255f, 1f), new Vector4(0 / 255f, 0 / 255f, 0 / 255f, 0.25f), 3);
         }
 
         private void DrawLongHealthBar(ImDrawListPtr drawList, Vector2 position, int hp, int maxHp)
