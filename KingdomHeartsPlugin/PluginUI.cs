@@ -185,6 +185,20 @@ namespace KingdomHeartsPlugin
                         Configuration.ShowHpVal = showHpVal;
                     }
 
+                    var showHpRecovery = Configuration.ShowHpRecovery;
+                    if (ImGui.Checkbox("Show HP Recovery", ref showHpRecovery))
+                    {
+                        Configuration.ShowHpRecovery = showHpRecovery;
+                    }
+                    if (ImGui.IsItemHovered())
+                    {
+                        Vector2 m = ImGui.GetIO().MousePos;
+                        ImGui.SetNextWindowPos(new Vector2(m.X + 20, m.Y + 20));
+                        ImGui.Begin("TT2", ImGuiWindowFlags.Tooltip | ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoTitleBar);
+                        ImGui.Text("Shows a blue bar for when HP is recovered then gradually fills the green bar.");
+                        ImGui.End();
+                    }
+
                     ImGui.EndTabItem();
                 }
 

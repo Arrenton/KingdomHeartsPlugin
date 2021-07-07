@@ -336,10 +336,17 @@ namespace KingdomHeartsPlugin.HealthBar
                 HealthLostRing.Draw(drawList, HpBeforeDamaged / (float) Ui.Configuration.HpForFullRing * HpLengthMultiplier, drawPosition + new Vector2(0, (int)(HealthY * Ui.Configuration.Scale)), 3, Ui.Configuration.Scale);
             }
 
-            if (HpTemp < hp)
-                HealthRestoredRing.Draw(drawList, hp / (float)Ui.Configuration.HpForFullRing * HpLengthMultiplier, drawPosition + new Vector2(0, (int)(HealthY * Ui.Configuration.Scale)), 3, Ui.Configuration.Scale);
+            if (Ui.Configuration.ShowHpRecovery)
+            {
+                if (HpTemp < hp)
+                    HealthRestoredRing.Draw(drawList, hp / (float) Ui.Configuration.HpForFullRing * HpLengthMultiplier, drawPosition + new Vector2(0, (int) (HealthY * Ui.Configuration.Scale)), 3, Ui.Configuration.Scale);
 
-            HealthRing.Draw(drawList, HpTemp / Ui.Configuration.HpForFullRing * HpLengthMultiplier, drawPosition + new Vector2(0, (int)(HealthY * Ui.Configuration.Scale)), 3, Ui.Configuration.Scale);
+                HealthRing.Draw(drawList, HpTemp / Ui.Configuration.HpForFullRing * HpLengthMultiplier, drawPosition + new Vector2(0, (int) (HealthY * Ui.Configuration.Scale)), 3, Ui.Configuration.Scale);
+            }
+            else
+            {
+                HealthRing.Draw(drawList, hp / (float)Ui.Configuration.HpForFullRing * HpLengthMultiplier, drawPosition + new Vector2(0, (int) (HealthY * Ui.Configuration.Scale)), 3, Ui.Configuration.Scale);
+            }
 
             RingOutline.Draw(drawList, maxHealthPercent, drawPosition + new Vector2(0, (int)(HealthY * Ui.Configuration.Scale)), 3, Ui.Configuration.Scale);
 
