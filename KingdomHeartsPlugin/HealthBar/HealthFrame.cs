@@ -428,9 +428,9 @@ namespace KingdomHeartsPlugin.HealthBar
         {
             var barHeight = (int)Math.Ceiling(37f * Ui.Configuration.Scale);
             var outlineHeight = (int)Math.Ceiling(42f * Ui.Configuration.Scale);
-            var healthLength = (int)Math.Ceiling((HpTemp * HpLengthMultiplier - Ui.Configuration.HpForFullRing) / Ui.Configuration.HpPerPixelLongBar * Ui.Configuration.Scale);
+            var healthLength = (int)Math.Ceiling(((Ui.Configuration.ShowHpRecovery ? HpTemp : hp) * HpLengthMultiplier - Ui.Configuration.HpForFullRing) / Ui.Configuration.HpPerPixelLongBar * Ui.Configuration.Scale);
             var damagedHealthLength = (int)Math.Ceiling((HpBeforeDamaged * HpLengthMultiplier - Ui.Configuration.HpForFullRing) / Ui.Configuration.HpPerPixelLongBar * Ui.Configuration.Scale);
-            var restoredHealthLength = (int)Math.Ceiling((hp * HpLengthMultiplier - Ui.Configuration.HpForFullRing) / Ui.Configuration.HpPerPixelLongBar * Ui.Configuration.Scale);
+            var restoredHealthLength = (int)Math.Ceiling(((Ui.Configuration.ShowHpRecovery ? hp : 0) * HpLengthMultiplier - Ui.Configuration.HpForFullRing) / Ui.Configuration.HpPerPixelLongBar * Ui.Configuration.Scale);
             var maxHealthLength = (int)Math.Ceiling((maxHp * HpLengthMultiplier - Ui.Configuration.HpForFullRing) / Ui.Configuration.HpPerPixelLongBar * Ui.Configuration.Scale);
             var outlineSize = new Vector2(maxHealthLength, outlineHeight);
             var edgeSize = new Vector2((int)Math.Ceiling(5 * Ui.Configuration.Scale), (int)Math.Ceiling(42 * Ui.Configuration.Scale));
