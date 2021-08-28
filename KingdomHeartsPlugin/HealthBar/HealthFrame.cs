@@ -321,7 +321,7 @@ namespace KingdomHeartsPlugin.HealthBar
                 ?
                 Ui.Configuration.MinimumHpForLength / (float) maxHp
                 : maxHp > Ui.Configuration.MaximumHpForMaximumLength
-                    ? maxHp / (float) Ui.Configuration.MaximumHpForMaximumLength
+                    ? (float)Ui.Configuration.MaximumHpForMaximumLength / maxHp 
                     : 1f;
             var drawPosition = ImGui.GetItemRectMin();
             var maxHealthPercent = maxHp / (float)Ui.Configuration.HpForFullRing * HpLengthMultiplier;
