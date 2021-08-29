@@ -194,7 +194,7 @@ namespace KingdomHeartsPlugin.HealthBar
 
         private void UpdateHealth(PlayerCharacter player)
         {
-            if (LastHp > player.CurrentHp)
+            if (LastHp > player.CurrentHp && LastHp <= player.MaxHp)
                 DamagedHealth(LastHp);
             if (LastHp < player.CurrentHp)
                 RestoredHealth(LastHp);
@@ -202,6 +202,9 @@ namespace KingdomHeartsPlugin.HealthBar
             UpdateDamagedHealth();
 
             UpdateRestoredHealth(player.CurrentHp);
+
+            if (HpBeforeDamaged > player.MaxHp)
+                HpBeforeDamaged = player.MaxHp;
 
             LastHp = player.CurrentHp;
         }
