@@ -1,14 +1,11 @@
-﻿using System;
-using System.IO;
-using System.Numerics;
-using System.Reflection;
-using Dalamud.Game.ClientState.Actors;
-using Dalamud.Game.ClientState.Actors.Types;
-using Dalamud.Interface;
+﻿using Dalamud.Interface;
 using Dalamud.Plugin;
 using ImGuiNET;
 using KingdomHeartsPlugin.HealthBar;
 using KingdomHeartsPlugin.Utilities;
+using System;
+using System.Numerics;
+using Dalamud.Game.ClientState.Objects.SubKinds;
 
 namespace KingdomHeartsPlugin
 {
@@ -38,7 +35,7 @@ namespace KingdomHeartsPlugin
         public PluginUI(Configuration configuration, DalamudPluginInterface pluginInterface)
         {
             this.Configuration = configuration;
-            _healthFrame = new HealthFrame(pluginInterface, this);
+            _healthFrame = new HealthFrame();
         }
 
         public void Dispose()

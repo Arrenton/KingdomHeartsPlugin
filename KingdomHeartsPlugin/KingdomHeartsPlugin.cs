@@ -1,67 +1,89 @@
-﻿using System.IO;
-using System.Reflection;
-using Dalamud.Game.Command;
-using Dalamud.Game.Internal;
+﻿using Dalamud.Game.Command;
 using Dalamud.Plugin;
-using KingdomHeartsPlugin.Utilities;
+using System.IO;
+using System.Reflection;
+using Dalamud.Data;
+using Dalamud.Game;
+using Dalamud.Game.ClientState;
+using Dalamud.Game.Gui;
+using Dalamud.IoC;
 
 namespace KingdomHeartsPlugin
 {
-    public class KingdomHeartsPlugin : IDalamudPlugin
+    public sealed class KingdomHeartsPlugin : IDalamudPlugin
     {
         public string Name => "Kingdom Hearts UI Plugin";
 
-        private const string commandName = "/khb";
+        private const string CommandName = "/khp";
         
         // When loaded by LivePluginLoader, the executing assembly will be wrong.
         // Supplying this property allows LivePluginLoader to supply the correct location, so that
         // you have full compatibility when loaded normally and through LPL.
-        public string AssemblyLocation { get => assemblyLocation; set => assemblyLocation = value; }
-        private string assemblyLocation = System.Reflection.Assembly.GetExecutingAssembly().Location;
+        //public string AssemblyLocation { get => assemblyLocation; set => assemblyLocation = value; }
+        //private string assemblyLocation = System.Reflection.Assembly.GetExecutingAssembly().Location;
+        private string assemblyLocation = Assembly.GetExecutingAssembly().Location;
 
-        public DalamudPluginInterface Pi;
-        private Configuration _configuration;
-        private PluginUI _ui;
+        public static DalamudPluginInterface Pi { get; private set; }
+        public static Framework Fw { get; private set; }
+        public static CommandManager Cm { get; private set; }
+        public static ClientState Cs { get; private set; }
+        public static GameGui Gui { get; private set; }
+        public static DataManager Dm { get; private set; }
+
+        public static PluginUI Ui { get; private set; }
+
         public static string TemplateLocation;
 
-        public void Initialize(DalamudPluginInterface pluginInterface)
+        public KingdomHeartsPlugin(
+            [RequiredVersion("1.0")] DalamudPluginInterface pluginInterface,
+            [RequiredVersion("1.0")] Framework framework,
+            [RequiredVersion("1.0")] CommandManager commandManager,
+            [RequiredVersion("1.0")] ClientState clientState,
+            [RequiredVersion("1.0")] GameGui gameGui,
+            [RequiredVersion("1.0")] DataManager dataManager)
         {
             Pi = pluginInterface;
+            Fw = framework;
+            Cm = commandManager;
+            Cs = clientState;
+            Gui = gameGui;
+            Dm = dataManager;
 
             TemplateLocation = Path.GetDirectoryName(assemblyLocation);
             
-            _configuration = Pi.GetPluginConfig() as Configuration ?? new Configuration();
-            _configuration.Initialize(Pi);
+            var configuration = Pi.GetPluginConfig() as Configuration ?? new Configuration();
+            configuration.Initialize(Pi);
 
-            Pi.Framework.OnUpdateEvent += OnUpdate;
+            Ui = new PluginUI(configuration, Pi);
 
-            _ui = new PluginUI(_configuration, pluginInterface);
+            Fw.Update += OnUpdate;
 
-            Pi.CommandManager.AddHandler(commandName, new CommandInfo(OnCommand)
+
+            Cm.AddHandler(CommandName, new CommandInfo(OnCommand)
             {
                 HelpMessage = "Opens configuration for Kingdom Hearts UI Bars."
             });
 
-            Pi.UiBuilder.OnBuildUi += DrawUI;
-            Pi.UiBuilder.OnOpenConfigUi += (sender, args) => DrawConfigUi();
+            Pi.UiBuilder.Draw += DrawUi;
+            Pi.UiBuilder.OpenConfigUi += DrawConfigUi;
         }
 
         public void Dispose()
         {
-            _ui?.Dispose();
+            Ui?.Dispose();
 
-            Pi.CommandManager.RemoveHandler(commandName);
+            Cm.RemoveHandler(CommandName);
 
-            Pi.Framework.OnUpdateEvent -= OnUpdate;
+            Fw.Update -= OnUpdate;
             
-            Pi.UiBuilder.OnBuildUi -= DrawUI;
+            Pi.UiBuilder.Draw -= DrawUi;
 
             Pi?.Dispose();
         }
 
         private void OnUpdate(Framework framework)
         {
-            _ui.OnUpdate(Pi);
+            Ui.OnUpdate(Pi);
         }
 
         private void OnCommand(string command, string args)
@@ -69,14 +91,14 @@ namespace KingdomHeartsPlugin
             DrawConfigUi();
         }
 
-        private void DrawUI()
+        private void DrawUi()
         {
-            _ui.Draw(Pi.ClientState.LocalPlayer);
+            Ui.Draw(Cs.LocalPlayer);
         }
 
         private void DrawConfigUi()
         {
-            _ui.SettingsVisible = true;
+            Ui.SettingsVisible = true;
         }
     }
 }

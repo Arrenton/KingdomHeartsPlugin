@@ -1,11 +1,11 @@
-﻿using System;
+﻿using Dalamud.Plugin;
+using ImGuiNET;
+using ImGuiScene;
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Threading.Tasks;
-using Dalamud.Data.LuminaExtensions;
-using Dalamud.Plugin;
-using ImGuiNET;
-using ImGuiScene;
+using Dalamud.Utility;
 
 namespace KingdomHeartsPlugin.Utilities
 {
@@ -60,40 +60,39 @@ namespace KingdomHeartsPlugin.Utilities
 
 
 
-        internal static void DrawIcon(DalamudPluginInterface pi, ImDrawListPtr d, ushort icon, Vector2 size, Vector2 position)
+        internal static void DrawIcon(ImDrawListPtr d, ushort icon, Vector2 size, Vector2 position)
         {
-            if (icon < 65000 && icon > 62000)
+            if (icon is >= 65000 or <= 62000) return;
+
+            if (IconTextures.ContainsKey(icon))
             {
-                if (IconTextures.ContainsKey(icon))
+                var tex = IconTextures[icon];
+                if (tex != null && tex.ImGuiHandle != IntPtr.Zero)
                 {
-                    var tex = IconTextures[icon];
-                    if (tex != null && tex.ImGuiHandle != IntPtr.Zero)
+                    var iconSize = new Vector2(IconTextures[icon].Width, IconTextures[icon].Height) * size;
+                    DrawImage(d, IconTextures[icon], iconSize, position - new Vector2((int)Math.Floor(iconSize.X / 2f), (int)Math.Floor(iconSize.Y / 2f)), new Vector4(0, 0, IconTextures[icon].Width, IconTextures[icon].Height));
+                }
+            }
+            else
+            {
+
+                IconTextures[icon] = null;
+
+                Task.Run(() => {
+                    try
                     {
-                        var iconSize = new Vector2(IconTextures[icon].Width, IconTextures[icon].Height) * size;
-                        DrawImage(d, IconTextures[icon], iconSize, position - new Vector2((int)Math.Floor(iconSize.X / 2f), (int)Math.Floor(iconSize.Y / 2f)), new Vector4(0, 0, IconTextures[icon].Width, IconTextures[icon].Height));
+                        var iconTex = KingdomHeartsPlugin.Dm.GetIcon(icon);
+                        var tex = KingdomHeartsPlugin.Pi.UiBuilder.LoadImageRaw(iconTex.GetRgbaImageData(), iconTex.Header.Width, iconTex.Header.Height, 4);
+                        if (tex != null && tex.ImGuiHandle != IntPtr.Zero)
+                        {
+                            IconTextures[icon] = tex;
+                        }
                     }
-                }
-                else
-                {
-
-                    IconTextures[icon] = null;
-
-                    Task.Run(() => {
-                        try
-                        {
-                            var iconTex = pi.Data.GetIcon(icon);
-                            var tex = pi.UiBuilder.LoadImageRaw(iconTex.GetRgbaImageData(), iconTex.Header.Width, iconTex.Header.Height, 4);
-                            if (tex != null && tex.ImGuiHandle != IntPtr.Zero)
-                            {
-                                IconTextures[icon] = tex;
-                            }
-                        }
-                        catch
-                        {
-                            // Ignore
-                        }
-                    });
-                }
+                    catch
+                    {
+                        // Ignore
+                    }
+                });
             }
         }
 
