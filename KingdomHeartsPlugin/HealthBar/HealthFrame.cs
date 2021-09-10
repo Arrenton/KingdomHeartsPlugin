@@ -17,6 +17,7 @@ namespace KingdomHeartsPlugin.HealthBar
     class HealthFrame : IDisposable
     {
         private float _verticalAnimationTicks;
+        private readonly Vector3 _bgColor;
         private IntPtr _expAddonPtr;
 
         private enum ParameterType
@@ -31,6 +32,9 @@ namespace KingdomHeartsPlugin.HealthBar
             HealthY = 0;
             _verticalAnimationTicks = 0;
             HealthVerticalSpeed = 0f;
+            LowHealthAlpha = 0;
+            LowHealthAlphaDirection = 0;
+            _bgColor = new Vector3(0.07843f, 0.07843f, 0.0745f);
             Timer = Stopwatch.StartNew();
             var imagesPath = KingdomHeartsPlugin.TemplateLocation;
             HealthRingSegmentTexture = KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(imagesPath, @"Textures\ring_health_segment.png"));
@@ -42,7 +46,7 @@ namespace KingdomHeartsPlugin.HealthBar
             RingExperienceTexture = KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(imagesPath, @"Textures\ring_experience_segment.png"));
             RingExperienceBgTexture = KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(imagesPath, @"Textures\ring_experience_outline.png"));
             BarTextures = KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(imagesPath, @"Textures\bar_textures.png"));
-            HealthRingBg = new Ring(RingValueSegmentTexture, 0.07843f, 0.07843f, 0.0745f);
+            HealthRingBg = new Ring(RingValueSegmentTexture, _bgColor.X, _bgColor.Y, _bgColor.Z);
             HealthLostRing = new Ring(RingValueSegmentTexture, 1, 0, 0);
             RingOutline = new Ring(RingOutlineTexture);
             ExperienceRing = new Ring(RingExperienceTexture);
@@ -194,6 +198,8 @@ namespace KingdomHeartsPlugin.HealthBar
                 DamagedHealth(LastHp);
             if (LastHp < player.CurrentHp)
                 RestoredHealth(LastHp);
+
+            UpdateLowHealth(player.CurrentHp, player.MaxHp);
             
             UpdateDamagedHealth();
 
@@ -289,6 +295,29 @@ namespace KingdomHeartsPlugin.HealthBar
             }
         }
 
+        private void UpdateLowHealth(uint health, uint maxHealth)
+        {
+            if (!(health <= maxHealth * (KingdomHeartsPlugin.Ui.Configuration.LowHpPercent / 100f)) &&
+                !(LowHealthAlpha > 0)) return;
+
+            if (LowHealthAlphaDirection == 0)
+            {
+                LowHealthAlpha += 1.6f * UiSpeed;
+
+                if (LowHealthAlpha >= .4)
+                    LowHealthAlphaDirection = 1;
+            }
+            else
+            {
+                LowHealthAlpha -= 1.6f * UiSpeed;
+
+                if (LowHealthAlpha <= 0)
+                    LowHealthAlphaDirection = 0;
+            }
+
+            HealthRingBg.Color = ColorAddons.Interpolate(_bgColor, new Vector3(1, 0, 0), LowHealthAlpha);
+        }
+
         private void DrawExperience(ImDrawListPtr drawList, int experience, int maxExp)
         {
             int size = (int)Math.Ceiling(256 * KingdomHeartsPlugin.Ui.Configuration.Scale);
@@ -361,8 +390,6 @@ namespace KingdomHeartsPlugin.HealthBar
             RingOutline.Draw(drawList, maxHealthPercent, drawPosition + new Vector2(0, (int)(HealthY * KingdomHeartsPlugin.Ui.Configuration.Scale)), 3, KingdomHeartsPlugin.Ui.Configuration.Scale);
 
             DrawLongHealthBar(drawList, drawPosition, hp, maxHp);
-
-            //ImGuiAdditions.TextShadowedDrawList(drawList, 24f, 1, $"{hp}", drawPosition + new Vector2(0, 128), new Vector4(255 / 255f, 255 / 255f, 255 / 255f, 1f), new Vector4(0 / 255f, 0 / 255f, 0 / 255f, 0.25f), 3);
         }
 
         private void DrawParameterResourceBar(ImDrawListPtr drawList, ParameterType type, uint val, uint valMax)
@@ -451,7 +478,8 @@ namespace KingdomHeartsPlugin.HealthBar
 
             if (maxHealthLength > 0)
             {
-                DrawBar(drawList, position, barOffset, maxHealthSize, new Vector4(10, 1, 1, 37f), ImGui.GetColorU32(new Vector4(0.07843f, 0.07843f, 0.0745f, 1)));
+                Vector3 lowHealthColor = ColorAddons.Interpolate(_bgColor, new Vector3(1, 0, 0), LowHealthAlpha);
+                DrawBar(drawList, position, barOffset, maxHealthSize, new Vector4(10, 1, 1, 37f), ImGui.GetColorU32(new Vector4(lowHealthColor.X, lowHealthColor.Y, lowHealthColor.Z, 1)));
             }
 
             if (damagedHealthLength > 0)
@@ -537,6 +565,8 @@ namespace KingdomHeartsPlugin.HealthBar
 
         // Alpha Channels
         private float DamagedHealthAlpha { get; set; }
+        private float LowHealthAlpha { get; set; }
+        private int LowHealthAlphaDirection { get; set; }
 
         // Timers
         private float HealthRestoreTime { get; set; }

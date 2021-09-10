@@ -162,6 +162,12 @@ namespace KingdomHeartsPlugin
                             Configuration.MinimumHpForLength = 1;
                     }
 
+                    var lowHpPercent = Configuration.LowHpPercent;
+                    if (ImGui.SliderFloat("Percent To Trigger Low HP", ref lowHpPercent, 0, 100))
+                    {
+                        Configuration.LowHpPercent = lowHpPercent;
+                    }
+
                     var truncate = Configuration.TruncateHp;
                     if (ImGui.Checkbox("Truncate HP Text Value", ref truncate))
                     {

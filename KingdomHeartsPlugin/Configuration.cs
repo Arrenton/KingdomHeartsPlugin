@@ -17,13 +17,15 @@ namespace KingdomHeartsPlugin
 
         public float HpPerPixelLongBar { get; set; } = 10;
 
-        public float MpPerPixelLength { get; set; } = 22.5f;
-        
+        public float LowHpPercent { get; set; } = 25f;
+
         public bool ShowHpRecovery { get; set; } = true;
 
         public int MaximumMpLength { get; set; } = 11500;
 
         public int MinimumMpLength { get; set; } = 500;
+
+        public float MpPerPixelLength { get; set; } = 22.5f;
 
         public float GpPerPixelLength { get; set; } = 1.76f;
 
