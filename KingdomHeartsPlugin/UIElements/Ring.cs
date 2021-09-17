@@ -4,7 +4,7 @@ using ImGuiNET;
 using ImGuiScene;
 using KingdomHeartsPlugin.Utilities;
 
-namespace KingdomHeartsPlugin.HealthBar
+namespace KingdomHeartsPlugin.UIElements
 {
     internal class Ring : IDisposable
     {

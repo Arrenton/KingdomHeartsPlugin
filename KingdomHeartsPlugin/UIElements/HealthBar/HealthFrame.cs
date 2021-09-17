@@ -1,23 +1,21 @@
-﻿using Dalamud.Plugin;
-using ImGuiNET;
-using ImGuiScene;
-using KingdomHeartsPlugin.Utilities;
-using System;
-using System.Diagnostics;
+﻿using System;
 using System.IO;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using Dalamud.Game.ClientState.Objects.SubKinds;
-using FFXIVClientStructs.Attributes;
-using FFXIVClientStructs.FFXIV.Client.UI;
 using FFXIVClientStructs.FFXIV.Component.GUI;
+using ImGuiNET;
+using ImGuiScene;
+using KingdomHeartsPlugin.UIElements.LimitBreak;
+using KingdomHeartsPlugin.Utilities;
 
-namespace KingdomHeartsPlugin.HealthBar
+namespace KingdomHeartsPlugin.UIElements.HealthBar
 {
     class HealthFrame : IDisposable
     {
         private float _verticalAnimationTicks;
         private readonly Vector3 _bgColor;
+        private readonly LimitGauge _limitGauge;
         private IntPtr _expAddonPtr;
 
         private enum ParameterType
@@ -35,7 +33,6 @@ namespace KingdomHeartsPlugin.HealthBar
             LowHealthAlpha = 0;
             LowHealthAlphaDirection = 0;
             _bgColor = new Vector3(0.07843f, 0.07843f, 0.0745f);
-            Timer = Stopwatch.StartNew();
             var imagesPath = KingdomHeartsPlugin.TemplateLocation;
             HealthRingSegmentTexture = KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(imagesPath, @"Textures\ring_health_segment.png"));
             RingValueSegmentTexture = KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(imagesPath, @"Textures\ring_value_segment.png"));
@@ -55,11 +52,13 @@ namespace KingdomHeartsPlugin.HealthBar
             ExperienceRingBg = new Ring(RingExperienceTexture, 0.07843f, 0.07843f, 0.0745f) {Flip = true};
             HealthRing = new Ring(HealthRingSegmentTexture);
             HealthRestoredRing = new Ring(HealthRingSegmentTexture) {Flip = true};
+            _limitGauge = new LimitGauge();
         }
 
-        public unsafe void Draw(PlayerCharacter player)
+        public unsafe void Draw()
         {
-            var parameterWidget = ((AtkUnitBase*) KingdomHeartsPlugin.Gui.GetAddonByName("_ParameterWidget", 1));
+            var player = KingdomHeartsPlugin.Cs.LocalPlayer;
+            var parameterWidget = (AtkUnitBase*) KingdomHeartsPlugin.Gui.GetAddonByName("_ParameterWidget", 1);
             _expAddonPtr = KingdomHeartsPlugin.Gui.GetAddonByName("_Exp", 1);
 
             if (parameterWidget != null)
@@ -67,7 +66,6 @@ namespace KingdomHeartsPlugin.HealthBar
                 // Do not do or draw anything if the parameter widget is not visible
                 if (!parameterWidget->IsVisible)
                 {
-                    Timer.Restart();
                     return;
                 }
             }
@@ -75,13 +73,13 @@ namespace KingdomHeartsPlugin.HealthBar
             // Do not do or draw anything if player is null or game ui is hidden
             if (player is null || KingdomHeartsPlugin.Gui.GameUiHidden)
             {
-                Timer.Restart();
                 return;
             }
 
             var drawList = ImGui.GetWindowDrawList();
 
-            UiSpeed = Timer.ElapsedMilliseconds / 1000f;
+            if (ImGui.GetDrawListSharedData() == IntPtr.Zero) return;
+
 
             UpdateHealth(player);
             
@@ -121,14 +119,16 @@ namespace KingdomHeartsPlugin.HealthBar
                 DrawParameterResourceBar(drawList, ParameterType.Gp, player.CurrentGp, player.MaxGp);
             }
 
+            _limitGauge.Draw();
+
             if (KingdomHeartsPlugin.Ui.Configuration.ShowHpVal)
             {
                 // Draw HP Value
                 ImGui.SameLine(0, 0);
-                float hp = (KingdomHeartsPlugin.Ui.Configuration.TruncateHp && player.CurrentHp >= 10000)
+                float hp = KingdomHeartsPlugin.Ui.Configuration.TruncateHp && player.CurrentHp >= 10000
                     ? player.CurrentHp / 1000f
                     : player.CurrentHp;
-                string hpVal = (KingdomHeartsPlugin.Ui.Configuration.TruncateHp && player.CurrentHp >= 10000)
+                string hpVal = KingdomHeartsPlugin.Ui.Configuration.TruncateHp && player.CurrentHp >= 10000
                     ? player.CurrentHp >= 100000 ? $"{hp:0}K" : $"{hp:0.#}K"
                     : $"{hp}";
                 ImGuiAdditions.TextCenteredShadowed(hpVal, 1.25f * KingdomHeartsPlugin.Ui.Configuration.Scale,
@@ -136,9 +136,8 @@ namespace KingdomHeartsPlugin.HealthBar
                     new Vector4(255 / 255f, 255 / 255f, 255 / 255f, 1f),
                     new Vector4(0 / 255f, 0 / 255f, 0 / 255f, 0.25f), 3);
             }
-
-            Timer.Restart();
         }
+
 
         private void UpdateExperience(int exp, int maxExp, uint job, byte level)
         {
@@ -181,11 +180,11 @@ namespace KingdomHeartsPlugin.HealthBar
         {
             if (ExpGainTime > 0)
             {
-                ExpGainTime -= 1 * UiSpeed;
+                ExpGainTime -= 1 * KingdomHeartsPlugin.UiSpeed;
             }
             else if (ExpTemp < exp)
             {
-                ExpTemp += (exp - ExpBeforeGain) * UiSpeed;
+                ExpTemp += (exp - ExpBeforeGain) * KingdomHeartsPlugin.UiSpeed;
             }
 
             if (ExpTemp > exp)
@@ -234,11 +233,11 @@ namespace KingdomHeartsPlugin.HealthBar
         {
             if (HealthRestoreTime > 0)
             {
-                HealthRestoreTime -= 1 * UiSpeed;
+                HealthRestoreTime -= 1 * KingdomHeartsPlugin.UiSpeed;
             }
             else if (HpTemp < currentHp)
             {
-                HpTemp += (currentHp - HpBeforeRestored) * UiSpeed;
+                HpTemp += (currentHp - HpBeforeRestored) * KingdomHeartsPlugin.UiSpeed;
                 if (HpBeforeRestored > currentHp)
                     HpBeforeRestored = currentHp;
             }
@@ -251,23 +250,23 @@ namespace KingdomHeartsPlugin.HealthBar
         {
             if (DamagedHealthAlpha > 0.97f)
             {
-                DamagedHealthAlpha -= 0.09f * UiSpeed;
+                DamagedHealthAlpha -= 0.09f * KingdomHeartsPlugin.UiSpeed;
             }
             else if (DamagedHealthAlpha > 0.6f)
             {
-                DamagedHealthAlpha -= 0.8f * UiSpeed;
+                DamagedHealthAlpha -= 0.8f * KingdomHeartsPlugin.UiSpeed;
             }
             else if (DamagedHealthAlpha > 0.59f)
             {
-                DamagedHealthAlpha -= 0.005f * UiSpeed;
+                DamagedHealthAlpha -= 0.005f * KingdomHeartsPlugin.UiSpeed;
             }
             else if (DamagedHealthAlpha > 0.0f)
             {
-                DamagedHealthAlpha -= 1f * UiSpeed;
+                DamagedHealthAlpha -= 1f * KingdomHeartsPlugin.UiSpeed;
             }
 
             // Vertical wobble
-            _verticalAnimationTicks += 240 * UiSpeed;
+            _verticalAnimationTicks += 240 * KingdomHeartsPlugin.UiSpeed;
 
             while (_verticalAnimationTicks > 1)
             {
@@ -297,19 +296,18 @@ namespace KingdomHeartsPlugin.HealthBar
 
         private void UpdateLowHealth(uint health, uint maxHealth)
         {
-            if (!(health <= maxHealth * (KingdomHeartsPlugin.Ui.Configuration.LowHpPercent / 100f)) &&
-                !(LowHealthAlpha > 0)) return;
+            if ((health > maxHealth * (KingdomHeartsPlugin.Ui.Configuration.LowHpPercent / 100f) || health <= 0) && LowHealthAlpha <= 0) return;
 
             if (LowHealthAlphaDirection == 0)
             {
-                LowHealthAlpha += 1.6f * UiSpeed;
+                LowHealthAlpha += 1.6f * KingdomHeartsPlugin.UiSpeed;
 
                 if (LowHealthAlpha >= .4)
                     LowHealthAlphaDirection = 1;
             }
             else
             {
-                LowHealthAlpha -= 1.6f * UiSpeed;
+                LowHealthAlpha -= 1.6f * KingdomHeartsPlugin.UiSpeed;
 
                 if (LowHealthAlpha <= 0)
                     LowHealthAlphaDirection = 0;
@@ -436,11 +434,11 @@ namespace KingdomHeartsPlugin.HealthBar
             var outlineOffset = new Vector2((int) Math.Ceiling(40 * KingdomHeartsPlugin.Ui.Configuration.Scale), (int) Math.Ceiling(200 * KingdomHeartsPlugin.Ui.Configuration.Scale));
             var baseSize = new Vector2((int) Math.Ceiling(73 * KingdomHeartsPlugin.Ui.Configuration.Scale), (int) Math.Ceiling(30 * KingdomHeartsPlugin.Ui.Configuration.Scale));
 
-            ImageDrawing.DrawImage(drawList, BarTextures, baseSize, outlineOffset, new Vector4(1, 44, 73, 30));
-            ImageDrawing.DrawImage(drawList, BarTextures, -edgeSize, outlineOffset + baseSize + new Vector2((int) Math.Ceiling(5 * KingdomHeartsPlugin.Ui.Configuration.Scale), 0), new Vector4(23, 1, 5, 30f));
+            ImageDrawing.DrawImageArea(drawList, BarTextures, baseSize, outlineOffset, new Vector4(1, 44, 73, 30));
+            ImageDrawing.DrawImageArea(drawList, BarTextures, -edgeSize, outlineOffset + baseSize + new Vector2((int) Math.Ceiling(5 * KingdomHeartsPlugin.Ui.Configuration.Scale), 0), new Vector4(23, 1, 5, 30f));
 
             drawList.PushClipRect(drawPosition + outlineOffset + edgeOffset, drawPosition + outlineOffset + edgeOffset + edgeSize);
-            ImageDrawing.DrawImage(drawList, BarTextures, edgeSize, outlineOffset + edgeOffset, new Vector4(23, 1, 5, 30f));
+            ImageDrawing.DrawImageArea(drawList, BarTextures, edgeSize, outlineOffset + edgeOffset, new Vector4(23, 1, 5, 30f));
             drawList.PopClipRect();
 
             if (barMaxLength > 0)
@@ -502,7 +500,7 @@ namespace KingdomHeartsPlugin.HealthBar
                 DrawBar(drawList, position, outlineOffset, outlineSize, new Vector4(2, 1, 1, 42f));
                 var edgeOffset = new Vector2(-maxHealthLength - (int)Math.Ceiling(5 * KingdomHeartsPlugin.Ui.Configuration.Scale), 0);
                 drawList.PushClipRect(position + outlineOffset + edgeOffset, position + outlineOffset + edgeOffset + edgeSize);
-                ImageDrawing.DrawImage(drawList, BarTextures, edgeSize, outlineOffset + edgeOffset, new Vector4(17, 1, 5, 42f));
+                ImageDrawing.DrawImageArea(drawList, BarTextures, edgeSize, outlineOffset + edgeOffset, new Vector4(17, 1, 5, 42f));
                 drawList.PopClipRect();
             }
         }
@@ -510,7 +508,7 @@ namespace KingdomHeartsPlugin.HealthBar
         private void DrawBar(ImDrawListPtr drawList, Vector2 position, Vector2 offSet, Vector2 size, Vector4 imageArea, uint color = UInt32.MaxValue)
         {
             drawList.PushClipRect(position + offSet - new Vector2(size.X, 0), position + offSet + new Vector2(0, size.Y));
-            ImageDrawing.DrawImage(drawList, BarTextures, size, offSet + new Vector2(-size.X, 0), imageArea, color);
+            ImageDrawing.DrawImageArea(drawList, BarTextures, size, offSet + new Vector2(-size.X, 0), imageArea, color);
             drawList.PopClipRect();
         }
 
@@ -545,8 +543,8 @@ namespace KingdomHeartsPlugin.HealthBar
             ExperienceRingGain = null;
             ExperienceRingBg = null;
             ExperienceRingRest = null;
-            Timer = null;
             _expAddonPtr = IntPtr.Zero;
+            _limitGauge?.Dispose();
         }
 
         // Temp Health Values
@@ -571,8 +569,6 @@ namespace KingdomHeartsPlugin.HealthBar
         // Timers
         private float HealthRestoreTime { get; set; }
         private float ExpGainTime { get; set; }
-        private Stopwatch Timer { get; set; }
-        private float UiSpeed { get; set; }
 
         // Positioning
         private float HealthY { get; set; }

@@ -1,11 +1,10 @@
 ﻿using Dalamud.Interface;
-using Dalamud.Plugin;
 using ImGuiNET;
-using KingdomHeartsPlugin.HealthBar;
+using ImGuiScene;
 using KingdomHeartsPlugin.Utilities;
 using System;
 using System.Numerics;
-using Dalamud.Game.ClientState.Objects.SubKinds;
+using KingdomHeartsPlugin.UIElements.HealthBar;
 
 namespace KingdomHeartsPlugin
 {
@@ -15,40 +14,56 @@ namespace KingdomHeartsPlugin
     {
         internal Configuration Configuration;
         private readonly HealthFrame _healthFrame;
+        private TextureWrap _testTextureWrap;
+        /*private float _width;
+        private float _height;
+        private float[] pos;
+        private float[] pos2;
+        private float[] uv;
+        private float[] uv2;*/
 
         // this extra bool exists for ImGui, since you can't ref a property
         private bool visible = true;
         public bool Visible
         {
-            get { return this.visible; }
-            set { this.visible = value; }
+            get => this.visible;
+            set => this.visible = value;
         }
 
         private bool settingsVisible = false;
         public bool SettingsVisible
         {
-            get { return this.settingsVisible; }
-            set { this.settingsVisible = value; }
+            get => this.settingsVisible;
+            set => this.settingsVisible = value;
         }
 
         // passing in the image here just for simplicity
-        public PluginUI(Configuration configuration, DalamudPluginInterface pluginInterface)
+        public PluginUI(Configuration configuration)
         {
             this.Configuration = configuration;
             _healthFrame = new HealthFrame();
+
+            /*_testTextureWrap = KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\LimitGauge\number_2.png"));
+            pos = new float[4];
+            pos2 = new float[4];
+            uv = new float[4];
+            uv2 = new float[4];
+            _width = 256;
+            _height = 256;*/
         }
 
         public void Dispose()
         {
             _healthFrame?.Dispose();
             ImageDrawing.Dispose();
+            //_testTextureWrap?.Dispose();
         }
 
-        public void OnUpdate(DalamudPluginInterface pi)
+        public void OnUpdate()
         {
         }
 
-        public void Draw(PlayerCharacter player)
+        public void Draw()
         {
             // This is our only draw handler attached to UIBuilder, so it needs to be
             // able to draw any windows we might have open.
@@ -57,11 +72,11 @@ namespace KingdomHeartsPlugin
             // There are other ways to do this, but it is generally best to keep the number of
             // draw delegates as low as possible.
 
-            DrawMainWindow(player);
+            DrawMainWindow();
             DrawSettingsWindow();
         }
 
-        public void DrawMainWindow(PlayerCharacter player)
+        public void DrawMainWindow()
         {
             if (!Visible)
             {
@@ -81,14 +96,14 @@ namespace KingdomHeartsPlugin
             window_flags |= ImGuiWindowFlags.AlwaysAutoResize;
             window_flags |= ImGuiWindowFlags.NoBackground;
 
-            var size = new Vector2(320, 180);
+            var size = new Vector2(320, 320);
             ImGui.SetNextWindowSize(size, ImGuiCond.FirstUseEver);
             ImGuiHelpers.ForceNextWindowMainViewport();
             ImGui.SetNextWindowSizeConstraints(size, new Vector2(float.MaxValue, float.MaxValue));
             
             if (ImGui.Begin("KH Frame", ref this.visible, window_flags))
             {
-                _healthFrame.Draw(player);
+                _healthFrame.Draw();
             }
             ImGui.End();
         }
@@ -100,9 +115,9 @@ namespace KingdomHeartsPlugin
                 return;
             }
 
-            ImGui.SetNextWindowSize(new Vector2(232, 75), ImGuiCond.FirstUseEver);
+            ImGui.SetNextWindowSize(new Vector2(232, 500), ImGuiCond.FirstUseEver);
             if (ImGui.Begin("Kingdom Hearts Bars: Configuration", ref this.settingsVisible,
-                ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse))
+                /*ImGuiWindowFlags.AlwaysAutoResize |*/ ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse))
             {
                 ImGui.BeginTabBar("KhTabBar");
                 if (ImGui.BeginTabItem("General"))
@@ -124,6 +139,51 @@ namespace KingdomHeartsPlugin
                         if (Configuration.Scale > 3)
                             Configuration.Scale = 3;
                     }
+
+                    /*ImGui.NewLine();
+                    ImGui.Separator();
+
+                    ImGui.SliderFloat("Width", ref _width, 0, 512);
+                    ImGui.SliderFloat("Height", ref _height, 0, 512);
+                    ImGui.SliderFloat("Pos[0]", ref pos[0], 0, 256);
+                    ImGui.SliderFloat("Pos[1]", ref pos[1], 0, 256);
+                    ImGui.SliderFloat("Pos[2]", ref pos[2], 0, 256);
+                    ImGui.SliderFloat("Pos[3]", ref pos[3], 0, 256);
+                    ImGui.SliderFloat("Pos2[0]", ref pos2[0], 0, 256);
+                    ImGui.SliderFloat("Pos2[1]", ref pos2[1], 0, 256);
+                    ImGui.SliderFloat("Pos2[2]", ref pos2[2], 0, 256);
+                    ImGui.SliderFloat("Pos2[3]", ref pos2[3], 0, 256);
+                    ImGui.SliderFloat("UV[0]", ref uv[0], 0, 1);
+                    ImGui.SliderFloat("UV[1]", ref uv[1], 0, 1);
+                    ImGui.SliderFloat("UV[2]", ref uv[2], 0, 1);
+                    ImGui.SliderFloat("UV[3]", ref uv[3], 0, 1);
+                    ImGui.SliderFloat("UV2[0]", ref uv2[0], 0, 1);
+                    ImGui.SliderFloat("UV2[1]", ref uv2[1], 0, 1);
+                    ImGui.SliderFloat("UV2[2]", ref uv2[2], 0, 1);
+                    ImGui.SliderFloat("UV2[3]", ref uv2[3], 0, 1);
+
+                    ImGui.NewLine();
+
+                    //ImGui.Image(_testTextureWrap.ImGuiHandle, new Vector2(pos[0], pos[1]), new Vector2(uv[0], uv[1]), new Vector2(uv[2], uv[3]));
+
+                    var dl = ImGui.GetWindowDrawList();
+                    ImGui.Dummy(new Vector2(_width, _height));
+                    double width = _testTextureWrap.Width;
+                    double height = _testTextureWrap.Height;
+                    Vector2 position = ImGui.GetItemRectMin();
+
+                    dl.PushClipRect(position - new Vector2(0, 0), position + new Vector2(_width, _height));
+                    dl.AddImageQuad(_testTextureWrap.ImGuiHandle, 
+                        position + new Vector2((pos[0]), (pos[1])), 
+                        position + new Vector2((pos[2]), (pos[3])),
+                        position + new Vector2((pos2[0]), (pos2[1])),
+                        position + new Vector2((pos2[2]), (pos2[3]))/*,
+                        position + new Vector2((uv[0]), (uv[1])), 
+                        position + new Vector2((uv[2]), (uv[3])),
+                        position + new Vector2((uv2[0]), (uv2[1])),
+                        position + new Vector2((uv2[2]), (uv2[3]))
+                        );
+                    dl.PopClipRect();*/
 
                     ImGui.EndTabItem();
                 }
@@ -311,6 +371,28 @@ namespace KingdomHeartsPlugin
                     ImGui.EndTabItem();
                 }
 
+
+                if (ImGui.BeginTabItem("Limit Gauge"))
+                {
+                    var limitAlwaysShow = Configuration.LimitGaugeAlwaysShow;
+                    if (ImGui.Checkbox("Always Show", ref limitAlwaysShow))
+                    {
+                        Configuration.LimitGaugeAlwaysShow = limitAlwaysShow;
+                    }
+                    var limitPosX = Configuration.LimitGaugePositionX;
+                    if (ImGui.InputFloat("X Position", ref limitPosX, 1, 25))
+                    {
+                        Configuration.LimitGaugePositionX = limitPosX;
+                    }
+                    var limitPosY = Configuration.LimitGaugePositionY;
+                    if (ImGui.InputFloat("Y Position", ref limitPosY, 1, 25))
+                    {
+                        Configuration.LimitGaugePositionY = limitPosY;
+                    }
+
+                    ImGui.EndTabItem();
+                }
+
                 ImGui.EndTabBar();
                 ImGui.Separator();
                 if (ImGui.Button("Save"))
@@ -320,5 +402,6 @@ namespace KingdomHeartsPlugin
             }
             ImGui.End();
         }
+
     }
 }

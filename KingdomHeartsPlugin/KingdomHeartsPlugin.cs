@@ -1,4 +1,5 @@
-﻿using Dalamud.Game.Command;
+﻿using System.Diagnostics;
+using Dalamud.Game.Command;
 using Dalamud.Plugin;
 using System.IO;
 using System.Reflection;
@@ -29,8 +30,10 @@ namespace KingdomHeartsPlugin
         public static ClientState Cs { get; private set; }
         public static GameGui Gui { get; private set; }
         public static DataManager Dm { get; private set; }
-
         public static PluginUI Ui { get; private set; }
+
+        public static Stopwatch Timer { get; private set; }
+        public static float UiSpeed { get; set; }
 
         public static string TemplateLocation;
 
@@ -48,13 +51,15 @@ namespace KingdomHeartsPlugin
             Cs = clientState;
             Gui = gameGui;
             Dm = dataManager;
+            
+            Timer = Stopwatch.StartNew();
 
             TemplateLocation = Path.GetDirectoryName(assemblyLocation);
             
             var configuration = Pi.GetPluginConfig() as Configuration ?? new Configuration();
             configuration.Initialize(Pi);
 
-            Ui = new PluginUI(configuration, Pi);
+            Ui = new PluginUI(configuration);
 
             Fw.Update += OnUpdate;
 
@@ -83,7 +88,9 @@ namespace KingdomHeartsPlugin
 
         private void OnUpdate(Framework framework)
         {
-            Ui.OnUpdate(Pi);
+            UiSpeed = Timer.ElapsedMilliseconds / 1000f;
+            Timer.Restart();
+            Ui.OnUpdate();
         }
 
         private void OnCommand(string command, string args)
@@ -93,7 +100,7 @@ namespace KingdomHeartsPlugin
 
         private void DrawUi()
         {
-            Ui.Draw(Cs.LocalPlayer);
+            Ui.Draw();
         }
 
         private void DrawConfigUi()
