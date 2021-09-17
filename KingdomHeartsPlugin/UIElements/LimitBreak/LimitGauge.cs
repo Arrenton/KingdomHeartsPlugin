@@ -123,7 +123,7 @@ namespace KingdomHeartsPlugin.UIElements.LimitBreak
             var basePosition = new Vector2(KingdomHeartsPlugin.Ui.Configuration.LimitGaugePositionX, KingdomHeartsPlugin.Ui.Configuration.LimitGaugePositionY);
 
             // BG
-            ImageDrawing.DrawImageQuad(drawList, _gaugeBackgroundTexture, basePosition, Vector2.Zero, Vector2.Zero, Vector2.Zero, Vector2.Zero);
+            ImageDrawing.DrawImage(drawList, _gaugeBackgroundTexture, basePosition);
             // Numbers
             ImageDrawing.DrawImageQuad(drawList, _numbers[LimitBreakLevel], basePosition + new Vector2(167, 1), new Vector2(30, 0), new Vector2(30, 0), Vector2.Zero, Vector2.Zero,
                 ImGui.GetColorU32(new Vector4(1, 0.4f, 0, 1)));
