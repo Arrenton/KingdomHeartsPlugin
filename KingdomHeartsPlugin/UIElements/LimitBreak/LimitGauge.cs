@@ -53,7 +53,7 @@ namespace KingdomHeartsPlugin.UIElements.LimitBreak
             //Get Limit Break Bar
             var LBWidget = (AtkUnitBase*)KingdomHeartsPlugin.Gui.GetAddonByName("_LimitBreak", 1);
 
-            LimitBreakMaxLevel = 3;
+            LimitBreakMaxLevel = 1;
 
             // Get LB Width
             if (LBWidget != null)
@@ -80,7 +80,7 @@ namespace KingdomHeartsPlugin.UIElements.LimitBreak
             }
 
             // Set Limit Break Level
-            LimitBreakLevel = 3;
+            LimitBreakLevel = 0;
 
             foreach (var barWidth in LimitBreakBarWidth)
             {
