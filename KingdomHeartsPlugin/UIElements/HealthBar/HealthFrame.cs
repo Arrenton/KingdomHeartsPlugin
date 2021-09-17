@@ -363,7 +363,15 @@ namespace KingdomHeartsPlugin.UIElements.HealthBar
             var drawPosition = ImGui.GetItemRectMin();
             var maxHealthPercent = maxHp / (float)KingdomHeartsPlugin.Ui.Configuration.HpForFullRing * HpLengthMultiplier;
 
-            DrawRingEdgesAndTrack(drawList, maxHealthPercent, drawPosition + new Vector2(0, (int)(HealthY * KingdomHeartsPlugin.Ui.Configuration.Scale)));
+            try
+            {
+                DrawRingEdgesAndTrack(drawList, maxHealthPercent, drawPosition + new Vector2(0, (int)(HealthY * KingdomHeartsPlugin.Ui.Configuration.Scale)));
+            }
+            catch
+            {
+                // Will sometimes error when hot reloading and I have no idea what is causing it. So exit.
+                return;
+            }
 
             HealthRingBg.Draw(drawList, maxHealthPercent, drawPosition + new Vector2(0, (int)(HealthY * KingdomHeartsPlugin.Ui.Configuration.Scale)), 3, KingdomHeartsPlugin.Ui.Configuration.Scale);
 
