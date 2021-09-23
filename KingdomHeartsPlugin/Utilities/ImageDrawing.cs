@@ -40,16 +40,18 @@ namespace KingdomHeartsPlugin.Utilities
         public static void DrawImageRotated(ImDrawListPtr d, TextureWrap texture, Vector2 position, Vector2 size, float angle, uint col = UInt32.MaxValue)
         {
             var basePosition = ImGui.GetItemRectMin();
-            var finalPosition = basePosition + position;
-            
+            var finalPosition = basePosition + position * KingdomHeartsPlugin.Ui.Configuration.Scale;
+            var scaledSize = size * KingdomHeartsPlugin.Ui.Configuration.Scale;
+
+
             float cosA = (float)Math.Cos(angle);
             float sinA = (float)Math.Sin(angle);
             Vector2[] pos =
             {
-                finalPosition + ImRotate(new Vector2(-size.X * 0.5f, -size.Y * 0.5f), cosA, sinA),
-                finalPosition + ImRotate(new Vector2(+size.X * 0.5f, -size.Y * 0.5f), cosA, sinA),
-                finalPosition + ImRotate(new Vector2(+size.X * 0.5f, +size.Y * 0.5f), cosA, sinA),
-                finalPosition + ImRotate(new Vector2(-size.X * 0.5f, +size.Y * 0.5f), cosA, sinA)
+                finalPosition + ImRotate(new Vector2(-scaledSize.X * 0.5f, -scaledSize.Y * 0.5f), cosA, sinA),
+                finalPosition + ImRotate(new Vector2(+scaledSize.X * 0.5f, -scaledSize.Y * 0.5f), cosA, sinA),
+                finalPosition + ImRotate(new Vector2(+scaledSize.X * 0.5f, +scaledSize.Y * 0.5f), cosA, sinA),
+                finalPosition + ImRotate(new Vector2(-scaledSize.X * 0.5f, +scaledSize.Y * 0.5f), cosA, sinA)
             };
             Vector2[] uvs = {
                 new(0.0f, 0.0f),
@@ -58,7 +60,7 @@ namespace KingdomHeartsPlugin.Utilities
                 new(0.0f, 1.0f)
             };
 
-            d.PushClipRect(finalPosition - size * 2, finalPosition + size * 2);
+            d.PushClipRect(finalPosition - scaledSize * 2, finalPosition + scaledSize * 2);
             d.AddImageQuad(texture.ImGuiHandle, pos[0], pos[1], pos[2], pos[3], uvs[0], uvs[1], uvs[2], uvs[3], col);
             d.PopClipRect();
         }
@@ -147,8 +149,8 @@ namespace KingdomHeartsPlugin.Utilities
         public static void DrawImage(ImDrawListPtr d, TextureWrap image, Vector2 position, Vector4 imagePortion, uint color = UInt32.MaxValue)
         {
             var basePosition = ImGui.GetItemRectMin();
-            var imageSize = new Vector2(image.Width, image.Height);
-            var finalPosition = basePosition + position;
+            var imageSize = new Vector2(image.Width, image.Height) * KingdomHeartsPlugin.Ui.Configuration.Scale;
+            var finalPosition = basePosition + position * KingdomHeartsPlugin.Ui.Configuration.Scale;
 
             d.PushClipRect(finalPosition - imageSize * 2, finalPosition + imageSize * 2);
             d.AddImage(image.ImGuiHandle, finalPosition, finalPosition + imageSize * new Vector2(1 - imagePortion.X, 1 - imagePortion.Y) * new Vector2(imagePortion.Z, imagePortion.W),
