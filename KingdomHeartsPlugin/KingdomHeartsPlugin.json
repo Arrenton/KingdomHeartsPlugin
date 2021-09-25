@@ -5,5 +5,5 @@
   "RepoUrl": "https://github.com/Arrenton/KingdomHeartsPlugin",
   "DalamudApiLevel": 4,
   "Punchline": "HP bar, MP bar, EXP bar, oh my!",
-  "Changelog": "Added Limit Bar"
+  "Changelog": "Resource bar (MP) and text value are now movable, improved the scaling to look a bit better."
 }

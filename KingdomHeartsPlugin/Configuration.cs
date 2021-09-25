@@ -26,9 +26,13 @@ namespace KingdomHeartsPlugin
         #endregion
 
         #region Resource
+        public float ResourceBarPositionX { get; set; } = 0;
+        public float ResourceBarPositionY { get; set; } = 200;
+        public float ResourceTextPositionX { get; set; } = -56;
+        public float ResourceTextPositionY { get; set; } = -7;
         public int MaximumMpLength { get; set; } = 11500;
         public int MinimumMpLength { get; set; } = 500;
-        public float MpPerPixelLength { get; set; } = 22.5f;
+        public float MpPerPixelLength { get; set; } = 24.4f;
         public float GpPerPixelLength { get; set; } = 1.76f;
         public int MaximumGpLength { get; set; } = 900;
         public int MinimumGpLength { get; set; } = 1;

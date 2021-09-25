@@ -117,7 +117,7 @@ namespace KingdomHeartsPlugin
 
             ImGui.SetNextWindowSize(new Vector2(232, 500), ImGuiCond.FirstUseEver);
             if (ImGui.Begin("Kingdom Hearts Bars: Configuration", ref this.settingsVisible,
-                /*ImGuiWindowFlags.AlwaysAutoResize |*/ ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse))
+               ImGuiWindowFlags.NoCollapse))
             {
                 ImGui.BeginTabBar("KhTabBar");
                 if (ImGui.BeginTabItem("General"))
@@ -267,13 +267,36 @@ namespace KingdomHeartsPlugin
 
                 if (ImGui.BeginTabItem("MP/GP/CP"))
                 {
+                    ImGui.Text("Position");
+                    var resourcePos = new Vector2(Configuration.ResourceBarPositionX, Configuration.ResourceBarPositionY);
+                    if (ImGui.DragFloat2("Position (X, Y)", ref resourcePos))
+                    {
+                        Configuration.ResourceBarPositionX = resourcePos.X;
+                        Configuration.ResourceBarPositionY = resourcePos.Y;
+                    }
+
+                    ImGui.Separator();
+                    ImGui.NewLine();
+                    ImGui.Text("Value Text");
+                    ImGui.Separator();
+
                     var showVal = Configuration.ShowResourceVal;
                     if (ImGui.Checkbox("Show Resource Value", ref showVal))
                     {
                         Configuration.ShowResourceVal = showVal;
                     }
+                    var resourceTextPos = new Vector2(Configuration.ResourceTextPositionX, Configuration.ResourceTextPositionY);
+                    if (ImGui.DragFloat2("Text Position (X, Y)", ref resourceTextPos))
+                    {
+                        Configuration.ResourceTextPositionX = resourceTextPos.X;
+                        Configuration.ResourceTextPositionY = resourceTextPos.Y;
+                    }
+
+                    ImGui.Separator();
+                    ImGui.NewLine();
                     ImGui.Text("MP");
                     ImGui.Separator();
+
                     var mpPerPixel = Configuration.MpPerPixelLength;
                     if (ImGui.InputFloat("MP per pixel for bar length", ref mpPerPixel, 0.1f, 0.5f, "%f"))
                     {
@@ -312,6 +335,7 @@ namespace KingdomHeartsPlugin
                         ImGui.End();
                     }
 
+                    ImGui.Separator();
                     ImGui.NewLine();
                     ImGui.Text("GP");
                     ImGui.Separator();
@@ -340,6 +364,7 @@ namespace KingdomHeartsPlugin
                             Configuration.MinimumGpLength = 1;
                     }
 
+                    ImGui.Separator();
                     ImGui.NewLine();
                     ImGui.Text("CP");
                     ImGui.Separator();

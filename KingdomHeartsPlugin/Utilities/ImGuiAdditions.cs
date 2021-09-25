@@ -88,7 +88,10 @@ namespace KingdomHeartsPlugin.Utilities
         {
             var x = position.X;
             var y = position.Y;
+            var sizeVector = new Vector2(size * text.Length, size * text.Length);
             var font = ImGui.GetIO().FontDefault;
+
+            drawList.PushClipRect(position - sizeVector * text.Length, position + sizeVector * text.Length);
 
             for (var i = -shadowWidth; i < shadowWidth; i++)
             {
@@ -99,6 +102,7 @@ namespace KingdomHeartsPlugin.Utilities
                 }
             }
             drawList.AddText(font, size, new Vector2(x, y), ImGui.GetColorU32(foregroundColor), text);
+            drawList.PopClipRect();
         }
 
         public static void TextShadowedDrawList(ImDrawListPtr drawList, float size, int hAlign, string text, Vector2 position, Vector4 foregroundColor, Vector4 shadowColor, byte shadowWidth = 1)

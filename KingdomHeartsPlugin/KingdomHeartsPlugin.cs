@@ -17,12 +17,7 @@ namespace KingdomHeartsPlugin
 
         private const string CommandName = "/khp";
         
-        // When loaded by LivePluginLoader, the executing assembly will be wrong.
-        // Supplying this property allows LivePluginLoader to supply the correct location, so that
-        // you have full compatibility when loaded normally and through LPL.
-        //public string AssemblyLocation { get => assemblyLocation; set => assemblyLocation = value; }
-        //private string assemblyLocation = System.Reflection.Assembly.GetExecutingAssembly().Location;
-        private string assemblyLocation = Assembly.GetExecutingAssembly().Location;
+        private readonly string _assemblyLocation = Assembly.GetExecutingAssembly().Location;
 
         public static DalamudPluginInterface Pi { get; private set; }
         public static Framework Fw { get; private set; }
@@ -54,7 +49,7 @@ namespace KingdomHeartsPlugin
             
             Timer = Stopwatch.StartNew();
 
-            TemplateLocation = Path.GetDirectoryName(assemblyLocation);
+            TemplateLocation = Path.GetDirectoryName(_assemblyLocation);
             
             var configuration = Pi.GetPluginConfig() as Configuration ?? new Configuration();
             configuration.Initialize(Pi);

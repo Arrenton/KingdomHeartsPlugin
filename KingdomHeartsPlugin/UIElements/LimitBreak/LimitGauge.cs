@@ -12,9 +12,9 @@ namespace KingdomHeartsPlugin.UIElements.LimitBreak
     {
         private const byte MaxLimitBarWidth = 128;
 
-        private readonly TextureWrap _gaugeBackgroundTexture, _gaugeForegroundTexture, _gaugeForegroundColorlessTexture, _maxLimitTexture, _limitTextTexture, _orbTexture;
+        private TextureWrap _gaugeBackgroundTexture, _gaugeForegroundTexture, _gaugeForegroundColorlessTexture, _maxLimitTexture, _limitTextTexture, _orbTexture;
 
-        private readonly TextureWrap[] _numbers;
+        private TextureWrap[] _numbers;
 
         private Orb[] _orbs;
 
@@ -62,12 +62,19 @@ namespace KingdomHeartsPlugin.UIElements.LimitBreak
                 {
                     if ((LBWidget->UldManager.SearchNodeById(3)->Alpha_2 == 0 || !LBWidget->UldManager.SearchNodeById(3)->IsVisible) && !KingdomHeartsPlugin.Ui.Configuration.LimitGaugeAlwaysShow) return false;
 
-                    LimitBreakBarWidth[0] = LBWidget->UldManager.SearchNodeById(6)->GetComponent()->UldManager.SearchNodeById(3)->Width - 18;
+                    for (uint i = 0; i < 3; i++)
+                    {
+                        LimitBreakBarWidth[i] = LBWidget->UldManager.SearchNodeById(6 - i)->GetComponent()->UldManager.SearchNodeById(3)->Width - 18;
+
+                        if (LBWidget->UldManager.SearchNodeById(6 - i)->IsVisible && i > 0) LimitBreakMaxLevel++;
+                    }
+
+                    /*LimitBreakBarWidth[0] = LBWidget->UldManager.SearchNodeById(6)->GetComponent()->UldManager.SearchNodeById(3)->Width - 18;
                     LimitBreakBarWidth[1] = LBWidget->UldManager.SearchNodeById(5)->GetComponent()->UldManager.SearchNodeById(3)->Width - 18;
                     LimitBreakBarWidth[2] = LBWidget->UldManager.SearchNodeById(4)->GetComponent()->UldManager.SearchNodeById(3)->Width - 18;
                     
                     if (LBWidget->UldManager.SearchNodeById(5)->IsVisible) LimitBreakMaxLevel++;
-                    if (LBWidget->UldManager.SearchNodeById(4)->IsVisible) LimitBreakMaxLevel++;
+                    if (LBWidget->UldManager.SearchNodeById(4)->IsVisible) LimitBreakMaxLevel++;*/
                 }
                 else
                 {
@@ -194,10 +201,17 @@ namespace KingdomHeartsPlugin.UIElements.LimitBreak
             _limitTextTexture.Dispose();
             _maxLimitTexture.Dispose();
 
-            foreach (TextureWrap number in _numbers)
+            for (int i = 0; i < _numbers.Length; i++)
             {
-                number.Dispose();
+                _numbers[i].Dispose();
+                _numbers[i] = null;
             }
+
+            _gaugeBackgroundTexture = null;
+            _gaugeForegroundColorlessTexture = null;
+            _gaugeForegroundTexture = null;
+            _limitTextTexture = null;
+            _maxLimitTexture = null;
         }
 
         private int LimitBreakLevel { get; set; }
