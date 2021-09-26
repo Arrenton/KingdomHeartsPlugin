@@ -41,18 +41,18 @@ namespace KingdomHeartsPlugin.UIElements.ParameterResource
                 ResourceValue = player.CurrentCp;
                 ResourceMax = player.MaxCp;
 
-                minLength = KingdomHeartsPlugin.Ui.Configuration.MinimumGpLength;
-                maxLength = KingdomHeartsPlugin.Ui.Configuration.MaximumGpLength;
-                lengthRate = KingdomHeartsPlugin.Ui.Configuration.GpPerPixelLength;
+                minLength = KingdomHeartsPlugin.Ui.Configuration.MinimumCpLength;
+                maxLength = KingdomHeartsPlugin.Ui.Configuration.MaximumCpLength;
+                lengthRate = KingdomHeartsPlugin.Ui.Configuration.CpPerPixelLength;
             }
             else if (player.MaxGp > 0)
             {
                 ResourceValue = player.CurrentGp;
                 ResourceMax = player.MaxGp;
 
-                minLength = KingdomHeartsPlugin.Ui.Configuration.MinimumCpLength;
-                maxLength = KingdomHeartsPlugin.Ui.Configuration.MaximumCpLength;
-                lengthRate = KingdomHeartsPlugin.Ui.Configuration.CpPerPixelLength;
+                minLength = KingdomHeartsPlugin.Ui.Configuration.MinimumGpLength;
+                maxLength = KingdomHeartsPlugin.Ui.Configuration.MaximumGpLength;
+                lengthRate = KingdomHeartsPlugin.Ui.Configuration.GpPerPixelLength;
             }
 
             var lengthMultiplier = ResourceMax < minLength ? minLength / (float)ResourceMax : ResourceMax > maxLength ? (float)maxLength / ResourceMax : 1f;

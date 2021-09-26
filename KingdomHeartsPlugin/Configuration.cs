@@ -33,10 +33,10 @@ namespace KingdomHeartsPlugin
         public int MaximumMpLength { get; set; } = 11500;
         public int MinimumMpLength { get; set; } = 500;
         public float MpPerPixelLength { get; set; } = 24.4f;
-        public float GpPerPixelLength { get; set; } = 1.76f;
+        public float GpPerPixelLength { get; set; } = 1.913f;
         public int MaximumGpLength { get; set; } = 900;
         public int MinimumGpLength { get; set; } = 1;
-        public float CpPerPixelLength { get; set; } = 1.27f;
+        public float CpPerPixelLength { get; set; } = 1.382f;
         public int MaximumCpLength { get; set; } = 650;
         public int MinimumCpLength { get; set; } = 1;
         public bool TruncateMp { get; set; } = false;

@@ -164,19 +164,12 @@ namespace KingdomHeartsPlugin.UIElements.LimitBreak
 
                 if (_orbs[i].Angle >= 360)
                 {
-
                     _orbs[i].Angle -= 360;
-
                 }
 
-                if (_orbs[i].Angle >= -160)
+                if (_orbs[i].Angle >= -160 && _orbs[i].Alpha < 1)
                 {
-                    if (_orbs[i].Alpha < 1)
-                    {
-
-                        _orbs[i].Alpha += 1.5f * KingdomHeartsPlugin.UiSpeed;
-
-                    }
+                    _orbs[i].Alpha += 1.5f * KingdomHeartsPlugin.UiSpeed;
                 }
 
                 _orbs[i].Position = new Vector2(pointX - 1, pointy);
