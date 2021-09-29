@@ -17,7 +17,7 @@ namespace KingdomHeartsPlugin
 
         private const string CommandName = "/khp";
         
-        private readonly string _assemblyLocation = Assembly.GetExecutingAssembly().Location;
+        private string _assemblyLocation = Assembly.GetExecutingAssembly().Location;
 
         public static DalamudPluginInterface Pi { get; private set; }
         public static Framework Fw { get; private set; }
@@ -48,6 +48,8 @@ namespace KingdomHeartsPlugin
             Dm = dataManager;
             
             Timer = Stopwatch.StartNew();
+
+            _assemblyLocation ??= Assembly.GetExecutingAssembly().Location;
 
             TemplateLocation = Path.GetDirectoryName(_assemblyLocation);
             

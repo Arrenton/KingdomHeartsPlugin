@@ -73,7 +73,7 @@ namespace KingdomHeartsPlugin.Utilities
         {
             var x = position.X;
             var y = position.Y;
-
+            
             for (var i = -shadowWidth; i < shadowWidth; i++)
             {
                 for (var j = -shadowWidth; j < shadowWidth; j++)

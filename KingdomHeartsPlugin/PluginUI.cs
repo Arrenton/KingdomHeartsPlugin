@@ -14,8 +14,8 @@ namespace KingdomHeartsPlugin
     {
         internal Configuration Configuration;
         private readonly HealthFrame _healthFrame;
-        private TextureWrap _testTextureWrap;
-        /*private float _width;
+        /*private TextureWrap _testTextureWrap;
+        private float _width;
         private float _height;
         private float[] pos;
         private float[] pos2;

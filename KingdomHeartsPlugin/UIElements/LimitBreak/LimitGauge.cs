@@ -10,7 +10,6 @@ namespace KingdomHeartsPlugin.UIElements.LimitBreak
 {
     public class LimitGauge
     {
-        private const byte MaxLimitBarWidth = 128;
 
         private TextureWrap _gaugeBackgroundTexture, _gaugeForegroundTexture, _gaugeForegroundColorlessTexture, _maxLimitTexture, _limitTextTexture, _orbTexture;
 
@@ -24,7 +23,7 @@ namespace KingdomHeartsPlugin.UIElements.LimitBreak
 
         public LimitGauge()
         {
-            LimitBreakBarWidth = new int[4];
+            LimitBreakBarWidth = new int[5];
             _gaugeBackgroundTexture = KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\LimitGauge\background.png"));
             _gaugeForegroundTexture = KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\LimitGauge\gauge_colored.png"));
             _gaugeForegroundColorlessTexture = KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\LimitGauge\gauge_white.png"));
@@ -37,10 +36,11 @@ namespace KingdomHeartsPlugin.UIElements.LimitBreak
                 KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\LimitGauge\number_1.png")),
                 KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\LimitGauge\number_2.png")),
                 KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\LimitGauge\number_3.png")),
-                KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\LimitGauge\number_4.png"))
+                KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\LimitGauge\number_4.png")),
+                KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\LimitGauge\number_5.png"))
             };
-            _orbs = new Orb[4];
-            for (int i = 0; i < 4; i++)
+            _orbs = new Orb[5];
+            for (int i = 0; i < 5; i++)
             {
                 _orbs[i] = new Orb();
             }
@@ -52,38 +52,61 @@ namespace KingdomHeartsPlugin.UIElements.LimitBreak
         {
             //Get Limit Break Bar
             var LBWidget = (AtkUnitBase*)KingdomHeartsPlugin.Gui.GetAddonByName("_LimitBreak", 1);
+            //Get Compressed Aether Bar
+            var CAWidget = (AtkUnitBase*)KingdomHeartsPlugin.Gui.GetAddonByName("HWDAetherGauge", 1);
+
+            var foundCeGauge = false;
 
             LimitBreakMaxLevel = 1;
+            MaxLimitBarWidth = 128;
 
-            // Get LB Width
-            if (LBWidget != null)
+            // Daidem Compatibility
+            if (CAWidget != null)
             {
-                if (LBWidget->UldManager.NodeListCount == 6)
+                if (CAWidget->UldManager.NodeListCount == 10)
                 {
-                    if ((LBWidget->UldManager.SearchNodeById(3)->Alpha_2 == 0 || !LBWidget->UldManager.SearchNodeById(3)->IsVisible) && !KingdomHeartsPlugin.Ui.Configuration.LimitGaugeAlwaysShow) return false;
-
-                    for (uint i = 0; i < 3; i++)
+                    if ((CAWidget->UldManager.SearchNodeById(3)->Alpha_2 > 0 && CAWidget->UldManager.SearchNodeById(3)->IsVisible) || KingdomHeartsPlugin.Ui.Configuration.LimitGaugeAlwaysShow)
                     {
-                        LimitBreakBarWidth[i] = LBWidget->UldManager.SearchNodeById(6 - i)->GetComponent()->UldManager.SearchNodeById(3)->Width - 18;
+                        var usedAuger = CAWidget->UldManager.SearchNodeById(10)->IsVisible;
+                        for (uint i = 0; i < 5; i++)
+                        {
+                            var node = CAWidget->UldManager.SearchNodeById(5 + i + (usedAuger ? 1u : 0))->GetComponent()->UldManager.SearchNodeById(3);
+                            LimitBreakBarWidth[i] = node->IsVisible ? node->Width - 14 : 0;
+                        }
 
-                        if (LBWidget->UldManager.SearchNodeById(6 - i)->IsVisible && i > 0) LimitBreakMaxLevel++;
+                        MaxLimitBarWidth = 80;
+                        LimitBreakMaxLevel = 5;
+                        foundCeGauge = true;
                     }
+                }
+            }
 
-                    /*LimitBreakBarWidth[0] = LBWidget->UldManager.SearchNodeById(6)->GetComponent()->UldManager.SearchNodeById(3)->Width - 18;
-                    LimitBreakBarWidth[1] = LBWidget->UldManager.SearchNodeById(5)->GetComponent()->UldManager.SearchNodeById(3)->Width - 18;
-                    LimitBreakBarWidth[2] = LBWidget->UldManager.SearchNodeById(4)->GetComponent()->UldManager.SearchNodeById(3)->Width - 18;
-                    
-                    if (LBWidget->UldManager.SearchNodeById(5)->IsVisible) LimitBreakMaxLevel++;
-                    if (LBWidget->UldManager.SearchNodeById(4)->IsVisible) LimitBreakMaxLevel++;*/
+            if (!foundCeGauge)
+            {
+                // Get LB Width
+                if (LBWidget != null)
+                {
+                    if (LBWidget->UldManager.NodeListCount == 6)
+                    {
+                        if ((LBWidget->UldManager.SearchNodeById(3)->Alpha_2 == 0 || !LBWidget->UldManager.SearchNodeById(3)->IsVisible) &&
+                            !KingdomHeartsPlugin.Ui.Configuration.LimitGaugeAlwaysShow) return false;
+
+                        for (uint i = 0; i < 3; i++)
+                        {
+                            LimitBreakBarWidth[i] = LBWidget->UldManager.SearchNodeById(6 - i)->GetComponent()->UldManager.SearchNodeById(3)->Width - 18;
+
+                            if (LBWidget->UldManager.SearchNodeById(6 - i)->IsVisible && i > 0) LimitBreakMaxLevel++;
+                        }
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
                 else
                 {
                     return false;
                 }
-            }
-            else
-            {
-                return false;
             }
 
             // Set Limit Break Level
@@ -135,7 +158,8 @@ namespace KingdomHeartsPlugin.UIElements.LimitBreak
             ImageDrawing.DrawImageQuad(drawList, _numbers[LimitBreakLevel], basePosition + new Vector2(167, 1), new Vector2(30, 0), new Vector2(30, 0), Vector2.Zero, Vector2.Zero,
                 ImGui.GetColorU32(new Vector4(1, 0.4f, 0, 1)));
             // Foreground
-            ImageDrawing.DrawImage(drawList, _gaugeForegroundTexture, basePosition + new Vector2(4, 4), new Vector4(0, 0, LimitBreakLevel == LimitBreakMaxLevel ? 1 : LimitBreakBarWidth[LimitBreakLevel] / 128f, 1));
+            ImageDrawing.DrawImage(drawList, _gaugeForegroundTexture, basePosition + new Vector2(4, 4),
+                new Vector4(0, 0, LimitBreakLevel == LimitBreakMaxLevel ? 1 : LimitBreakBarWidth[LimitBreakLevel] / (float)MaxLimitBarWidth, 1));
             // Text
             ImageDrawing.DrawImage(drawList, _limitTextTexture, basePosition + new Vector2(-60, 28), ImGui.GetColorU32(new Vector4(1, 0.75f, 0, 1)));
             // MAX icon
@@ -144,19 +168,19 @@ namespace KingdomHeartsPlugin.UIElements.LimitBreak
             // Orbs
             for (int i = 0; i < LimitBreakLevel; i++)
             {
-                ImageDrawing.DrawImage(drawList, _orbTexture, basePosition + _orbs[i].Position + new Vector2(190, 14), ImGui.GetColorU32(new Vector4(1, 0.5f, 0, _orbs[i].Alpha)));
+                ImageDrawing.DrawImage(drawList, _orbTexture, basePosition + _orbs[i].Position + new Vector2(192, 14), ImGui.GetColorU32(new Vector4(1, 0.5f, 0, _orbs[i].Alpha)));
             }
         }
 
         public void UpdateOrbs()
         {
-            var radius = 28f;
+            var radius = 30f;
 
             for (int i = 0; i < LimitBreakLevel; i++)
             {
                 var direction = _orbs[i].Angle;
 
-                float pointX = (float)(Math.Cos(_orbs[i].Angle * Math.PI / 180) * radius * 0.9 + Math.Sin(-direction * Math.PI / 180) * radius * 0.10);
+                float pointX = (float)(Math.Cos(_orbs[i].Angle * Math.PI / 180) * radius * 0.9 + Math.Sin(-direction * Math.PI / 180) * radius * 0.3);
 
                 float pointy = (float)(Math.Sin(_orbs[i].Angle * Math.PI / 180) * radius);
 
@@ -178,7 +202,7 @@ namespace KingdomHeartsPlugin.UIElements.LimitBreak
 
         public void ResetOrbs()
         {
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 5; i++)
             {
                 _orbs[i].Position = Vector2.Zero;
                 _orbs[i].Alpha = 0;
@@ -210,5 +234,6 @@ namespace KingdomHeartsPlugin.UIElements.LimitBreak
         private int LimitBreakLevel { get; set; }
         private int LimitBreakMaxLevel { get; set; }
         private int[] LimitBreakBarWidth { get; }
+        private int MaxLimitBarWidth { get; set; }
     }
 }
