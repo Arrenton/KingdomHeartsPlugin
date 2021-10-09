@@ -60,7 +60,7 @@ namespace KingdomHeartsPlugin.UIElements.LimitBreak
             LimitBreakMaxLevel = 1;
             MaxLimitBarWidth = 128;
 
-            // Daidem Compatibility
+            // Diadem Compatibility
             if (CAWidget != null)
             {
                 if (CAWidget->UldManager.NodeListCount == 10)

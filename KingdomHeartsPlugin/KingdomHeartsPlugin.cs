@@ -15,8 +15,10 @@ namespace KingdomHeartsPlugin
     {
         public string Name => "Kingdom Hearts UI Plugin";
 
-        private const string CommandName = "/khp";
-        
+        private const string SettingsCommand = "/khp";
+        private const string HideCommand = "/khphide";
+        private const string ShowCommand = "/khpshow";
+
         private string _assemblyLocation = Assembly.GetExecutingAssembly().Location;
 
         public static DalamudPluginInterface Pi { get; private set; }
@@ -51,6 +53,13 @@ namespace KingdomHeartsPlugin
 
             _assemblyLocation ??= Assembly.GetExecutingAssembly().Location;
 
+            if (_assemblyLocation == null)
+            {
+                Dalamud.Logging.PluginLog.Fatal("Kingdom Hearts Plugin was unable to get the working directory!");
+                Timer = null;
+                return;
+            }
+
             TemplateLocation = Path.GetDirectoryName(_assemblyLocation);
             
             var configuration = Pi.GetPluginConfig() as Configuration ?? new Configuration();
@@ -61,9 +70,19 @@ namespace KingdomHeartsPlugin
             Fw.Update += OnUpdate;
 
 
-            Cm.AddHandler(CommandName, new CommandInfo(OnCommand)
+            Cm.AddHandler(SettingsCommand, new CommandInfo(OnSettingsCommand)
             {
                 HelpMessage = "Opens configuration for Kingdom Hearts UI Bars."
+            });
+
+            Cm.AddHandler(HideCommand, new CommandInfo(OnHideCommand)
+            {
+                HelpMessage = "Disables the KH UI."
+            });
+
+            Cm.AddHandler(ShowCommand, new CommandInfo(OnShowCommand)
+            {
+                HelpMessage = "Enables the KH UI."
             });
 
             Pi.UiBuilder.Draw += DrawUi;
@@ -74,13 +93,17 @@ namespace KingdomHeartsPlugin
         {
             Ui?.Dispose();
 
-            Cm.RemoveHandler(CommandName);
+            Cm.RemoveHandler(SettingsCommand);
+            Cm.RemoveHandler(HideCommand);
+            Cm.RemoveHandler(ShowCommand);
 
             Fw.Update -= OnUpdate;
             
             Pi.UiBuilder.Draw -= DrawUi;
 
             Pi?.Dispose();
+
+            Timer = null;
         }
 
         private void OnUpdate(Framework framework)
@@ -90,9 +113,17 @@ namespace KingdomHeartsPlugin
             Ui.OnUpdate();
         }
 
-        private void OnCommand(string command, string args)
+        private void OnSettingsCommand(string command, string args)
         {
             DrawConfigUi();
+        }
+        private void OnHideCommand(string command, string args)
+        {
+            Ui.Configuration.Enabled = false;
+        }
+        private void OnShowCommand(string command, string args)
+        {
+            Ui.Configuration.Enabled = true;
         }
 
         private void DrawUi()

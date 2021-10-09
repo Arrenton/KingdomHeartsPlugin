@@ -11,10 +11,15 @@ namespace KingdomHeartsPlugin
 
         #region General
         public bool Locked { get; set; } = false;
+        public bool Enabled { get; set; } = true;
+        public bool HideWhenNpcTalking { get; set; } = false;
         public float Scale { get; set; } = 1f;
         #endregion
 
         #region HP
+        public float HPValueTextPositionX { get; set; } = 0;
+        public float HPValueTextPositionY { get; set; } = 0;
+        public float HPValueTextSize { get; set; } = 24;
         public int HpForFullRing { get; set; } = 6000;
         public int MaximumHpForMaximumLength { get; set; } = 12000;
         public int MinimumHpForLength { get; set; } = 100;
@@ -30,6 +35,7 @@ namespace KingdomHeartsPlugin
         public float ResourceBarPositionY { get; set; } = 200;
         public float ResourceTextPositionX { get; set; } = -56;
         public float ResourceTextPositionY { get; set; } = -7;
+        public float ResourceTextSize { get; set; } = 24;
         public int MaximumMpLength { get; set; } = 11500;
         public int MinimumMpLength { get; set; } = 500;
         public float MpPerPixelLength { get; set; } = 24.4f;

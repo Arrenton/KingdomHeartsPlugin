@@ -4,6 +4,7 @@ using ImGuiScene;
 using KingdomHeartsPlugin.Utilities;
 using System;
 using System.Numerics;
+using FFXIVClientStructs.FFXIV.Component.GUI;
 using KingdomHeartsPlugin.UIElements.HealthBar;
 
 namespace KingdomHeartsPlugin
@@ -78,7 +79,11 @@ namespace KingdomHeartsPlugin
 
         public void DrawMainWindow()
         {
-            if (!Visible)
+            Visible = true;
+
+            CheckNpcTalkingVisibility();
+
+            if (!Visible || !KingdomHeartsPlugin.Ui.Configuration.Enabled)
             {
                 return;
             }
@@ -108,6 +113,16 @@ namespace KingdomHeartsPlugin
             ImGui.End();
         }
 
+        private unsafe void CheckNpcTalkingVisibility()
+        {
+            var actionBarWidget = (AtkUnitBase*)KingdomHeartsPlugin.Gui.GetAddonByName("_ActionBar", 1);
+            if (actionBarWidget != null && KingdomHeartsPlugin.Ui.Configuration.HideWhenNpcTalking)
+            {
+                if (!actionBarWidget->IsVisible)
+                    Visible = false;
+            }
+        }
+
         public void DrawSettingsWindow()
         {
             if (!SettingsVisible)
@@ -122,12 +137,21 @@ namespace KingdomHeartsPlugin
                 ImGui.BeginTabBar("KhTabBar");
                 if (ImGui.BeginTabItem("General"))
                 {
-                    // can't ref a property, so use a local copy
-                    var enabled = this.Configuration.Locked;
-                    if (ImGui.Checkbox("Locked", ref enabled))
+                    var enabled = this.Configuration.Enabled;
+                    if (ImGui.Checkbox("Visible", ref enabled))
                     {
-                        this.Configuration.Locked = enabled;
-                        // can save immediately on change, if you don't want to provide a "Save and Close" button
+                        this.Configuration.Enabled = enabled;
+                    }
+                    var hideWhenNpcTalking = this.Configuration.HideWhenNpcTalking;
+                    if (ImGui.Checkbox("Hide when dialogue box is shown", ref hideWhenNpcTalking))
+                    {
+                        this.Configuration.HideWhenNpcTalking = hideWhenNpcTalking;
+                    }
+
+                    var locked = this.Configuration.Locked;
+                    if (ImGui.Checkbox("Locked", ref locked))
+                    {
+                        this.Configuration.Locked = locked;
                     }
 
                     var scale = this.Configuration.Scale;
