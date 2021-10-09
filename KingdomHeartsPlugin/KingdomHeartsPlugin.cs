@@ -19,8 +19,6 @@ namespace KingdomHeartsPlugin
         private const string HideCommand = "/khphide";
         private const string ShowCommand = "/khpshow";
 
-        private string _assemblyLocation = Assembly.GetExecutingAssembly().Location;
-
         public static DalamudPluginInterface Pi { get; private set; }
         public static Framework Fw { get; private set; }
         public static CommandManager Cm { get; private set; }
@@ -51,16 +49,9 @@ namespace KingdomHeartsPlugin
             
             Timer = Stopwatch.StartNew();
 
-            _assemblyLocation ??= Assembly.GetExecutingAssembly().Location;
+            var assemblyLocation = pluginInterface.AssemblyLocation.DirectoryName + "\\";
 
-            if (_assemblyLocation == null)
-            {
-                Dalamud.Logging.PluginLog.Fatal("Kingdom Hearts Plugin was unable to get the working directory!");
-                Timer = null;
-                return;
-            }
-
-            TemplateLocation = Path.GetDirectoryName(_assemblyLocation);
+            TemplateLocation = Path.GetDirectoryName(assemblyLocation);
             
             var configuration = Pi.GetPluginConfig() as Configuration ?? new Configuration();
             configuration.Initialize(Pi);
