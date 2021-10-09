@@ -252,6 +252,12 @@ namespace KingdomHeartsPlugin
                         Configuration.LowHpPercent = lowHpPercent;
                     }
 
+                    var hpDamageWobbleIntensity = Configuration.HpDamageWobbleIntensity;
+                    if (ImGui.SliderFloat("Damage wobble intensity %", ref hpDamageWobbleIntensity, 0, 200))
+                    {
+                        Configuration.HpDamageWobbleIntensity = hpDamageWobbleIntensity;
+                    }
+
                     var truncate = Configuration.TruncateHp;
                     if (ImGui.Checkbox("Truncate HP Text Value", ref truncate))
                     {

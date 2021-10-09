@@ -17,9 +17,10 @@ namespace KingdomHeartsPlugin
         #endregion
 
         #region HP
-        public float HPValueTextPositionX { get; set; } = 0;
-        public float HPValueTextPositionY { get; set; } = 0;
-        public float HPValueTextSize { get; set; } = 24;
+        public float HpValueTextPositionX { get; set; } = 0;
+        public float HpValueTextPositionY { get; set; } = 0;
+        public float HpValueTextSize { get; set; } = 24;
+        public float HpDamageWobbleIntensity { get; set; } = 100f;
         public int HpForFullRing { get; set; } = 6000;
         public int MaximumHpForMaximumLength { get; set; } = 12000;
         public int MinimumHpForLength { get; set; } = 100;

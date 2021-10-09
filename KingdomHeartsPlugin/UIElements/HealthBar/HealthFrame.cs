@@ -86,7 +86,7 @@ namespace KingdomHeartsPlugin.UIElements.HealthBar
             
             _resourceBar.Draw(player);
             _limitGauge.Draw();
-            _expBar.Draw(player, HealthY);
+            _expBar.Draw(player, HealthY * KingdomHeartsPlugin.Ui.Configuration.HpDamageWobbleIntensity / 100f);
 
             if (KingdomHeartsPlugin.Ui.Configuration.ShowHpVal)
             {
@@ -184,6 +184,7 @@ namespace KingdomHeartsPlugin.UIElements.HealthBar
 
             while (_verticalAnimationTicks > 1)
             {
+                float intensity = KingdomHeartsPlugin.Ui.Configuration.HpDamageWobbleIntensity / 100f;
                 _verticalAnimationTicks--;
                 HealthY += HealthVerticalSpeed;
 
@@ -243,7 +244,7 @@ namespace KingdomHeartsPlugin.UIElements.HealthBar
 
             try
             {
-                DrawRingEdgesAndTrack(drawList, maxHealthPercent, drawPosition + new Vector2(0, (int)(HealthY * KingdomHeartsPlugin.Ui.Configuration.Scale)));
+                DrawRingEdgesAndTrack(drawList, maxHealthPercent, drawPosition + new Vector2(0, (int)(HealthY * KingdomHeartsPlugin.Ui.Configuration.HpDamageWobbleIntensity / 100f * KingdomHeartsPlugin.Ui.Configuration.Scale)));
             }
             catch
             {
@@ -251,34 +252,34 @@ namespace KingdomHeartsPlugin.UIElements.HealthBar
                 return;
             }
 
-            HealthRingBg.Draw(drawList, maxHealthPercent, drawPosition + new Vector2(0, (int)(HealthY * KingdomHeartsPlugin.Ui.Configuration.Scale)), 3, KingdomHeartsPlugin.Ui.Configuration.Scale);
+            HealthRingBg.Draw(drawList, maxHealthPercent, drawPosition + new Vector2(0, (int)(HealthY * KingdomHeartsPlugin.Ui.Configuration.HpDamageWobbleIntensity / 100f * KingdomHeartsPlugin.Ui.Configuration.Scale)), 3, KingdomHeartsPlugin.Ui.Configuration.Scale);
 
             if (DamagedHealthAlpha > 0)
             {
                 HealthLostRing.Alpha = DamagedHealthAlpha;
-                HealthLostRing.Draw(drawList, HpBeforeDamaged / (float) KingdomHeartsPlugin.Ui.Configuration.HpForFullRing * HpLengthMultiplier, drawPosition + new Vector2(0, (int)(HealthY * KingdomHeartsPlugin.Ui.Configuration.Scale)), 3, KingdomHeartsPlugin.Ui.Configuration.Scale);
+                HealthLostRing.Draw(drawList, HpBeforeDamaged / (float) KingdomHeartsPlugin.Ui.Configuration.HpForFullRing * HpLengthMultiplier, drawPosition + new Vector2(0, (int)(HealthY * KingdomHeartsPlugin.Ui.Configuration.HpDamageWobbleIntensity / 100f * KingdomHeartsPlugin.Ui.Configuration.Scale)), 3, KingdomHeartsPlugin.Ui.Configuration.Scale);
             }
 
             if (KingdomHeartsPlugin.Ui.Configuration.ShowHpRecovery)
             {
                 if (HpTemp < hp)
-                    HealthRestoredRing.Draw(drawList, hp / (float) KingdomHeartsPlugin.Ui.Configuration.HpForFullRing * HpLengthMultiplier, drawPosition + new Vector2(0, (int) (HealthY * KingdomHeartsPlugin.Ui.Configuration.Scale)), 3, KingdomHeartsPlugin.Ui.Configuration.Scale);
+                    HealthRestoredRing.Draw(drawList, hp / (float) KingdomHeartsPlugin.Ui.Configuration.HpForFullRing * HpLengthMultiplier, drawPosition + new Vector2(0, (int) (HealthY * KingdomHeartsPlugin.Ui.Configuration.HpDamageWobbleIntensity / 100f * KingdomHeartsPlugin.Ui.Configuration.Scale)), 3, KingdomHeartsPlugin.Ui.Configuration.Scale);
 
-                HealthRing.Draw(drawList, HpTemp / KingdomHeartsPlugin.Ui.Configuration.HpForFullRing * HpLengthMultiplier, drawPosition + new Vector2(0, (int) (HealthY * KingdomHeartsPlugin.Ui.Configuration.Scale)), 3, KingdomHeartsPlugin.Ui.Configuration.Scale);
+                HealthRing.Draw(drawList, HpTemp / KingdomHeartsPlugin.Ui.Configuration.HpForFullRing * HpLengthMultiplier, drawPosition + new Vector2(0, (int) (HealthY * KingdomHeartsPlugin.Ui.Configuration.HpDamageWobbleIntensity / 100f * KingdomHeartsPlugin.Ui.Configuration.Scale)), 3, KingdomHeartsPlugin.Ui.Configuration.Scale);
             }
             else
             {
-                HealthRing.Draw(drawList, hp / (float)KingdomHeartsPlugin.Ui.Configuration.HpForFullRing * HpLengthMultiplier, drawPosition + new Vector2(0, (int) (HealthY * KingdomHeartsPlugin.Ui.Configuration.Scale)), 3, KingdomHeartsPlugin.Ui.Configuration.Scale);
+                HealthRing.Draw(drawList, hp / (float)KingdomHeartsPlugin.Ui.Configuration.HpForFullRing * HpLengthMultiplier, drawPosition + new Vector2(0, (int) (HealthY * KingdomHeartsPlugin.Ui.Configuration.HpDamageWobbleIntensity / 100f * KingdomHeartsPlugin.Ui.Configuration.Scale)), 3, KingdomHeartsPlugin.Ui.Configuration.Scale);
             }
 
-            RingOutline.Draw(drawList, maxHealthPercent, drawPosition + new Vector2(0, (int)(HealthY * KingdomHeartsPlugin.Ui.Configuration.Scale)), 3, KingdomHeartsPlugin.Ui.Configuration.Scale);
+            RingOutline.Draw(drawList, maxHealthPercent, drawPosition + new Vector2(0, (int)(HealthY * KingdomHeartsPlugin.Ui.Configuration.HpDamageWobbleIntensity / 100f * KingdomHeartsPlugin.Ui.Configuration.Scale)), 3, KingdomHeartsPlugin.Ui.Configuration.Scale);
 
             DrawLongHealthBar(drawList, hp, maxHp);
         }
         
         private void DrawLongHealthBar(ImDrawListPtr drawList, uint hp, uint maxHp)
         {
-            var basePosition = new Vector2(129, 212 + HealthY);
+            var basePosition = new Vector2(129, 212 + HealthY * KingdomHeartsPlugin.Ui.Configuration.HpDamageWobbleIntensity / 100f);
             var healthLength = ((KingdomHeartsPlugin.Ui.Configuration.ShowHpRecovery ? HpTemp : hp) * HpLengthMultiplier - KingdomHeartsPlugin.Ui.Configuration.HpForFullRing) / KingdomHeartsPlugin.Ui.Configuration.HpPerPixelLongBar;
             var damagedHealthLength = (HpBeforeDamaged * HpLengthMultiplier - KingdomHeartsPlugin.Ui.Configuration.HpForFullRing) / KingdomHeartsPlugin.Ui.Configuration.HpPerPixelLongBar;
             var restoredHealthLength = ((KingdomHeartsPlugin.Ui.Configuration.ShowHpRecovery ? hp : 0) * HpLengthMultiplier - KingdomHeartsPlugin.Ui.Configuration.HpForFullRing) / KingdomHeartsPlugin.Ui.Configuration.HpPerPixelLongBar;
