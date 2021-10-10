@@ -17,9 +17,10 @@ namespace KingdomHeartsPlugin
         #endregion
 
         #region HP
-        public float HpValueTextPositionX { get; set; } = 0;
-        public float HpValueTextPositionY { get; set; } = 0;
-        public float HpValueTextSize { get; set; } = 24;
+        public float HpValueTextPositionX { get; set; } = 26;
+        public float HpValueTextPositionY { get; set; } = 130;
+        public float HpValueTextSize { get; set; } = 21;
+        public int HpValueTextAlignment { get; set; } = 0;
         public float HpDamageWobbleIntensity { get; set; } = 100f;
         public int HpForFullRing { get; set; } = 6000;
         public int MaximumHpForMaximumLength { get; set; } = 12000;
@@ -34,9 +35,10 @@ namespace KingdomHeartsPlugin
         #region Resource
         public float ResourceBarPositionX { get; set; } = 0;
         public float ResourceBarPositionY { get; set; } = 200;
-        public float ResourceTextPositionX { get; set; } = -56;
+        public float ResourceTextPositionX { get; set; } = -10;
         public float ResourceTextPositionY { get; set; } = -7;
         public float ResourceTextSize { get; set; } = 24;
+        public int ResourceTextAlignment { get; set; } = 2;
         public int MaximumMpLength { get; set; } = 11500;
         public int MinimumMpLength { get; set; } = 500;
         public float MpPerPixelLength { get; set; } = 24.4f;
@@ -53,6 +55,7 @@ namespace KingdomHeartsPlugin
         #region Limit Break
 
         public bool LimitGaugeAlwaysShow { get; set; } = false;
+        public bool LimitGaugeDiadem { get; set; } = true;
         public float LimitGaugePositionX { get; set; } = -180;
         public float LimitGaugePositionY { get; set; } = 149;
 
@@ -61,16 +64,16 @@ namespace KingdomHeartsPlugin
         // the below exist just to make saving less cumbersome
 
         [NonSerialized]
-        private DalamudPluginInterface pluginInterface;
+        private DalamudPluginInterface _pluginInterface;
 
         public void Initialize(DalamudPluginInterface pluginInterface)
         {
-            this.pluginInterface = pluginInterface;
+            this._pluginInterface = pluginInterface;
         }
 
         public void Save()
         {
-            this.pluginInterface.SavePluginConfig(this);
+            this._pluginInterface.SavePluginConfig(this);
         }
     }
 }

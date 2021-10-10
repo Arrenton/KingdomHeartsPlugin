@@ -2,7 +2,6 @@
 using System.IO;
 using System.Numerics;
 using Dalamud.Game.ClientState.Objects.SubKinds;
-using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using ImGuiNET;
 using ImGuiScene;
 using KingdomHeartsPlugin.Utilities;
@@ -64,7 +63,7 @@ namespace KingdomHeartsPlugin.UIElements.ParameterResource
         {
             Update(player);
             var drawList = ImGui.GetWindowDrawList();
-            var basePosition = new Vector2(KingdomHeartsPlugin.Ui.Configuration.ResourceBarPositionX, KingdomHeartsPlugin.Ui.Configuration.ResourceBarPositionY);
+            var basePosition =  new Vector2(KingdomHeartsPlugin.Ui.Configuration.ResourceBarPositionX, KingdomHeartsPlugin.Ui.Configuration.ResourceBarPositionY);
             var textPosition = new Vector2(KingdomHeartsPlugin.Ui.Configuration.ResourceTextPositionX, KingdomHeartsPlugin.Ui.Configuration.ResourceTextPositionY) * KingdomHeartsPlugin.Ui.Configuration.Scale;
 
             // Base
@@ -82,7 +81,7 @@ namespace KingdomHeartsPlugin.UIElements.ParameterResource
             ImageDrawing.DrawImageRotated(drawList, _barEdgeTexture, new Vector2(basePosition.X + 74, basePosition.Y + 15), new Vector2(_barEdgeTexture.Width, _barEdgeTexture.Height), (float)Math.PI);
 
             if (KingdomHeartsPlugin.Ui.Configuration.ShowResourceVal)
-                ImGuiAdditions.TextShadowedDrawList(drawList, 24f * KingdomHeartsPlugin.Ui.Configuration.Scale, $"{ResourceValue}", ImGui.GetItemRectMin() + basePosition * KingdomHeartsPlugin.Ui.Configuration.Scale + textPosition, new Vector4(255 / 255f, 255 / 255f, 255 / 255f, 1f), new Vector4(0 / 255f, 0 / 255f, 0 / 255f, 0.25f), 3);
+                ImGuiAdditions.TextShadowedDrawList(drawList, KingdomHeartsPlugin.Ui.Configuration.ResourceTextSize, $"{(KingdomHeartsPlugin.Ui.Configuration.TruncateMp ? ResourceValue / 100 : ResourceValue)}", ImGui.GetItemRectMin() + basePosition * KingdomHeartsPlugin.Ui.Configuration.Scale + textPosition, new Vector4(255 / 255f, 255 / 255f, 255 / 255f, 1f), new Vector4(0 / 255f, 0 / 255f, 0 / 255f, 0.25f), 3, (ImGuiAdditions.TextAlignment)KingdomHeartsPlugin.Ui.Configuration.ResourceTextAlignment);
         }
 
         public void Dispose()

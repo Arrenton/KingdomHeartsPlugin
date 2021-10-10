@@ -1,6 +1,5 @@
 ﻿using Dalamud.Interface;
 using ImGuiNET;
-using ImGuiScene;
 using KingdomHeartsPlugin.Utilities;
 using System;
 using System.Numerics;
@@ -214,6 +213,8 @@ namespace KingdomHeartsPlugin
 
                 if (ImGui.BeginTabItem("Health"))
                 {
+                    ImGui.Text("Length");
+                    ImGui.Separator();
                     var fullRing = Configuration.HpForFullRing;
                     if (ImGui.InputInt("HP for full ring", ref fullRing, 5, 50))
                     {
@@ -246,16 +247,41 @@ namespace KingdomHeartsPlugin
                             Configuration.MinimumHpForLength = 1;
                     }
 
-                    var lowHpPercent = Configuration.LowHpPercent;
-                    if (ImGui.SliderFloat("Percent To Trigger Low HP", ref lowHpPercent, 0, 100))
+                    ImGui.Separator();
+                    ImGui.NewLine();
+                    ImGui.Text("Value Text");
+                    ImGui.Separator();
+
+                    var hpTextPos = new Vector2(Configuration.HpValueTextPositionX, Configuration.HpValueTextPositionY);
+                    if (ImGui.DragFloat2("Text Position (X, Y)", ref hpTextPos))
                     {
-                        Configuration.LowHpPercent = lowHpPercent;
+                        Configuration.HpValueTextPositionX = hpTextPos.X;
+                        Configuration.HpValueTextPositionY = hpTextPos.Y;
                     }
 
-                    var hpDamageWobbleIntensity = Configuration.HpDamageWobbleIntensity;
-                    if (ImGui.SliderFloat("Damage wobble intensity %", ref hpDamageWobbleIntensity, 0, 200))
+                    var hpTextSize = Configuration.HpValueTextSize;
+                    if (ImGui.InputFloat("Text Size", ref hpTextSize))
                     {
-                        Configuration.HpDamageWobbleIntensity = hpDamageWobbleIntensity;
+                        Configuration.HpValueTextSize = hpTextSize;
+                    }
+                    
+                    if (ImGui.BeginCombo("Text Alignment", Enum.GetName((ImGuiAdditions.TextAlignment)Configuration.HpValueTextAlignment)))
+                    {
+                        var alignments = Enum.GetNames(typeof(ImGuiAdditions.TextAlignment));
+                        for (int i = 0; i < alignments.Length; i++)
+                        {
+                            if (ImGui.Selectable(alignments[i]))
+                            {
+                                Configuration.HpValueTextAlignment = i;
+                            }
+                        }
+                        ImGui.EndCombo();
+                    }
+
+                    var showHpVal = Configuration.ShowHpVal;
+                    if (ImGui.Checkbox("Show HP Value", ref showHpVal))
+                    {
+                        Configuration.ShowHpVal = showHpVal;
                     }
 
                     var truncate = Configuration.TruncateHp;
@@ -271,11 +297,23 @@ namespace KingdomHeartsPlugin
                         ImGui.Text("Truncate HP value over 10000 to 10.0K and 100000 to 100K");
                         ImGui.End();
                     }
-                    
-                    var showHpVal = Configuration.ShowHpVal;
-                    if (ImGui.Checkbox("Show HP Value", ref showHpVal))
+
+
+                    ImGui.Separator();
+                    ImGui.NewLine();
+                    ImGui.Text("Miscellaneous");
+                    ImGui.Separator();
+
+                    var lowHpPercent = Configuration.LowHpPercent;
+                    if (ImGui.SliderFloat("Percent To Trigger Low HP", ref lowHpPercent, 0, 100))
                     {
-                        Configuration.ShowHpVal = showHpVal;
+                        Configuration.LowHpPercent = lowHpPercent;
+                    }
+
+                    var hpDamageWobbleIntensity = Configuration.HpDamageWobbleIntensity;
+                    if (ImGui.SliderFloat("Damage wobble intensity %", ref hpDamageWobbleIntensity, 0, 200))
+                    {
+                        Configuration.HpDamageWobbleIntensity = hpDamageWobbleIntensity;
                     }
 
                     var showHpRecovery = Configuration.ShowHpRecovery;
@@ -322,8 +360,29 @@ namespace KingdomHeartsPlugin
                         Configuration.ResourceTextPositionY = resourceTextPos.Y;
                     }
 
+                    var resourceTextSize = Configuration.ResourceTextSize;
+                    if (ImGui.InputFloat("Text Size", ref resourceTextSize))
+                    {
+                        Configuration.ResourceTextSize = resourceTextSize;
+                    }
+
+                    if (ImGui.BeginCombo("Text Alignment", Enum.GetName((ImGuiAdditions.TextAlignment)Configuration.ResourceTextAlignment)))
+                    {
+                        var alignments = Enum.GetNames(typeof(ImGuiAdditions.TextAlignment));
+                        for (int i = 0; i < alignments.Length; i++)
+                        {
+                            if (ImGui.Selectable(alignments[i]))
+                            {
+                                Configuration.ResourceTextAlignment = i;
+                            }
+                        }
+                        ImGui.EndCombo();
+                    }
+
                     ImGui.Separator();
                     ImGui.NewLine();
+                    ImGui.Text("Length");
+                    ImGui.Separator();
                     ImGui.Text("MP");
                     ImGui.Separator();
 
@@ -433,6 +492,11 @@ namespace KingdomHeartsPlugin
                     if (ImGui.Checkbox("Always Show", ref limitAlwaysShow))
                     {
                         Configuration.LimitGaugeAlwaysShow = limitAlwaysShow;
+                    }
+                    var limitDiadem = Configuration.LimitGaugeDiadem;
+                    if (ImGui.Checkbox("Show for Diadem Compressed Aether", ref limitDiadem))
+                    {
+                        Configuration.LimitGaugeDiadem = limitDiadem;
                     }
                     var limitPosX = Configuration.LimitGaugePositionX;
                     if (ImGui.InputFloat("X Position", ref limitPosX, 1, 25))

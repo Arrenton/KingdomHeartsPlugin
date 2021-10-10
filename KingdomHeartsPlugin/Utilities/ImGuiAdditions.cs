@@ -1,15 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Numerics;
 using ImGuiNET;
 
 namespace KingdomHeartsPlugin.Utilities
 {
     public static class ImGuiAdditions
     {
+        public enum TextAlignment
+        {
+            Center,
+            Left,
+            Right
+        }
+
         public static void TextShadowed(string text, Vector4 foregroundColor, Vector4 shadowColor, byte shadowWidth = 1)
         {
             var x = ImGui.GetCursorPosX();
@@ -48,79 +50,70 @@ namespace KingdomHeartsPlugin.Utilities
             ImGui.TextColored(foregroundColor, text);
             ImGui.SetWindowFontScale(1);
         }
+
         public static void TextCenteredShadowed(string text, float size, Vector2 position, Vector4 foregroundColor, Vector4 shadowColor, byte shadowWidth = 1)
         {
             ImGui.SetWindowFontScale(size);
-            var textSize = ImGui.CalcTextSize(text);
-            var x = ImGui.GetCursorPosX() + position.X - textSize.X / 2;
-            var y = ImGui.GetCursorPosY() + position.Y;
+            float fontSize = ImGui.GetFontSize() * text.Length * KingdomHeartsPlugin.Ui.Configuration.Scale;
+            var y = position.Y;
+            var x = position.X - fontSize;
+
+
+            TextShadowedDrawList(ImGui.GetWindowDrawList(),
+                KingdomHeartsPlugin.Ui.Configuration.ResourceTextSize * KingdomHeartsPlugin.Ui.Configuration.Scale,
+                $"{fontSize} Pos: {x},{y}",
+                ImGui.GetItemRectMin(),
+                new Vector4(255 / 255f, 255 / 255f, 255 / 255f, 1f),
+                new Vector4(0 / 255f, 0 / 255f, 0 / 255f, 0.25f), 3);
+
+            ImGui.PushClipRect(
+                ImGui.GetItemRectMin() - new Vector2(x + shadowWidth + fontSize, y + shadowWidth + ImGui.GetFontSize()),
+                ImGui.GetItemRectMin() + new Vector2(x + shadowWidth + fontSize, y + shadowWidth + ImGui.GetFontSize()), 
+                true);
 
             for (var i = -shadowWidth; i < shadowWidth; i++)
             {
                 for (var j = -shadowWidth; j < shadowWidth; j++)
                 {
-                    ImGui.SetCursorPosX(x + i);
-                    ImGui.SetCursorPosY(y + j);
+                    ImGui.SetCursorPosX(i);
+                    ImGui.SetCursorPosY(position.Y + j);
                     ImGui.TextColored(shadowColor, text);
                 }
             }
+
             ImGui.SetCursorPosX(x);
             ImGui.SetCursorPosY(y);
             ImGui.TextColored(foregroundColor, text);
+            ImGui.PopClipRect();
             ImGui.SetWindowFontScale(1);
         }
-        public static void TextShadowedDrawList(ImDrawListPtr drawList, string text, Vector2 position, Vector4 foregroundColor, Vector4 shadowColor, byte shadowWidth = 1)
+
+        public static void TextShadowedDrawList(ImDrawListPtr drawList, float size, string text, Vector2 position, Vector4 foregroundColor, Vector4 shadowColor, byte shadowWidth = 1, TextAlignment alignment = TextAlignment.Left)
         {
-            var x = position.X;
-            var y = position.Y;
-            
-            for (var i = -shadowWidth; i < shadowWidth; i++)
+            var sizeVector = new Vector2(size * text.Length, size * text.Length) * KingdomHeartsPlugin.Ui.Configuration.Scale;
+            var x = alignment switch
             {
-                for (var j = -shadowWidth; j < shadowWidth; j++)
-                {
-                    if (i == 0 && j == 0) continue;
-                    drawList.AddText(new Vector2(x + i, y + j), ImGui.GetColorU32(shadowColor), text);
-                }
-            }
-            drawList.AddText(new Vector2(x, y), ImGui.GetColorU32(foregroundColor), text);
-        }
-        public static void TextShadowedDrawList(ImDrawListPtr drawList, float size, string text, Vector2 position, Vector4 foregroundColor, Vector4 shadowColor, byte shadowWidth = 1)
-        {
-            var x = position.X;
+                TextAlignment.Center => position.X - sizeVector.X / 4.55f,
+                TextAlignment.Right => position.X - sizeVector.X / 2.6f,
+                TextAlignment.Left => position.X,
+                _ => position.X
+            };
+
             var y = position.Y;
-            var sizeVector = new Vector2(size * text.Length, size * text.Length);
             var font = ImGui.GetIO().FontDefault;
 
-            drawList.PushClipRect(position - sizeVector * text.Length, position + sizeVector * text.Length);
+            drawList.PushClipRect(new Vector2(x, y) - sizeVector * text.Length, new Vector2(x, y) + sizeVector * text.Length);
 
             for (var i = -shadowWidth; i < shadowWidth; i++)
             {
                 for (var j = -shadowWidth; j < shadowWidth; j++)
                 {
                     if (i == 0 && j == 0) continue;
-                    drawList.AddText(font, size, new Vector2(x + i, y + j), ImGui.GetColorU32(shadowColor), text);
+                    drawList.AddText(font, size * KingdomHeartsPlugin.Ui.Configuration.Scale, new Vector2(x + i * KingdomHeartsPlugin.Ui.Configuration.Scale, y + j * KingdomHeartsPlugin.Ui.Configuration.Scale), ImGui.GetColorU32(shadowColor), text);
                 }
             }
-            drawList.AddText(font, size, new Vector2(x, y), ImGui.GetColorU32(foregroundColor), text);
+            drawList.AddText(font, size * KingdomHeartsPlugin.Ui.Configuration.Scale, new Vector2(x, y), ImGui.GetColorU32(foregroundColor), text);
             drawList.PopClipRect();
-        }
-
-        public static void TextShadowedDrawList(ImDrawListPtr drawList, float size, int hAlign, string text, Vector2 position, Vector4 foregroundColor, Vector4 shadowColor, byte shadowWidth = 1)
-        {
-            var width = text.Length * size;
-            var x = position.X - (hAlign == 2 ? width : hAlign == 1 ? width / 2f : 0);
-            var y = position.Y;
-            var font = ImGui.GetIO().FontDefault;
-
-            for (var i = -shadowWidth; i < shadowWidth; i++)
-            {
-                for (var j = -shadowWidth; j < shadowWidth; j++)
-                {
-                    if (i == 0 && j == 0) continue;
-                    drawList.AddText(font, size, new Vector2(x + i, y + j), ImGui.GetColorU32(shadowColor), text);
-                }
-            }
-            drawList.AddText(font, size, new Vector2(x, y), ImGui.GetColorU32(foregroundColor), text);
         }
     }
 }

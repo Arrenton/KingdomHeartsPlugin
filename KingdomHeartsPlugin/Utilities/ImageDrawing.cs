@@ -1,5 +1,4 @@
-﻿using Dalamud.Plugin;
-using ImGuiNET;
+﻿using ImGuiNET;
 using ImGuiScene;
 using System;
 using System.Collections.Generic;

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Numerics;
-using System.Runtime.InteropServices;
 using Dalamud.Game.ClientState.Objects.SubKinds;
 using FFXIVClientStructs.FFXIV.Component.GUI;
 using ImGuiNET;
@@ -91,17 +90,23 @@ namespace KingdomHeartsPlugin.UIElements.HealthBar
             if (KingdomHeartsPlugin.Ui.Configuration.ShowHpVal)
             {
                 // Draw HP Value
-                ImGui.SameLine(0, 0);
+                var basePosition = ImGui.GetItemRectMin() + new Vector2(KingdomHeartsPlugin.Ui.Configuration.HpValueTextPositionX, KingdomHeartsPlugin.Ui.Configuration.HpValueTextPositionY) * KingdomHeartsPlugin.Ui.Configuration.Scale;
                 float hp = KingdomHeartsPlugin.Ui.Configuration.TruncateHp && player.CurrentHp >= 10000
                     ? player.CurrentHp / 1000f
                     : player.CurrentHp;
                 string hpVal = KingdomHeartsPlugin.Ui.Configuration.TruncateHp && player.CurrentHp >= 10000
                     ? player.CurrentHp >= 100000 ? $"{hp:0}K" : $"{hp:0.#}K"
                     : $"{hp}";
-                ImGuiAdditions.TextCenteredShadowed(hpVal, 1.25f * KingdomHeartsPlugin.Ui.Configuration.Scale,
-                    new Vector2(-196 + 22 * (KingdomHeartsPlugin.Ui.Configuration.Scale - 1), 128 * KingdomHeartsPlugin.Ui.Configuration.Scale),
+                /*ImGuiAdditions.TextCenteredShadowed(hpVal, 1.25f,
+                    new Vector2(KingdomHeartsPlugin.Ui.Configuration.HpValueTextPositionX, KingdomHeartsPlugin.Ui.Configuration.HpValueTextPositionY),
                     new Vector4(255 / 255f, 255 / 255f, 255 / 255f, 1f),
-                    new Vector4(0 / 255f, 0 / 255f, 0 / 255f, 0.25f), 3);
+                    new Vector4(0 / 255f, 0 / 255f, 0 / 255f, 0.25f), 3);*/
+                ImGuiAdditions.TextShadowedDrawList(drawList,
+                    KingdomHeartsPlugin.Ui.Configuration.HpValueTextSize,
+                    $"{hpVal}",
+                    basePosition,
+                    new Vector4(255 / 255f, 255 / 255f, 255 / 255f, 1f),
+                    new Vector4(0 / 255f, 0 / 255f, 0 / 255f, 0.25f), 3, (ImGuiAdditions.TextAlignment)KingdomHeartsPlugin.Ui.Configuration.HpValueTextAlignment);
             }
         }
         

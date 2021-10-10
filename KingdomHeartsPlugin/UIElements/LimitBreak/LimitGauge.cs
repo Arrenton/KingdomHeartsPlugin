@@ -55,13 +55,13 @@ namespace KingdomHeartsPlugin.UIElements.LimitBreak
             //Get Compressed Aether Bar
             var CAWidget = (AtkUnitBase*)KingdomHeartsPlugin.Gui.GetAddonByName("HWDAetherGauge", 1);
 
-            var foundCeGauge = false;
+            var foundCaGauge = false;
 
             LimitBreakMaxLevel = 1;
             MaxLimitBarWidth = 128;
 
             // Diadem Compatibility
-            if (CAWidget != null)
+            if (CAWidget != null && KingdomHeartsPlugin.Ui.Configuration.LimitGaugeDiadem)
             {
                 if (CAWidget->UldManager.NodeListCount == 10)
                 {
@@ -76,12 +76,12 @@ namespace KingdomHeartsPlugin.UIElements.LimitBreak
 
                         MaxLimitBarWidth = 80;
                         LimitBreakMaxLevel = 5;
-                        foundCeGauge = true;
+                        foundCaGauge = true;
                     }
                 }
             }
 
-            if (!foundCeGauge)
+            if (!foundCaGauge)
             {
                 // Get LB Width
                 if (LBWidget != null)

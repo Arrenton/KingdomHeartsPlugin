@@ -133,7 +133,7 @@ namespace KingdomHeartsPlugin.UIElements.Experience
                 new Vector2((int)(size / 2f), (int)(size / 2f + 18 * KingdomHeartsPlugin.Ui.Configuration.Scale)) +
                 new Vector2(0, (int)(healthY * KingdomHeartsPlugin.Ui.Configuration.Scale)));
 
-            ImGuiAdditions.TextShadowedDrawList(drawList, 32f * KingdomHeartsPlugin.Ui.Configuration.Scale,
+            ImGuiAdditions.TextShadowedDrawList(drawList, 32f,
                 $"Lv{KingdomHeartsPlugin.Cs.LocalPlayer.Level}",
                 drawPosition + new Vector2(size / 2f - 26 * KingdomHeartsPlugin.Ui.Configuration.Scale,
                     size / 2f - 52 * KingdomHeartsPlugin.Ui.Configuration.Scale),

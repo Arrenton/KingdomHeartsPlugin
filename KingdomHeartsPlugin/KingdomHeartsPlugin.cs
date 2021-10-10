@@ -1,13 +1,12 @@
-﻿using System.Diagnostics;
-using Dalamud.Game.Command;
-using Dalamud.Plugin;
-using System.IO;
-using System.Reflection;
-using Dalamud.Data;
+﻿using Dalamud.Data;
 using Dalamud.Game;
 using Dalamud.Game.ClientState;
+using Dalamud.Game.Command;
 using Dalamud.Game.Gui;
 using Dalamud.IoC;
+using Dalamud.Plugin;
+using System.Diagnostics;
+using System.IO;
 
 namespace KingdomHeartsPlugin
 {
