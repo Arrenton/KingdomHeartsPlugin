@@ -110,10 +110,12 @@ namespace KingdomHeartsPlugin
         private void OnHideCommand(string command, string args)
         {
             Ui.Configuration.Enabled = false;
+            Ui.Configuration.Save();
         }
         private void OnShowCommand(string command, string args)
         {
             Ui.Configuration.Enabled = true;
+            Ui.Configuration.Save();
         }
 
         private void DrawUi()
