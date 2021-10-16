@@ -12,6 +12,13 @@ namespace KingdomHeartsPlugin.UIElements.ParameterResource
     {
         private TextureWrap _barBackgroundTexture, _barForegroundTexture, _mpBaseTexture, _barEdgeTexture;
 
+        private enum Resource
+        {
+            Mp,
+            Cp,
+            Gp
+        }
+
         public ResourceBar()
         {
             _barBackgroundTexture = KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\ResourceBar\background.png"));
@@ -30,6 +37,7 @@ namespace KingdomHeartsPlugin.UIElements.ParameterResource
             {
                 ResourceValue = player.CurrentMp;
                 ResourceMax = player.MaxMp;
+                ResourceType = Resource.Mp;
 
                 minLength = KingdomHeartsPlugin.Ui.Configuration.MinimumMpLength;
                 maxLength = KingdomHeartsPlugin.Ui.Configuration.MaximumMpLength;
@@ -39,6 +47,7 @@ namespace KingdomHeartsPlugin.UIElements.ParameterResource
             {
                 ResourceValue = player.CurrentCp;
                 ResourceMax = player.MaxCp;
+                ResourceType = Resource.Cp;
 
                 minLength = KingdomHeartsPlugin.Ui.Configuration.MinimumCpLength;
                 maxLength = KingdomHeartsPlugin.Ui.Configuration.MaximumCpLength;
@@ -48,6 +57,7 @@ namespace KingdomHeartsPlugin.UIElements.ParameterResource
             {
                 ResourceValue = player.CurrentGp;
                 ResourceMax = player.MaxGp;
+                ResourceType = Resource.Gp;
 
                 minLength = KingdomHeartsPlugin.Ui.Configuration.MinimumGpLength;
                 maxLength = KingdomHeartsPlugin.Ui.Configuration.MaximumGpLength;
@@ -81,7 +91,7 @@ namespace KingdomHeartsPlugin.UIElements.ParameterResource
             ImageDrawing.DrawImageRotated(drawList, _barEdgeTexture, new Vector2(basePosition.X + 74, basePosition.Y + 15), new Vector2(_barEdgeTexture.Width, _barEdgeTexture.Height), (float)Math.PI);
 
             if (KingdomHeartsPlugin.Ui.Configuration.ShowResourceVal)
-                ImGuiAdditions.TextShadowedDrawList(drawList, KingdomHeartsPlugin.Ui.Configuration.ResourceTextSize, $"{(KingdomHeartsPlugin.Ui.Configuration.TruncateMp ? ResourceValue / 100 : ResourceValue)}", ImGui.GetItemRectMin() + basePosition * KingdomHeartsPlugin.Ui.Configuration.Scale + textPosition, new Vector4(255 / 255f, 255 / 255f, 255 / 255f, 1f), new Vector4(0 / 255f, 0 / 255f, 0 / 255f, 0.25f), 3, (ImGuiAdditions.TextAlignment)KingdomHeartsPlugin.Ui.Configuration.ResourceTextAlignment);
+                ImGuiAdditions.TextShadowedDrawList(drawList, KingdomHeartsPlugin.Ui.Configuration.ResourceTextSize, $"{(KingdomHeartsPlugin.Ui.Configuration.TruncateMp && ResourceType == Resource.Mp ? ResourceValue / 100 : ResourceValue)}", ImGui.GetItemRectMin() + basePosition * KingdomHeartsPlugin.Ui.Configuration.Scale + textPosition, new Vector4(255 / 255f, 255 / 255f, 255 / 255f, 1f), new Vector4(0 / 255f, 0 / 255f, 0 / 255f, 0.25f), 3, (ImGuiAdditions.TextAlignment)KingdomHeartsPlugin.Ui.Configuration.ResourceTextAlignment);
         }
 
         public void Dispose()
@@ -98,6 +108,7 @@ namespace KingdomHeartsPlugin.UIElements.ParameterResource
         }
 
         private uint ResourceValue { get; set; }
+        private Resource ResourceType { get; set; }
         private uint ResourceMax { get; set; }
         private float ResourceLength { get; set; }
         private float MaxResourceLength { get; set; }
