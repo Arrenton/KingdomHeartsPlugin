@@ -111,35 +111,43 @@ namespace KingdomHeartsPlugin.UIElements.Experience
             int size = (int)Math.Ceiling(256 * KingdomHeartsPlugin.Ui.Configuration.Scale);
             var drawPosition = ImGui.GetItemRectMin() + new Vector2(0, (int)(healthY * KingdomHeartsPlugin.Ui.Configuration.Scale));
 
-            ExperienceRingBg.Draw(drawList, 1, drawPosition, 4, KingdomHeartsPlugin.Ui.Configuration.Scale);
+            if (KingdomHeartsPlugin.Ui.Configuration.ExpBarEnabled)
+            {
 
-            ExperienceRingRest.Draw(drawList, (Experience + RestedBonusExperience) / (float)MaxExperience, drawPosition, 4, KingdomHeartsPlugin.Ui.Configuration.Scale);
+                ExperienceRingBg.Draw(drawList, 1, drawPosition, 4, KingdomHeartsPlugin.Ui.Configuration.Scale);
 
-            ExperienceRingGain.Draw(drawList, Experience / (float)MaxExperience, drawPosition, 4, KingdomHeartsPlugin.Ui.Configuration.Scale);
+                ExperienceRingRest.Draw(drawList, (Experience + RestedBonusExperience) / (float)MaxExperience, drawPosition, 4, KingdomHeartsPlugin.Ui.Configuration.Scale);
 
-            ExperienceRing.Draw(drawList, ExpTemp / MaxExperience, drawPosition, 4, KingdomHeartsPlugin.Ui.Configuration.Scale);
+                ExperienceRingGain.Draw(drawList, Experience / (float)MaxExperience, drawPosition, 4, KingdomHeartsPlugin.Ui.Configuration.Scale);
 
-            drawList.PushClipRect(drawPosition, drawPosition + new Vector2(size, size));
-            drawList.AddImage(_expBarBaseTexture.ImGuiHandle, drawPosition, drawPosition + new Vector2(size, size));
-            drawList.PopClipRect();
+                ExperienceRing.Draw(drawList, ExpTemp / MaxExperience, drawPosition, 4, KingdomHeartsPlugin.Ui.Configuration.Scale);
 
+                drawList.PushClipRect(drawPosition, drawPosition + new Vector2(size, size));
+                drawList.AddImage(_expBarBaseTexture.ImGuiHandle, drawPosition, drawPosition + new Vector2(size, size));
+                drawList.PopClipRect();
+            }
 
-            float iconSize = 3f * KingdomHeartsPlugin.Ui.Configuration.Scale;
+            if (KingdomHeartsPlugin.Ui.Configuration.ClassIconEnabled)
+            {
+                float iconSize = 3f * KingdomHeartsPlugin.Ui.Configuration.Scale;
 
-            if (KingdomHeartsPlugin.Cs.LocalPlayer is null) return;
+                if (KingdomHeartsPlugin.Cs.LocalPlayer is null) return;
 
-            ImageDrawing.DrawIcon(drawList, (ushort)(62000 + KingdomHeartsPlugin.Cs.LocalPlayer.ClassJob.Id),
-                new Vector2(iconSize, iconSize),
-                new Vector2((int)(size / 2f), (int)(size / 2f + 18 * KingdomHeartsPlugin.Ui.Configuration.Scale)) +
-                new Vector2(0, (int)(healthY * KingdomHeartsPlugin.Ui.Configuration.Scale)));
+                ImageDrawing.DrawIcon(drawList, (ushort)(62000 + KingdomHeartsPlugin.Cs.LocalPlayer.ClassJob.Id),
+                    new Vector2(iconSize, iconSize),
+                    new Vector2((int)(size / 2f), (int)(size / 2f + 18 * KingdomHeartsPlugin.Ui.Configuration.Scale)) +
+                    new Vector2(0, (int)(healthY * KingdomHeartsPlugin.Ui.Configuration.Scale)));
+            }
 
-            ImGuiAdditions.TextShadowedDrawList(drawList, 32f,
-                $"Lv{KingdomHeartsPlugin.Cs.LocalPlayer.Level}",
-                drawPosition + new Vector2(size / 2f - 26 * KingdomHeartsPlugin.Ui.Configuration.Scale,
-                    size / 2f - 52 * KingdomHeartsPlugin.Ui.Configuration.Scale),
-                new Vector4(249 / 255f, 247 / 255f, 232 / 255f, 0.9f),
-                new Vector4(96 / 255f, 78 / 255f, 23 / 255f, 0.25f), 3);
+            if (KingdomHeartsPlugin.Ui.Configuration.LevelEnabled)
+                ImGuiAdditions.TextShadowedDrawList(drawList, 32f,
+                    $"Lv{KingdomHeartsPlugin.Cs.LocalPlayer.Level}",
+                    drawPosition + new Vector2(size / 2f - 26 * KingdomHeartsPlugin.Ui.Configuration.Scale,
+                        size / 2f - 52 * KingdomHeartsPlugin.Ui.Configuration.Scale),
+                    new Vector4(249 / 255f, 247 / 255f, 232 / 255f, 0.9f),
+                    new Vector4(96 / 255f, 78 / 255f, 23 / 255f, 0.25f), 3);
         }
+
         public void Dispose()
         {
             _expBarBaseTexture.Dispose();

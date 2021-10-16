@@ -213,6 +213,13 @@ namespace KingdomHeartsPlugin
 
                 if (ImGui.BeginTabItem("Health"))
                 {
+                    var enabled = Configuration.HpBarEnabled;
+                    if (ImGui.Checkbox("Enabled", ref enabled))
+                    {
+                        Configuration.HpBarEnabled = enabled;
+                    }
+                    ImGui.NewLine();
+                    ImGui.Separator();
                     ImGui.Text("Length");
                     ImGui.Separator();
                     var fullRing = Configuration.HpForFullRing;
@@ -367,6 +374,13 @@ namespace KingdomHeartsPlugin
 
                 if (ImGui.BeginTabItem("MP/GP/CP"))
                 {
+                    var enabled = Configuration.ResourceBarEnabled;
+                    if (ImGui.Checkbox("Enabled", ref enabled))
+                    {
+                        Configuration.ResourceBarEnabled = enabled;
+                    }
+                    ImGui.NewLine();
+                    ImGui.Separator();
                     ImGui.Text("Position");
                     var resourcePos = new Vector2(Configuration.ResourceBarPositionX, Configuration.ResourceBarPositionY);
                     if (ImGui.DragFloat2("Position (X, Y)", ref resourcePos))
@@ -592,6 +606,11 @@ namespace KingdomHeartsPlugin
 
                 if (ImGui.BeginTabItem("Limit Gauge"))
                 {
+                    var enabled = Configuration.LimitBarEnabled;
+                    if (ImGui.Checkbox("Enabled", ref enabled))
+                    {
+                        Configuration.LimitBarEnabled = enabled;
+                    }
                     var limitAlwaysShow = Configuration.LimitGaugeAlwaysShow;
                     if (ImGui.Checkbox("Always Show", ref limitAlwaysShow))
                     {
@@ -611,6 +630,27 @@ namespace KingdomHeartsPlugin
                     if (ImGui.InputFloat("Y Position", ref limitPosY, 1, 25))
                     {
                         Configuration.LimitGaugePositionY = limitPosY;
+                    }
+
+                    ImGui.EndTabItem();
+                }
+
+                if (ImGui.BeginTabItem("Class Info"))
+                {
+                    var expBarEnabled = Configuration.ExpBarEnabled;
+                    if (ImGui.Checkbox("EXP Bar Enabled", ref expBarEnabled))
+                    {
+                        Configuration.ExpBarEnabled = expBarEnabled;
+                    }
+                    var levelTextEnabled = Configuration.LevelEnabled;
+                    if (ImGui.Checkbox("Level Text Enabled", ref levelTextEnabled))
+                    {
+                        Configuration.LevelEnabled = levelTextEnabled;
+                    }
+                    var classIconEnabled = Configuration.ClassIconEnabled;
+                    if (ImGui.Checkbox("Class Icon Enabled", ref classIconEnabled))
+                    {
+                        Configuration.ClassIconEnabled = classIconEnabled;
                     }
 
                     ImGui.EndTabItem();

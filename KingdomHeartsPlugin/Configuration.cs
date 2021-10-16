@@ -17,6 +17,7 @@ namespace KingdomHeartsPlugin
         #endregion
 
         #region HP
+        public bool HpBarEnabled { get; set; } = true;
         public float HpValueTextPositionX { get; set; } = 26;
         public float HpValueTextPositionY { get; set; } = 130;
         public float HpValueTextSize { get; set; } = 21;
@@ -33,6 +34,7 @@ namespace KingdomHeartsPlugin
         #endregion
 
         #region Resource
+        public bool ResourceBarEnabled { get; set; } = true;
         public float ResourceBarPositionX { get; set; } = 0;
         public float ResourceBarPositionY { get; set; } = 200;
         public float ResourceTextPositionX { get; set; } = -10;
@@ -54,10 +56,24 @@ namespace KingdomHeartsPlugin
 
         #region Limit Break
 
+        public bool LimitBarEnabled { get; set; } = true;
         public bool LimitGaugeAlwaysShow { get; set; } = false;
         public bool LimitGaugeDiadem { get; set; } = true;
         public float LimitGaugePositionX { get; set; } = -180;
         public float LimitGaugePositionY { get; set; } = 149;
+
+        #endregion
+
+        #region Experience
+        
+        public bool ExpBarEnabled { get; set; } = true;
+
+        #endregion
+
+        #region ClassInfo
+        
+        public bool LevelEnabled { get; set; } = true;
+        public bool ClassIconEnabled { get; set; } = true;
 
         #endregion
 

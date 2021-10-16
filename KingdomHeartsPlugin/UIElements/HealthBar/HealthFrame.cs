@@ -76,18 +76,19 @@ namespace KingdomHeartsPlugin.UIElements.HealthBar
 
             if (ImGui.GetDrawListSharedData() == IntPtr.Zero) return;
 
-
-            UpdateHealth(player);
-            
             ImGui.Dummy(new Vector2(220, 256));
 
-            DrawHealth(drawList, player.CurrentHp, player.MaxHp);
-            
-            _resourceBar.Draw(player);
-            _limitGauge.Draw();
+            if (KingdomHeartsPlugin.Ui.Configuration.HpBarEnabled)
+            {
+                UpdateHealth(player);
+                DrawHealth(drawList, player.CurrentHp, player.MaxHp);
+            }
+
+            if (KingdomHeartsPlugin.Ui.Configuration.ResourceBarEnabled) _resourceBar.Draw(player);
+            if (KingdomHeartsPlugin.Ui.Configuration.LimitBarEnabled) _limitGauge.Draw();
             _expBar.Draw(player, HealthY * KingdomHeartsPlugin.Ui.Configuration.HpDamageWobbleIntensity / 100f);
 
-            if (KingdomHeartsPlugin.Ui.Configuration.ShowHpVal)
+            if (KingdomHeartsPlugin.Ui.Configuration.ShowHpVal && KingdomHeartsPlugin.Ui.Configuration.HpBarEnabled)
             {
                 // Draw HP Value
                 var basePosition = ImGui.GetItemRectMin() + new Vector2(KingdomHeartsPlugin.Ui.Configuration.HpValueTextPositionX, KingdomHeartsPlugin.Ui.Configuration.HpValueTextPositionY) * KingdomHeartsPlugin.Ui.Configuration.Scale;
