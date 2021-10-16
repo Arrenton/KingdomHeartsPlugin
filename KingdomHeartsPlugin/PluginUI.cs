@@ -222,6 +222,14 @@ namespace KingdomHeartsPlugin
                         if (Configuration.HpForFullRing < 1)
                             Configuration.HpForFullRing = 1;
                     }
+                    if (ImGui.IsItemHovered())
+                    {
+                        Vector2 m = ImGui.GetIO().MousePos;
+                        ImGui.SetNextWindowPos(new Vector2(m.X + 20, m.Y + 20));
+                        ImGui.Begin("KHTT", ImGuiWindowFlags.Tooltip | ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoTitleBar);
+                        ImGui.Text("How much HP will make the ring max out, then goes long bar.");
+                        ImGui.End();
+                    }
 
                     var hpPerPixel = Configuration.HpPerPixelLongBar;
                     if (ImGui.InputFloat("HP per pixel for long bar", ref hpPerPixel, 5, 50))
@@ -230,21 +238,45 @@ namespace KingdomHeartsPlugin
                         if (Configuration.HpPerPixelLongBar < 0.0001f)
                             Configuration.HpPerPixelLongBar = 0.0001f;
                     }
+                    if (ImGui.IsItemHovered())
+                    {
+                        Vector2 m = ImGui.GetIO().MousePos;
+                        ImGui.SetNextWindowPos(new Vector2(m.X + 20, m.Y + 20));
+                        ImGui.Begin("KHTT", ImGuiWindowFlags.Tooltip | ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoTitleBar);
+                        ImGui.Text("Defines the width of the bar.\n100 would mean that every 100 HP, the bar is 1 pixel wider.");
+                        ImGui.End();
+                    }
 
                     var maxLength = Configuration.MaximumHpForMaximumLength;
-                    if (ImGui.InputInt("HP for maximum total length", ref maxLength, 5, 50))
+                    if (ImGui.InputInt("Max HP for maximum total length", ref maxLength, 5, 50))
                     {
                         Configuration.MaximumHpForMaximumLength = maxLength;
                         if (Configuration.MaximumHpForMaximumLength < 1)
                             Configuration.MaximumHpForMaximumLength = 1;
                     }
+                    if (ImGui.IsItemHovered())
+                    {
+                        Vector2 m = ImGui.GetIO().MousePos;
+                        ImGui.SetNextWindowPos(new Vector2(m.X + 20, m.Y + 20));
+                        ImGui.Begin("KHTT", ImGuiWindowFlags.Tooltip | ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoTitleBar);
+                        ImGui.Text("Defines when the total bar size, including the ring, will stop getting larger.\n10000 would make the bar stop getting longer at 10000 MaxHP. Prevents an HP bar that's too big.");
+                        ImGui.End();
+                    }
 
                     var minLength = Configuration.MinimumHpForLength;
-                    if (ImGui.InputInt("HP for minimum length", ref minLength, 5, 50))
+                    if (ImGui.InputInt("Max HP for minimum length", ref minLength, 5, 50))
                     {
                         Configuration.MinimumHpForLength = minLength;
                         if (Configuration.MinimumHpForLength < 1)
                             Configuration.MinimumHpForLength = 1;
+                    }
+                    if (ImGui.IsItemHovered())
+                    {
+                        Vector2 m = ImGui.GetIO().MousePos;
+                        ImGui.SetNextWindowPos(new Vector2(m.X + 20, m.Y + 20));
+                        ImGui.Begin("KHTT", ImGuiWindowFlags.Tooltip | ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoTitleBar);
+                        ImGui.Text("Defines when the total bar size, including the ring, will stop getting smaller.\n1000 would make the bar stop getting smaller at 1000 MaxHP. Prevents an HP bar that's too small.");
+                        ImGui.End();
                     }
 
                     ImGui.Separator();
@@ -393,6 +425,14 @@ namespace KingdomHeartsPlugin
                         if (Configuration.MpPerPixelLength < 0.0001f)
                             Configuration.MpPerPixelLength = 0.0001f;
                     }
+                    if (ImGui.IsItemHovered())
+                    {
+                        Vector2 m = ImGui.GetIO().MousePos;
+                        ImGui.SetNextWindowPos(new Vector2(m.X + 20, m.Y + 20));
+                        ImGui.Begin("KHTT", ImGuiWindowFlags.Tooltip | ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoTitleBar);
+                        ImGui.Text("Defines how long the MP bar is.\nFor example: If set to 20, every 20 MP would increase the width by 1 pixel.");
+                        ImGui.End();
+                    }
 
                     var maximumMpLength = Configuration.MaximumMpLength;
                     if (ImGui.InputInt("MP for maximum length", ref maximumMpLength, 1, 25))
@@ -401,6 +441,14 @@ namespace KingdomHeartsPlugin
                         if (Configuration.MaximumMpLength < 1)
                             Configuration.MaximumMpLength = 1;
                     }
+                    if (ImGui.IsItemHovered())
+                    {
+                        Vector2 m = ImGui.GetIO().MousePos;
+                        ImGui.SetNextWindowPos(new Vector2(m.X + 20, m.Y + 20));
+                        ImGui.Begin("KHTT", ImGuiWindowFlags.Tooltip | ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoTitleBar);
+                        ImGui.Text("Defines the limit of MaxMP on how long the bar can get.\nSetting to 10000 would prevent the bar from getting longer after 10000 MaxMP");
+                        ImGui.End();
+                    }
 
                     var minimumMpLength = Configuration.MinimumMpLength;
                     if (ImGui.InputInt("MP for minimum length", ref minimumMpLength, 1, 25))
@@ -408,6 +456,14 @@ namespace KingdomHeartsPlugin
                         Configuration.MinimumMpLength = minimumMpLength;
                         if (Configuration.MinimumMpLength < 1)
                             Configuration.MinimumMpLength = 1;
+                    }
+                    if (ImGui.IsItemHovered())
+                    {
+                        Vector2 m = ImGui.GetIO().MousePos;
+                        ImGui.SetNextWindowPos(new Vector2(m.X + 20, m.Y + 20));
+                        ImGui.Begin("KHTT", ImGuiWindowFlags.Tooltip | ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoTitleBar);
+                        ImGui.Text("Defines the limit of MaxMP on how small the bar can get.\nSetting to 100 would prevent the bar from getting smaller lower than 100 MaxMP.");
+                        ImGui.End();
                     }
 
                     var truncate = Configuration.TruncateMp;
@@ -436,6 +492,14 @@ namespace KingdomHeartsPlugin
                         if (Configuration.GpPerPixelLength < 0.0001f)
                             Configuration.GpPerPixelLength = 0.0001f;
                     }
+                    if (ImGui.IsItemHovered())
+                    {
+                        Vector2 m = ImGui.GetIO().MousePos;
+                        ImGui.SetNextWindowPos(new Vector2(m.X + 20, m.Y + 20));
+                        ImGui.Begin("KHTT", ImGuiWindowFlags.Tooltip | ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoTitleBar);
+                        ImGui.Text("Defines how long the GP bar is.\nFor example: If set to 20, every 20 GP would increase the width by 1 pixel.");
+                        ImGui.End();
+                    }
 
                     var maximumGpLength = Configuration.MaximumGpLength;
                     if (ImGui.InputInt("GP for maximum length", ref maximumGpLength, 1, 25))
@@ -444,6 +508,14 @@ namespace KingdomHeartsPlugin
                         if (Configuration.MaximumGpLength < 1)
                             Configuration.MaximumGpLength = 1;
                     }
+                    if (ImGui.IsItemHovered())
+                    {
+                        Vector2 m = ImGui.GetIO().MousePos;
+                        ImGui.SetNextWindowPos(new Vector2(m.X + 20, m.Y + 20));
+                        ImGui.Begin("KHTT", ImGuiWindowFlags.Tooltip | ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoTitleBar);
+                        ImGui.Text("Defines the limit of MaxGP on how long the bar can get.\nSetting to 500 would prevent the bar from getting longer after 500 MaxGP");
+                        ImGui.End();
+                    }
 
                     var minimumGpLength = Configuration.MinimumGpLength;
                     if (ImGui.InputInt("GP for minimum length", ref minimumGpLength, 1, 25))
@@ -451,6 +523,14 @@ namespace KingdomHeartsPlugin
                         Configuration.MinimumGpLength = minimumGpLength;
                         if (Configuration.MinimumGpLength < 1)
                             Configuration.MinimumGpLength = 1;
+                    }
+                    if (ImGui.IsItemHovered())
+                    {
+                        Vector2 m = ImGui.GetIO().MousePos;
+                        ImGui.SetNextWindowPos(new Vector2(m.X + 20, m.Y + 20));
+                        ImGui.Begin("KHTT", ImGuiWindowFlags.Tooltip | ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoTitleBar);
+                        ImGui.Text("Defines the limit of MaxGP on how small the bar can get.\nSetting to 100 would prevent the bar from getting smaller lower than 100 MaxGP.");
+                        ImGui.End();
                     }
 
                     ImGui.Separator();
@@ -465,6 +545,14 @@ namespace KingdomHeartsPlugin
                         if (Configuration.CpPerPixelLength < 0.0001f)
                             Configuration.CpPerPixelLength = 0.0001f;
                     }
+                    if (ImGui.IsItemHovered())
+                    {
+                        Vector2 m = ImGui.GetIO().MousePos;
+                        ImGui.SetNextWindowPos(new Vector2(m.X + 20, m.Y + 20));
+                        ImGui.Begin("KHTT", ImGuiWindowFlags.Tooltip | ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoTitleBar);
+                        ImGui.Text("Defines how long the CP bar is.\nFor example: If set to 20, every 20 CP would increase the width by 1 pixel.");
+                        ImGui.End();
+                    }
 
                     var maximumCpLength = Configuration.MaximumCpLength;
                     if (ImGui.InputInt("CP for maximum length", ref maximumCpLength, 1, 25))
@@ -473,6 +561,14 @@ namespace KingdomHeartsPlugin
                         if (Configuration.MaximumCpLength < 1)
                             Configuration.MaximumCpLength = 1;
                     }
+                    if (ImGui.IsItemHovered())
+                    {
+                        Vector2 m = ImGui.GetIO().MousePos;
+                        ImGui.SetNextWindowPos(new Vector2(m.X + 20, m.Y + 20));
+                        ImGui.Begin("KHTT", ImGuiWindowFlags.Tooltip | ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoTitleBar);
+                        ImGui.Text("Defines the limit of MaxCP on how long the bar can get.\nSetting to 400 would prevent the bar from getting longer after 400 MaxCP");
+                        ImGui.End();
+                    }
 
                     var minimumCpLength = Configuration.MinimumCpLength;
                     if (ImGui.InputInt("CP for minimum length", ref minimumCpLength, 1, 25))
@@ -480,6 +576,14 @@ namespace KingdomHeartsPlugin
                         Configuration.MinimumCpLength = minimumCpLength;
                         if (Configuration.MinimumCpLength < 1)
                             Configuration.MinimumCpLength = 1;
+                    }
+                    if (ImGui.IsItemHovered())
+                    {
+                        Vector2 m = ImGui.GetIO().MousePos;
+                        ImGui.SetNextWindowPos(new Vector2(m.X + 20, m.Y + 20));
+                        ImGui.Begin("KHTT", ImGuiWindowFlags.Tooltip | ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoTitleBar);
+                        ImGui.Text("Defines the limit of MaxCP on how small the bar can get.\nSetting to 100 would prevent the bar from getting smaller lower than 100 MaxCP.");
+                        ImGui.End();
                     }
 
                     ImGui.EndTabItem();
