@@ -75,15 +75,7 @@ namespace KingdomHeartsPlugin
 
             if (Cs.LocalPlayer != null)
             {
-                try
-                {
-                    var territory = Dm.GetExcelSheet<TerritoryType>().GetRow(Cs.TerritoryType);
-                    IsInPvp = territory.IsPvpZone;
-                }
-                catch (KeyNotFoundException)
-                {
-                    PluginLog.Warning("Could not get territory for current zone");
-                }
+                IsInPvp = GetTerritoryPvP(Cs.TerritoryType);
             }
         }
 
@@ -129,15 +121,7 @@ namespace KingdomHeartsPlugin
 
         private void OnTerritoryChange(object sender, ushort e)
         {
-            try
-            {
-                var territory = Dm.GetExcelSheet<TerritoryType>().GetRow(e);
-                IsInPvp = territory.IsPvpZone;
-            }
-            catch (KeyNotFoundException)
-            {
-                PluginLog.Warning("Could not get territory for current zone");
-            }
+            IsInPvp = GetTerritoryPvP(e);
         }
 
         private void DrawUi()
@@ -148,6 +132,20 @@ namespace KingdomHeartsPlugin
         private void DrawConfigUi()
         {
             Ui.SettingsVisible = true;
+        }
+
+        private bool GetTerritoryPvP(uint territoryType)
+        {
+            try
+            {
+                var territory = Dm.GetExcelSheet<TerritoryType>().GetRow(territoryType);
+                return territory.IsPvpZone;
+            }
+            catch (KeyNotFoundException)
+            {
+                PluginLog.Warning("Could not get territory for current zone");
+                return false;
+            }
         }
 
         public static DalamudPluginInterface Pi { get; private set; }
