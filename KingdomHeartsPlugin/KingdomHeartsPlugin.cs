@@ -1,4 +1,5 @@
-﻿using Dalamud.Data;
+﻿using System.Collections.Generic;
+using Dalamud.Data;
 using Dalamud.Game;
 using Dalamud.Game.ClientState;
 using Dalamud.Game.Command;
@@ -7,6 +8,9 @@ using Dalamud.IoC;
 using Dalamud.Plugin;
 using System.Diagnostics;
 using System.IO;
+using Dalamud.Logging;
+using KingdomHeartsPlugin.Configuration;
+using Lumina.Excel.GeneratedSheets;
 
 namespace KingdomHeartsPlugin
 {
@@ -17,17 +21,6 @@ namespace KingdomHeartsPlugin
         private const string SettingsCommand = "/khp";
         private const string HideCommand = "/khphide";
         private const string ShowCommand = "/khpshow";
-
-        public static DalamudPluginInterface Pi { get; private set; }
-        public static Framework Fw { get; private set; }
-        public static CommandManager Cm { get; private set; }
-        public static ClientState Cs { get; private set; }
-        public static GameGui Gui { get; private set; }
-        public static DataManager Dm { get; private set; }
-        public static PluginUI Ui { get; private set; }
-
-        public static Stopwatch Timer { get; private set; }
-        public static float UiSpeed { get; set; }
 
         public static string TemplateLocation;
 
@@ -46,13 +39,14 @@ namespace KingdomHeartsPlugin
             Gui = gameGui;
             Dm = dataManager;
             
+            
             Timer = Stopwatch.StartNew();
 
             var assemblyLocation = pluginInterface.AssemblyLocation.DirectoryName + "\\";
 
             TemplateLocation = Path.GetDirectoryName(assemblyLocation);
             
-            var configuration = Pi.GetPluginConfig() as Configuration ?? new Configuration();
+            var configuration = Pi.GetPluginConfig() as Settings ?? new Settings();
             configuration.Initialize(Pi);
 
             Ui = new PluginUI(configuration);
@@ -77,6 +71,20 @@ namespace KingdomHeartsPlugin
 
             Pi.UiBuilder.Draw += DrawUi;
             Pi.UiBuilder.OpenConfigUi += DrawConfigUi;
+            Cs.TerritoryChanged += OnTerritoryChange;
+
+            if (Cs.LocalPlayer != null)
+            {
+                try
+                {
+                    var territory = Dm.GetExcelSheet<TerritoryType>().GetRow(Cs.TerritoryType);
+                    IsInPvp = territory.IsPvpZone;
+                }
+                catch (KeyNotFoundException)
+                {
+                    PluginLog.Warning("Could not get territory for current zone");
+                }
+            }
         }
 
         public void Dispose()
@@ -90,6 +98,7 @@ namespace KingdomHeartsPlugin
             Fw.Update -= OnUpdate;
             
             Pi.UiBuilder.Draw -= DrawUi;
+            Cs.TerritoryChanged -= OnTerritoryChange;
 
             Pi?.Dispose();
 
@@ -118,6 +127,19 @@ namespace KingdomHeartsPlugin
             Ui.Configuration.Save();
         }
 
+        private void OnTerritoryChange(object sender, ushort e)
+        {
+            try
+            {
+                var territory = Dm.GetExcelSheet<TerritoryType>().GetRow(e);
+                IsInPvp = territory.IsPvpZone;
+            }
+            catch (KeyNotFoundException)
+            {
+                PluginLog.Warning("Could not get territory for current zone");
+            }
+        }
+
         private void DrawUi()
         {
             Ui.Draw();
@@ -127,5 +149,17 @@ namespace KingdomHeartsPlugin
         {
             Ui.SettingsVisible = true;
         }
+
+        public static DalamudPluginInterface Pi { get; private set; }
+        public static Framework Fw { get; private set; }
+        public static CommandManager Cm { get; private set; }
+        public static ClientState Cs { get; private set; }
+        public static GameGui Gui { get; private set; }
+        public static DataManager Dm { get; private set; }
+        public static PluginUI Ui { get; private set; }
+
+        public static Stopwatch Timer { get; private set; }
+        public static float UiSpeed { get; set; }
+        public static bool IsInPvp { get; private set; }
     }
 }
