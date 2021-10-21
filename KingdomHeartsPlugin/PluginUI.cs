@@ -116,11 +116,12 @@ namespace KingdomHeartsPlugin
         private unsafe void CheckNpcTalkingVisibility()
         {
             var actionBarWidget = (AtkUnitBase*)KingdomHeartsPlugin.Gui.GetAddonByName("_ActionBar", 1);
-            if (actionBarWidget != null && KingdomHeartsPlugin.Ui.Configuration.HideWhenNpcTalking)
-            {
-                if (!actionBarWidget->IsVisible)
-                    Visible = false;
-            }
+            var actionCrossWidget = (AtkUnitBase*)KingdomHeartsPlugin.Gui.GetAddonByName("_ActionCross", 1);
+
+            if (actionBarWidget == null || actionCrossWidget == null || !KingdomHeartsPlugin.Ui.Configuration.HideWhenNpcTalking) return;
+
+            if (!actionBarWidget->IsVisible && !actionCrossWidget->IsVisible)
+                Visible = false;
         }
 
         private void GeneralSettings()
