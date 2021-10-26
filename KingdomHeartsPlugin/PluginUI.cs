@@ -7,6 +7,7 @@ using FFXIVClientStructs.FFXIV.Component.GUI;
 using KingdomHeartsPlugin.Configuration;
 using KingdomHeartsPlugin.Enums;
 using KingdomHeartsPlugin.UIElements.HealthBar;
+using Microsoft.VisualBasic;
 
 namespace KingdomHeartsPlugin
 {
@@ -219,6 +220,7 @@ namespace KingdomHeartsPlugin
             ImGui.Separator();
             if (ImGui.CollapsingHeader("Standard"))
             {
+                ImGui.Indent(20);
                 var fullRing = Configuration.HpForFullRing;
                 if (ImGui.InputInt("HP for full ring", ref fullRing, 5, 50))
                 {
@@ -288,11 +290,13 @@ namespace KingdomHeartsPlugin
                         $"Defines when the total bar size, including the ring, will stop getting smaller.\n1000 would make the bar stop getting smaller at 1000 MaxHP. Prevents an HP bar that's too small.\n\nDefault: {Defaults.MinimumHpForLength}");
                     ImGui.End();
                 }
+                ImGui.Indent(-20);
             }
 
 
             if (ImGui.CollapsingHeader("PvP"))
             {
+                ImGui.Indent(20);
                 var fullRing = Configuration.PvpHpForFullRing;
                 if (ImGui.InputInt("HP for full ring", ref fullRing, 5, 50))
                 {
@@ -362,6 +366,7 @@ namespace KingdomHeartsPlugin
                         $"Defines when the total bar size, including the ring, will stop getting smaller.\n1000 would make the bar stop getting smaller at 1000 MaxHP. Prevents an HP bar that's too small.\n\nDefault: {Defaults.PvpMinimumHpForLength}");
                     ImGui.End();
                 }
+                ImGui.Indent(-20);
             }
 
             ImGui.Separator();
@@ -402,26 +407,18 @@ namespace KingdomHeartsPlugin
                 ImGui.Text("Please note that center and right alignments are not perfect and may not hold the same position.");
                 ImGui.End();
             }
-
-            var textStyles = new[] { "No Formatting", "Separators", "Truncate", "Truncate with Separators" };
-            if (ImGui.BeginCombo("Text Formatting", textStyles[Configuration.HpValueTextStyle]))
+            
+            if (ImGui.BeginCombo("Text Formatting", Configuration.HpValueTextStyle.GetDescription()))
             {
-                for (int i = 0; i < textStyles.Length; i++)
+                var styles = (NumberFormatStyle[])Enum.GetValues(typeof(NumberFormatStyle));
+                for (int i = 0; i < styles.Length; i++)
                 {
-                    if (ImGui.Selectable(textStyles[i]))
+                    if (ImGui.Selectable($"{styles[i].GetDescription()} ({StringFormatting.FormatDigits(1234567, (NumberFormatStyle)i)}) ({StringFormatting.FormatDigits(54321, (NumberFormatStyle)i)})"))
                     {
-                        Configuration.HpValueTextStyle = i;
+                        Configuration.HpValueTextStyle = (NumberFormatStyle)i;
                     }
                 }
                 ImGui.EndCombo();
-            }
-            if (ImGui.IsItemHovered())
-            {
-                Vector2 m = ImGui.GetIO().MousePos;
-                ImGui.SetNextWindowPos(new Vector2(m.X + 20, m.Y + 20));
-                ImGui.Begin("TT1", ImGuiWindowFlags.Tooltip | ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoTitleBar);
-                ImGui.Text("Separator: Adds for separators for Thousands, Millions, etc. Ex: 1,234,567\nTruncate: Truncate HP value over 10000 to 10.0K and 100000 to 100K");
-                ImGui.End();
             }
 
             var showHpVal = Configuration.ShowHpVal;
@@ -515,6 +512,19 @@ namespace KingdomHeartsPlugin
                     if (ImGui.Selectable(alignments[i]))
                     {
                         Configuration.ResourceTextAlignment = i;
+                    }
+                }
+                ImGui.EndCombo();
+            }
+
+            if (ImGui.BeginCombo("Text Formatting", Configuration.ResourceTextStyle.GetDescription()))
+            {
+                var styles = (NumberFormatStyle[])Enum.GetValues(typeof(NumberFormatStyle));
+                for (int i = 0; i < styles.Length; i++)
+                {
+                    if (ImGui.Selectable($"{styles[i].GetDescription()} ({StringFormatting.FormatDigits(10000, (NumberFormatStyle)i)})"))
+                    {
+                        Configuration.ResourceTextStyle = (NumberFormatStyle)i;
                     }
                 }
                 ImGui.EndCombo();
@@ -735,11 +745,78 @@ namespace KingdomHeartsPlugin
         {
             if (!ImGui.BeginTabItem("Class Info")) return;
 
+            ImGui.Text("Exp Info");
+            ImGui.Separator();
+
             var expBarEnabled = Configuration.ExpBarEnabled;
             if (ImGui.Checkbox("EXP Bar Enabled", ref expBarEnabled))
             {
                 Configuration.ExpBarEnabled = expBarEnabled;
             }
+
+            if (ImGui.CollapsingHeader("Exp Text"))
+            {
+                ImGui.Indent(20);
+
+                var expTextEnabled = Configuration.ExpValueTextEnabled;
+                if (ImGui.Checkbox("Enabled", ref expTextEnabled))
+                {
+                    Configuration.ExpValueTextEnabled = expTextEnabled;
+                }
+
+                var expTextPos = new Vector2(Configuration.ExpValueTextPositionX, Configuration.ExpValueTextPositionY);
+                if (ImGui.DragFloat2("Position (X, Y)", ref expTextPos))
+                {
+                    Configuration.ExpValueTextPositionX = expTextPos.X;
+                    Configuration.ExpValueTextPositionY = expTextPos.Y;
+                }
+
+                var expTextSize = Configuration.ExpValueTextSize;
+                if (ImGui.InputFloat("Size", ref expTextSize))
+                {
+                    Configuration.ExpValueTextSize = expTextSize;
+                }
+
+                if (ImGui.BeginCombo("Alignment", Enum.GetName((TextAlignment)Configuration.ExpValueTextAlignment)))
+                {
+                    var alignments = Enum.GetNames(typeof(TextAlignment));
+                    for (int i = 0; i < alignments.Length; i++)
+                    {
+                        if (ImGui.Selectable(alignments[i]))
+                        {
+                            Configuration.ExpValueTextAlignment = i;
+                        }
+                    }
+                    ImGui.EndCombo();
+                }
+                if (ImGui.IsItemHovered())
+                {
+                    Vector2 m = ImGui.GetIO().MousePos;
+                    ImGui.SetNextWindowPos(new Vector2(m.X + 20, m.Y + 20));
+                    ImGui.Begin("TT1", ImGuiWindowFlags.Tooltip | ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoTitleBar);
+                    ImGui.Text("Please note that center and right alignments are not perfect and may not hold the same position.");
+                    ImGui.End();
+                }
+
+                if (ImGui.BeginCombo("Formatting", Configuration.ExpValueTextFormatStyle.GetDescription()))
+                {
+                    var styles = (NumberFormatStyle[])Enum.GetValues(typeof(NumberFormatStyle));
+                    for (int i = 0; i < styles.Length; i++)
+                    {
+                        if (ImGui.Selectable($"{styles[i].GetDescription()} ({StringFormatting.FormatDigits(12345, (NumberFormatStyle)i)}/{StringFormatting.FormatDigits(9999999, (NumberFormatStyle)i)})"))
+                        {
+                            Configuration.ExpValueTextFormatStyle = (NumberFormatStyle)i;
+                        }
+                    }
+                    ImGui.EndCombo();
+                }
+
+                ImGui.Indent(-20);
+            }
+
+            ImGui.Separator();
+            ImGui.NewLine();
+
             var levelTextEnabled = Configuration.LevelEnabled;
             if (ImGui.Checkbox("Level Text Enabled", ref levelTextEnabled))
             {

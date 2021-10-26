@@ -9,29 +9,45 @@ namespace KingdomHeartsPlugin.Utilities
 {
     public static class StringFormatting
     {
-        public static string FormatDigits(uint val, NumberFormatStyle formatStyle)
+        public static string FormatDigits(uint val, NumberFormatStyle formatStyle = NumberFormatStyle.NoFormatting)
         {
-            switch (formatStyle)
+            if (formatStyle == NumberFormatStyle.NoFormatting) return $"{val}";
+
+            if (formatStyle == NumberFormatStyle.ThousandsSeparator) return val.ToString("N0", KingdomHeartsPlugin.GetCulture());
+
+            var stringFormat = formatStyle switch
             {
-                case NumberFormatStyle.ThousandsSeparator:
-                    return $"{val:#,##0}";
-                case NumberFormatStyle.TruncateTenThousands:
-                {
-                    float floatVal = val >= 10000 ? val / 1000f : val;
+                NumberFormatStyle.SmallNumberOneDecimalPrecision => "F1",
+                NumberFormatStyle.SmallNumberTwoDecimalPrecision => "F2",
+                _ => "F0"
+            };
 
-                    return val >= 10000 ? val >= 100000 ? $"{floatVal:0}K" : $"{floatVal:0.#}K" : $"{floatVal}";
-                }
-                case NumberFormatStyle.TruncateTenThousandsAndSeparator:
-                {
-                    float floatVal = val >= 10000 ? val / 1000f : val;
+            return val switch
+            {
+                >= 1000000 => $"{(val / 1000000f).ToString(stringFormat, KingdomHeartsPlugin.GetCulture())}M",
+                >= 10000 => $"{(val / 1000f).ToString(stringFormat, KingdomHeartsPlugin.GetCulture())}K",
+                _ => $"{val}"
+            };
+        }
+        public static string FormatDigits(int val, NumberFormatStyle formatStyle = NumberFormatStyle.NoFormatting)
+        {
+            if (formatStyle == NumberFormatStyle.NoFormatting) return $"{val}";
 
-                    return val >= 10000 ? val >= 100000 ? $"{floatVal:#,##0}K" : $"{floatVal:#,##0.#}K" : $"{floatVal}";
-                }
-                case NumberFormatStyle.NoFormatting:
-                    return $"{val}";
-                default:
-                    return $"{val}";
-            }
+            if (formatStyle == NumberFormatStyle.ThousandsSeparator) return val.ToString("N0", KingdomHeartsPlugin.GetCulture());
+
+            var stringFormat = formatStyle switch
+            {
+                NumberFormatStyle.SmallNumberOneDecimalPrecision => "F1",
+                NumberFormatStyle.SmallNumberTwoDecimalPrecision => "F2",
+                _ => "F0"
+            };
+
+            return val switch
+            {
+                >= 1000000 => $"{(val / 1000000f).ToString(stringFormat, KingdomHeartsPlugin.GetCulture())}M",
+                >= 10000 => $"{(val / 1000f).ToString(stringFormat, KingdomHeartsPlugin.GetCulture())}K",
+                _ => $"{val}"
+            };
         }
     }
 }

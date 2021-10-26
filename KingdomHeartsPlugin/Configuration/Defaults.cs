@@ -1,4 +1,7 @@
-﻿namespace KingdomHeartsPlugin.Configuration
+﻿using System.Globalization;
+using KingdomHeartsPlugin.Enums;
+
+namespace KingdomHeartsPlugin.Configuration
 {
     public static class Defaults
     {
@@ -7,6 +10,7 @@
         public const bool Enabled  = true;
         public const bool HideWhenNpcTalking  = false;
         public const float Scale  = 1f;
+        public const string TextFormatCulture = "en-US";
         #endregion
 
         #region HP
@@ -15,7 +19,7 @@
         public const float HpValueTextPositionY  = 130;
         public const float HpValueTextSize  = 21;
         public const int HpValueTextAlignment  = 0;
-        public const int HpValueTextStyle = 0;
+        public const NumberFormatStyle HpValueTextStyle = NumberFormatStyle.NoFormatting;
         public const float HpDamageWobbleIntensity  = 100f;
         public const int HpForFullRing  = 60000;
         public const int MaximumHpForMaximumLength  = 120000;
@@ -37,6 +41,7 @@
         public const float ResourceTextPositionX  = -10;
         public const float ResourceTextPositionY  = -7;
         public const float ResourceTextSize  = 24;
+        public const NumberFormatStyle ResourceTextStyle = NumberFormatStyle.NoFormatting;
         public const int ResourceTextAlignment  = 2;
         public const int MaximumMpLength  = 11500;
         public const int MinimumMpLength  = 500;
@@ -64,6 +69,12 @@
         #region Experience
 
         public const bool ExpBarEnabled  = true;
+        public const bool ExpValueTextEnabled = true;
+        public const float ExpValueTextSize = 24;
+        public const int ExpValueTextAlignment = 0;
+        public const NumberFormatStyle ExpValueTextFormatStyle = NumberFormatStyle.NoFormatting;
+        public const float ExpValueTextPositionX = 0;
+        public const float ExpValueTextPositionY = 0;
 
         #endregion
 

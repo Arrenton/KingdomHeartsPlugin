@@ -1,6 +1,7 @@
 ﻿using System;
 using Dalamud.Configuration;
 using Dalamud.Plugin;
+using KingdomHeartsPlugin.Enums;
 
 namespace KingdomHeartsPlugin.Configuration
 {
@@ -14,6 +15,7 @@ namespace KingdomHeartsPlugin.Configuration
         public bool Enabled { get; set; } = Defaults.Enabled;
         public bool HideWhenNpcTalking { get; set; } = Defaults.HideWhenNpcTalking;
         public float Scale { get; set; } = Defaults.Scale;
+        public string TextFormatCulture = Defaults.TextFormatCulture;
         #endregion
 
         #region HP
@@ -22,7 +24,7 @@ namespace KingdomHeartsPlugin.Configuration
         public float HpValueTextPositionY { get; set; } = Defaults.HpValueTextPositionY;
         public float HpValueTextSize { get; set; } = Defaults.HpValueTextSize;
         public int HpValueTextAlignment { get; set; } = Defaults.HpValueTextAlignment;
-        public int HpValueTextStyle { get; set; } = Defaults.HpValueTextStyle;
+        public NumberFormatStyle HpValueTextStyle { get; set; } = Defaults.HpValueTextStyle;
         public float HpDamageWobbleIntensity { get; set; } = Defaults.HpDamageWobbleIntensity;
         public int HpForFullRing { get; set; } = Defaults.HpForFullRing;
         public int MaximumHpForMaximumLength { get; set; } = Defaults.MaximumHpForMaximumLength;
@@ -44,6 +46,7 @@ namespace KingdomHeartsPlugin.Configuration
         public float ResourceTextPositionX { get; set; } = Defaults.ResourceTextPositionX;
         public float ResourceTextPositionY { get; set; } = Defaults.ResourceTextPositionY;
         public float ResourceTextSize { get; set; } = Defaults.ResourceTextSize;
+        public NumberFormatStyle ResourceTextStyle { get; set; } = Defaults.ResourceTextStyle;
         public int ResourceTextAlignment { get; set; } = Defaults.ResourceTextAlignment;
         public int MaximumMpLength { get; set; } = Defaults.MaximumMpLength;
         public int MinimumMpLength { get; set; } = Defaults.MinimumMpLength;
@@ -71,11 +74,17 @@ namespace KingdomHeartsPlugin.Configuration
         #region Experience
         
         public bool ExpBarEnabled { get; set; } = Defaults.ExpBarEnabled;
+        public bool ExpValueTextEnabled { get; set; } = Defaults.ExpValueTextEnabled;
+        public float ExpValueTextSize { get; set; } = Defaults.ExpValueTextSize;
+        public int ExpValueTextAlignment { get; set; } = Defaults.ExpValueTextAlignment;
+        public NumberFormatStyle ExpValueTextFormatStyle { get; set; } = Defaults.ExpValueTextFormatStyle;
+        public float ExpValueTextPositionX { get; set; } = Defaults.ExpValueTextPositionX;
+        public float ExpValueTextPositionY { get; set; } = Defaults.ExpValueTextPositionY;
 
         #endregion
 
         #region ClassInfo
-        
+
         public bool LevelEnabled { get; set; } = Defaults.LevelEnabled;
         public bool ClassIconEnabled { get; set; } = Defaults.ClassIconEnabled;
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Dalamud.Data;
 using Dalamud.Game;
 using Dalamud.Game.ClientState;
@@ -7,6 +8,7 @@ using Dalamud.Game.Gui;
 using Dalamud.IoC;
 using Dalamud.Plugin;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using Dalamud.Logging;
 using KingdomHeartsPlugin.Configuration;
@@ -147,6 +149,17 @@ namespace KingdomHeartsPlugin
                 return false;
             }
         }
+        public static CultureInfo GetCulture()
+        {
+            try
+            {
+                return CultureInfo.GetCultureInfo(Ui.Configuration.TextFormatCulture);
+            }
+            catch
+            {
+                return CultureInfo.GetCultureInfo("en-US");
+            }
+        }
 
         public static DalamudPluginInterface Pi { get; private set; }
         public static Framework Fw { get; private set; }
@@ -159,5 +172,6 @@ namespace KingdomHeartsPlugin
         public static Stopwatch Timer { get; private set; }
         public static float UiSpeed { get; set; }
         public static bool IsInPvp { get; private set; }
+
     }
 }

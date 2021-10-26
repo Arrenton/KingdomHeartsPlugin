@@ -6,6 +6,7 @@ using System;
 using System.IO;
 using System.Numerics;
 using System.Runtime.InteropServices;
+using KingdomHeartsPlugin.Enums;
 
 namespace KingdomHeartsPlugin.UIElements.Experience
 {
@@ -146,6 +147,15 @@ namespace KingdomHeartsPlugin.UIElements.Experience
                         size / 2f - 52 * KingdomHeartsPlugin.Ui.Configuration.Scale),
                     new Vector4(249 / 255f, 247 / 255f, 232 / 255f, 0.9f),
                     new Vector4(96 / 255f, 78 / 255f, 23 / 255f, 0.25f), 3);
+
+            if (KingdomHeartsPlugin.Ui.Configuration.ExpValueTextEnabled)
+                ImGuiAdditions.TextShadowedDrawList(drawList, KingdomHeartsPlugin.Ui.Configuration.ExpValueTextSize,
+                    $"{StringFormatting.FormatDigits(Experience, (NumberFormatStyle)KingdomHeartsPlugin.Ui.Configuration.ExpValueTextFormatStyle)} / {StringFormatting.FormatDigits(MaxExperience, (NumberFormatStyle)KingdomHeartsPlugin.Ui.Configuration.ExpValueTextFormatStyle)}",
+                    drawPosition + new Vector2(KingdomHeartsPlugin.Ui.Configuration.ExpValueTextPositionX, KingdomHeartsPlugin.Ui.Configuration.ExpValueTextPositionY),
+                    new Vector4(255 / 255f, 255 / 255f, 255 / 255f, 1f),
+                    new Vector4(0 / 255f, 0 / 255f, 0 / 255f, 0.25f),
+                    3,
+                    (TextAlignment)KingdomHeartsPlugin.Ui.Configuration.ExpValueTextAlignment);
         }
 
         public void Dispose()
