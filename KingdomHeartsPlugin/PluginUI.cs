@@ -5,6 +5,7 @@ using System;
 using System.Numerics;
 using FFXIVClientStructs.FFXIV.Component.GUI;
 using KingdomHeartsPlugin.Configuration;
+using KingdomHeartsPlugin.Enums;
 using KingdomHeartsPlugin.UIElements.HealthBar;
 
 namespace KingdomHeartsPlugin
@@ -27,21 +28,21 @@ namespace KingdomHeartsPlugin
         private bool visible = true;
         public bool Visible
         {
-            get => this.visible;
-            set => this.visible = value;
+            get => visible;
+            set => visible = value;
         }
 
         private bool settingsVisible = false;
         public bool SettingsVisible
         {
-            get => this.settingsVisible;
-            set => this.settingsVisible = value;
+            get => settingsVisible;
+            set => settingsVisible = value;
         }
 
         // passing in the image here just for simplicity
         public PluginUI(Settings configuration)
         {
-            this.Configuration = configuration;
+            Configuration = configuration;
             _healthFrame = new HealthFrame();
 
             /*_testTextureWrap = KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\LimitGauge\number_2.png"));
@@ -106,7 +107,7 @@ namespace KingdomHeartsPlugin
             ImGuiHelpers.ForceNextWindowMainViewport();
             ImGui.SetNextWindowSizeConstraints(size, new Vector2(float.MaxValue, float.MaxValue));
             
-            if (ImGui.Begin("KH Frame", ref this.visible, window_flags))
+            if (ImGui.Begin("KH Frame", ref visible, window_flags))
             {
                 _healthFrame.Draw();
             }
@@ -128,24 +129,24 @@ namespace KingdomHeartsPlugin
         {
             if (!ImGui.BeginTabItem("General")) return;
 
-            var enabled = this.Configuration.Enabled;
+            var enabled = Configuration.Enabled;
             if (ImGui.Checkbox("Visible", ref enabled))
             {
-                this.Configuration.Enabled = enabled;
+                Configuration.Enabled = enabled;
             }
-            var hideWhenNpcTalking = this.Configuration.HideWhenNpcTalking;
+            var hideWhenNpcTalking = Configuration.HideWhenNpcTalking;
             if (ImGui.Checkbox("Hide when dialogue box is shown", ref hideWhenNpcTalking))
             {
-                this.Configuration.HideWhenNpcTalking = hideWhenNpcTalking;
+                Configuration.HideWhenNpcTalking = hideWhenNpcTalking;
             }
 
-            var locked = this.Configuration.Locked;
+            var locked = Configuration.Locked;
             if (ImGui.Checkbox("Locked", ref locked))
             {
-                this.Configuration.Locked = locked;
+                Configuration.Locked = locked;
             }
 
-            var scale = this.Configuration.Scale;
+            var scale = Configuration.Scale;
             if (ImGui.InputFloat("Scale", ref scale, 0.025f, 0.1f))
             {
                 Configuration.Scale = scale;
@@ -381,9 +382,9 @@ namespace KingdomHeartsPlugin
                 Configuration.HpValueTextSize = hpTextSize;
             }
 
-            if (ImGui.BeginCombo("Text Alignment", Enum.GetName((ImGuiAdditions.TextAlignment)Configuration.HpValueTextAlignment)))
+            if (ImGui.BeginCombo("Text Alignment", Enum.GetName((TextAlignment)Configuration.HpValueTextAlignment)))
             {
-                var alignments = Enum.GetNames(typeof(ImGuiAdditions.TextAlignment));
+                var alignments = Enum.GetNames(typeof(TextAlignment));
                 for (int i = 0; i < alignments.Length; i++)
                 {
                     if (ImGui.Selectable(alignments[i]))
@@ -393,25 +394,40 @@ namespace KingdomHeartsPlugin
                 }
                 ImGui.EndCombo();
             }
-
-            var showHpVal = Configuration.ShowHpVal;
-            if (ImGui.Checkbox("Show HP Value", ref showHpVal))
+            if (ImGui.IsItemHovered())
             {
-                Configuration.ShowHpVal = showHpVal;
+                Vector2 m = ImGui.GetIO().MousePos;
+                ImGui.SetNextWindowPos(new Vector2(m.X + 20, m.Y + 20));
+                ImGui.Begin("TT1", ImGuiWindowFlags.Tooltip | ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoTitleBar);
+                ImGui.Text("Please note that center and right alignments are not perfect and may not hold the same position.");
+                ImGui.End();
             }
 
-            var truncate = Configuration.TruncateHp;
-            if (ImGui.Checkbox("Truncate HP Text Value", ref truncate))
+            var textStyles = new[] { "No Formatting", "Separators", "Truncate", "Truncate with Separators" };
+            if (ImGui.BeginCombo("Text Formatting", textStyles[Configuration.HpValueTextStyle]))
             {
-                Configuration.TruncateHp = truncate;
+                for (int i = 0; i < textStyles.Length; i++)
+                {
+                    if (ImGui.Selectable(textStyles[i]))
+                    {
+                        Configuration.HpValueTextStyle = i;
+                    }
+                }
+                ImGui.EndCombo();
             }
             if (ImGui.IsItemHovered())
             {
                 Vector2 m = ImGui.GetIO().MousePos;
                 ImGui.SetNextWindowPos(new Vector2(m.X + 20, m.Y + 20));
                 ImGui.Begin("TT1", ImGuiWindowFlags.Tooltip | ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoTitleBar);
-                ImGui.Text("Truncate HP value over 10000 to 10.0K and 100000 to 100K");
+                ImGui.Text("Separator: Adds for separators for Thousands, Millions, etc. Ex: 1,234,567\nTruncate: Truncate HP value over 10000 to 10.0K and 100000 to 100K");
                 ImGui.End();
+            }
+
+            var showHpVal = Configuration.ShowHpVal;
+            if (ImGui.Checkbox("Show HP Value", ref showHpVal))
+            {
+                Configuration.ShowHpVal = showHpVal;
             }
 
 
@@ -491,9 +507,9 @@ namespace KingdomHeartsPlugin
                 Configuration.ResourceTextSize = resourceTextSize;
             }
 
-            if (ImGui.BeginCombo("Text Alignment", Enum.GetName((ImGuiAdditions.TextAlignment)Configuration.ResourceTextAlignment)))
+            if (ImGui.BeginCombo("Text Alignment", Enum.GetName((TextAlignment)Configuration.ResourceTextAlignment)))
             {
-                var alignments = Enum.GetNames(typeof(ImGuiAdditions.TextAlignment));
+                var alignments = Enum.GetNames(typeof(TextAlignment));
                 for (int i = 0; i < alignments.Length; i++)
                 {
                     if (ImGui.Selectable(alignments[i]))
@@ -746,7 +762,7 @@ namespace KingdomHeartsPlugin
             }
 
             ImGui.SetNextWindowSize(new Vector2(600, 500), ImGuiCond.FirstUseEver);
-            if (ImGui.Begin("Kingdom Hearts Bars: Settings", ref this.settingsVisible,
+            if (ImGui.Begin("Kingdom Hearts Bars: Settings", ref settingsVisible,
                ImGuiWindowFlags.NoCollapse))
             {
                 ImGui.BeginTabBar("KhTabBar");
@@ -761,7 +777,7 @@ namespace KingdomHeartsPlugin
                 ImGui.Separator();
                 if (ImGui.Button("Save"))
                 {
-                    this.Configuration.Save();
+                    Configuration.Save();
                 }
             }
             ImGui.End();

@@ -1,14 +1,15 @@
-﻿using System;
-using System.IO;
-using System.Numerics;
-using Dalamud.Game.ClientState.Objects.SubKinds;
+﻿using Dalamud.Game.ClientState.Objects.SubKinds;
 using FFXIVClientStructs.FFXIV.Component.GUI;
 using ImGuiNET;
 using ImGuiScene;
+using KingdomHeartsPlugin.Enums;
 using KingdomHeartsPlugin.UIElements.Experience;
 using KingdomHeartsPlugin.UIElements.LimitBreak;
 using KingdomHeartsPlugin.UIElements.ParameterResource;
 using KingdomHeartsPlugin.Utilities;
+using System;
+using System.IO;
+using System.Numerics;
 
 namespace KingdomHeartsPlugin.UIElements.HealthBar
 {
@@ -92,22 +93,19 @@ namespace KingdomHeartsPlugin.UIElements.HealthBar
             {
                 // Draw HP Value
                 var basePosition = ImGui.GetItemRectMin() + new Vector2(KingdomHeartsPlugin.Ui.Configuration.HpValueTextPositionX, KingdomHeartsPlugin.Ui.Configuration.HpValueTextPositionY) * KingdomHeartsPlugin.Ui.Configuration.Scale;
-                float hp = KingdomHeartsPlugin.Ui.Configuration.TruncateHp && player.CurrentHp >= 10000
+                /*float hp = KingdomHeartsPlugin.Ui.Configuration.TruncateHp && player.CurrentHp >= 10000
                     ? player.CurrentHp / 1000f
                     : player.CurrentHp;
+
                 string hpVal = KingdomHeartsPlugin.Ui.Configuration.TruncateHp && player.CurrentHp >= 10000
-                    ? player.CurrentHp >= 100000 ? $"{hp:0}K" : $"{hp:0.#}K"
-                    : $"{hp}";
-                /*ImGuiAdditions.TextCenteredShadowed(hpVal, 1.25f,
-                    new Vector2(KingdomHeartsPlugin.Ui.Settings.HpValueTextPositionX, KingdomHeartsPlugin.Ui.Settings.HpValueTextPositionY),
-                    new Vector4(255 / 255f, 255 / 255f, 255 / 255f, 1f),
-                    new Vector4(0 / 255f, 0 / 255f, 0 / 255f, 0.25f), 3);*/
+                    ? player.CurrentHp >= 100000 ? $"{hp:0}K" : $"{hp:0.#}K" : $"{hp}";*/
+
                 ImGuiAdditions.TextShadowedDrawList(drawList,
                     KingdomHeartsPlugin.Ui.Configuration.HpValueTextSize,
-                    $"{hpVal}",
+                    $"{StringFormatting.FormatDigits(player.CurrentHp, (NumberFormatStyle)KingdomHeartsPlugin.Ui.Configuration.HpValueTextStyle)}",
                     basePosition,
                     new Vector4(255 / 255f, 255 / 255f, 255 / 255f, 1f),
-                    new Vector4(0 / 255f, 0 / 255f, 0 / 255f, 0.25f), 3, (ImGuiAdditions.TextAlignment)KingdomHeartsPlugin.Ui.Configuration.HpValueTextAlignment);
+                    new Vector4(0 / 255f, 0 / 255f, 0 / 255f, 0.25f), 3, (TextAlignment)KingdomHeartsPlugin.Ui.Configuration.HpValueTextAlignment);
             }
         }
         

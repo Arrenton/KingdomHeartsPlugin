@@ -22,6 +22,7 @@ namespace KingdomHeartsPlugin.Configuration
         public float HpValueTextPositionY { get; set; } = Defaults.HpValueTextPositionY;
         public float HpValueTextSize { get; set; } = Defaults.HpValueTextSize;
         public int HpValueTextAlignment { get; set; } = Defaults.HpValueTextAlignment;
+        public int HpValueTextStyle { get; set; } = Defaults.HpValueTextStyle;
         public float HpDamageWobbleIntensity { get; set; } = Defaults.HpDamageWobbleIntensity;
         public int HpForFullRing { get; set; } = Defaults.HpForFullRing;
         public int MaximumHpForMaximumLength { get; set; } = Defaults.MaximumHpForMaximumLength;
@@ -33,7 +34,6 @@ namespace KingdomHeartsPlugin.Configuration
         public float PvpHpPerPixelLongBar { get; set; } = Defaults.PvpHpPerPixelLongBar;
         public float LowHpPercent { get; set; } = Defaults.LowHpPercent;
         public bool ShowHpRecovery { get; set; } = Defaults.ShowHpRecovery;
-        public bool TruncateHp { get; set; } = Defaults.TruncateHp;
         public bool ShowHpVal { get; set; } = Defaults.ShowHpVal;
         #endregion
 

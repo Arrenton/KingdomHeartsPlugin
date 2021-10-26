@@ -1,16 +1,11 @@
 ﻿using System.Numerics;
 using ImGuiNET;
+using KingdomHeartsPlugin.Enums;
 
 namespace KingdomHeartsPlugin.Utilities
 {
     public static class ImGuiAdditions
     {
-        public enum TextAlignment
-        {
-            Center,
-            Left,
-            Right
-        }
 
         public static void TextShadowed(string text, Vector4 foregroundColor, Vector4 shadowColor, byte shadowWidth = 1)
         {
