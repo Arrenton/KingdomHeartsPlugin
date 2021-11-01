@@ -8,6 +8,30 @@ using System.Numerics;
 using System.Runtime.InteropServices;
 using KingdomHeartsPlugin.Enums;
 
+namespace KingdomHeartsPlugin.Configuration
+{
+    public partial class Defaults
+    {
+        public const float LevelTextX = 134;
+        public const float LevelTextY = 76;
+        public const float LevelTextSize = 32;
+        public const TextAlignment LevelTextAlignment = TextAlignment.Center;
+
+        public const float ClassIconX = 130;
+        public const float ClassIconY = 140;
+    }
+
+    public partial class Settings
+    {
+        public float LevelTextX { get; set; } = Defaults.LevelTextX;
+        public float LevelTextY { get; set; } = Defaults.LevelTextY;
+        public float LevelTextSize { get; set; } = Defaults.LevelTextSize;
+        public TextAlignment LevelTextAlignment { get; set; } = Defaults.LevelTextAlignment;
+        public float ClassIconX { get; set; } = Defaults.ClassIconX;
+        public float ClassIconY { get; set; } = Defaults.ClassIconY;
+    }
+}
+
 namespace KingdomHeartsPlugin.UIElements.Experience
 {
     public class ClassBar
@@ -128,6 +152,8 @@ namespace KingdomHeartsPlugin.UIElements.Experience
                 drawList.PopClipRect();
             }
 
+            Portrait.Draw(healthY);
+
             if (KingdomHeartsPlugin.Ui.Configuration.ClassIconEnabled)
             {
                 float iconSize = 3f * KingdomHeartsPlugin.Ui.Configuration.Scale;
@@ -136,17 +162,18 @@ namespace KingdomHeartsPlugin.UIElements.Experience
 
                 ImageDrawing.DrawIcon(drawList, (ushort)(62000 + KingdomHeartsPlugin.Cs.LocalPlayer.ClassJob.Id),
                     new Vector2(iconSize, iconSize),
-                    new Vector2((int)(size / 2f), (int)(size / 2f + 18 * KingdomHeartsPlugin.Ui.Configuration.Scale)) +
+                    //new Vector2((int)(size / 2f), (int)(size / 2f + 18 * KingdomHeartsPlugin.Ui.Configuration.Scale)) +
+                    new Vector2(KingdomHeartsPlugin.Ui.Configuration.ClassIconX, KingdomHeartsPlugin.Ui.Configuration.ClassIconY) +
                     new Vector2(0, (int)(healthY * KingdomHeartsPlugin.Ui.Configuration.Scale)));
             }
 
             if (KingdomHeartsPlugin.Ui.Configuration.LevelEnabled)
-                ImGuiAdditions.TextShadowedDrawList(drawList, 32f,
+                ImGuiAdditions.TextShadowedDrawList(drawList, KingdomHeartsPlugin.Ui.Configuration.LevelTextSize,
                     $"Lv{KingdomHeartsPlugin.Cs.LocalPlayer.Level}",
-                    drawPosition + new Vector2(size / 2f - 26 * KingdomHeartsPlugin.Ui.Configuration.Scale,
-                        size / 2f - 52 * KingdomHeartsPlugin.Ui.Configuration.Scale),
+                    drawPosition + new Vector2(KingdomHeartsPlugin.Ui.Configuration.LevelTextX, KingdomHeartsPlugin.Ui.Configuration.LevelTextY),
                     new Vector4(249 / 255f, 247 / 255f, 232 / 255f, 0.9f),
-                    new Vector4(96 / 255f, 78 / 255f, 23 / 255f, 0.25f), 3);
+                    new Vector4(96 / 255f, 78 / 255f, 23 / 255f, 0.25f), 3,
+                    KingdomHeartsPlugin.Ui.Configuration.LevelTextAlignment);
 
             if (KingdomHeartsPlugin.Ui.Configuration.ExpValueTextEnabled)
                 ImGuiAdditions.TextShadowedDrawList(drawList, KingdomHeartsPlugin.Ui.Configuration.ExpValueTextSize,
@@ -160,8 +187,8 @@ namespace KingdomHeartsPlugin.UIElements.Experience
 
         public void Dispose()
         {
-            _expBarBaseTexture.Dispose();
-            _expBarSegmentTexture.Dispose();
+            _expBarBaseTexture?.Dispose();
+            _expBarSegmentTexture?.Dispose();
             ExperienceRing.Dispose();
             ExperienceRingRest.Dispose();
             ExperienceRingGain.Dispose();

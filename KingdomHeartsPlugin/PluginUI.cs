@@ -6,6 +6,7 @@ using System.Numerics;
 using FFXIVClientStructs.FFXIV.Component.GUI;
 using KingdomHeartsPlugin.Configuration;
 using KingdomHeartsPlugin.Enums;
+using KingdomHeartsPlugin.UIElements.Experience;
 using KingdomHeartsPlugin.UIElements.HealthBar;
 using Microsoft.VisualBasic;
 
@@ -16,7 +17,7 @@ namespace KingdomHeartsPlugin
     public class PluginUI : IDisposable
     {
         internal Settings Configuration;
-        private readonly HealthFrame _healthFrame;
+        public readonly HealthFrame HealthFrame;
         /*private TextureWrap _testTextureWrap;
         private float _width;
         private float _height;
@@ -44,7 +45,7 @@ namespace KingdomHeartsPlugin
         public PluginUI(Settings configuration)
         {
             Configuration = configuration;
-            _healthFrame = new HealthFrame();
+            HealthFrame = new HealthFrame();
 
             /*_testTextureWrap = KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\LimitGauge\number_2.png"));
             pos = new float[4];
@@ -57,7 +58,8 @@ namespace KingdomHeartsPlugin
 
         public void Dispose()
         {
-            _healthFrame?.Dispose();
+            HealthFrame?.Dispose();
+            Portrait.Dispose();
             ImageDrawing.Dispose();
             //_testTextureWrap?.Dispose();
         }
@@ -110,7 +112,7 @@ namespace KingdomHeartsPlugin
             
             if (ImGui.Begin("KH Frame", ref visible, window_flags))
             {
-                _healthFrame.Draw();
+                HealthFrame.Draw();
             }
             ImGui.End();
         }
@@ -218,9 +220,10 @@ namespace KingdomHeartsPlugin
             ImGui.Separator();
             ImGui.Text("Length");
             ImGui.Separator();
-            if (ImGui.CollapsingHeader("Standard"))
+            if (ImGui.TreeNode("Standard"))
             {
-                ImGui.Indent(20);
+                ImGui.BeginGroup();
+
                 var fullRing = Configuration.HpForFullRing;
                 if (ImGui.InputInt("HP for full ring", ref fullRing, 5, 50))
                 {
@@ -290,13 +293,15 @@ namespace KingdomHeartsPlugin
                         $"Defines when the total bar size, including the ring, will stop getting smaller.\n1000 would make the bar stop getting smaller at 1000 MaxHP. Prevents an HP bar that's too small.\n\nDefault: {Defaults.MinimumHpForLength}");
                     ImGui.End();
                 }
-                ImGui.Indent(-20);
+                ImGui.EndGroup();
+                ImGui.TreePop();
             }
 
 
-            if (ImGui.CollapsingHeader("PvP"))
+            if (ImGui.TreeNode("PvP"))
             {
-                ImGui.Indent(20);
+                ImGui.BeginGroup();
+
                 var fullRing = Configuration.PvpHpForFullRing;
                 if (ImGui.InputInt("HP for full ring", ref fullRing, 5, 50))
                 {
@@ -366,7 +371,9 @@ namespace KingdomHeartsPlugin
                         $"Defines when the total bar size, including the ring, will stop getting smaller.\n1000 would make the bar stop getting smaller at 1000 MaxHP. Prevents an HP bar that's too small.\n\nDefault: {Defaults.PvpMinimumHpForLength}");
                     ImGui.End();
                 }
-                ImGui.Indent(-20);
+
+                ImGui.EndGroup();
+                ImGui.TreePop();
             }
 
             ImGui.Separator();
@@ -754,9 +761,10 @@ namespace KingdomHeartsPlugin
                 Configuration.ExpBarEnabled = expBarEnabled;
             }
 
-            if (ImGui.CollapsingHeader("Exp Text"))
+            if (ImGui.TreeNode("Exp Text"))
             {
-                ImGui.Indent(20);
+                //ImGui.Indent(20);
+                ImGui.BeginGroup();
 
                 var expTextEnabled = Configuration.ExpValueTextEnabled;
                 if (ImGui.Checkbox("Enabled", ref expTextEnabled))
@@ -811,24 +819,148 @@ namespace KingdomHeartsPlugin
                     ImGui.EndCombo();
                 }
 
-                ImGui.Indent(-20);
+                ImGui.EndGroup();
+                ImGui.TreePop();
+                //ImGui.Indent(-20);
             }
 
             ImGui.Separator();
-            ImGui.NewLine();
 
-            var levelTextEnabled = Configuration.LevelEnabled;
-            if (ImGui.Checkbox("Level Text Enabled", ref levelTextEnabled))
+
+            if (ImGui.TreeNode("Level Text"))
             {
-                Configuration.LevelEnabled = levelTextEnabled;
+                //ImGui.Indent(20);
+                ImGui.BeginGroup();
+
+                var levelTextEnabled = Configuration.LevelEnabled;
+                if (ImGui.Checkbox("Enabled", ref levelTextEnabled))
+                {
+                    Configuration.LevelEnabled = levelTextEnabled;
+                }
+
+                var levelTextPos = new Vector2(Configuration.LevelTextX, Configuration.LevelTextY);
+                if (ImGui.DragFloat2("Position (X, Y)", ref levelTextPos))
+                {
+                    Configuration.LevelTextX = levelTextPos.X;
+                    Configuration.LevelTextY = levelTextPos.Y;
+                }
+                
+                var levelTextSize = Configuration.LevelTextSize;
+                if (ImGui.InputFloat("Size", ref levelTextSize))
+                {
+                    Configuration.LevelTextSize = levelTextSize;
+                }
+
+                if (ImGui.BeginCombo("Alignment", Enum.GetName(Configuration.LevelTextAlignment)))
+                {
+                    var alignments = Enum.GetNames(typeof(TextAlignment));
+                    for (int i = 0; i < alignments.Length; i++)
+                    {
+                        if (ImGui.Selectable(alignments[i]))
+                        {
+                            Configuration.LevelTextAlignment = (TextAlignment)i;
+                        }
+                    }
+                    ImGui.EndCombo();
+                }
+                if (ImGui.IsItemHovered())
+                {
+                    Vector2 m = ImGui.GetIO().MousePos;
+                    ImGui.SetNextWindowPos(new Vector2(m.X + 20, m.Y + 20));
+                    ImGui.Begin("TT1", ImGuiWindowFlags.Tooltip | ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoTitleBar);
+                    ImGui.Text("Please note that center and right alignments are not perfect and may not hold the same position.");
+                    ImGui.End();
+                }
+
+                ImGui.EndGroup();
+                ImGui.TreePop();
+                //ImGui.Indent(-20);
             }
+
+            ImGui.Text("Class Icon");
+            ImGui.Separator();
+
             var classIconEnabled = Configuration.ClassIconEnabled;
             if (ImGui.Checkbox("Class Icon Enabled", ref classIconEnabled))
             {
                 Configuration.ClassIconEnabled = classIconEnabled;
             }
 
+
+            var classIconPos = new Vector2(Configuration.ClassIconX, Configuration.ClassIconY);
+            if (ImGui.DragFloat2("Position (X, Y)", ref classIconPos))
+            {
+                Configuration.ClassIconX = classIconPos.X;
+                Configuration.ClassIconY = classIconPos.Y;
+            }
+
             ImGui.EndTabItem();
+        }
+
+        private void PortraitSettings()
+        {
+            if (!ImGui.BeginTabItem("Portrait")) return;
+
+            var portraitPos = new Vector2(Configuration.PortraitX, Configuration.PortraitY);
+            if (ImGui.DragFloat2("Position (X, Y)", ref portraitPos))
+            {
+                Configuration.PortraitX = portraitPos.X;
+                Configuration.PortraitY = portraitPos.Y;
+            }
+
+
+            ImGui.NewLine();
+            ImGui.Text("Portrait image paths");
+            ImGui.Separator();
+            ImGui.NewLine();
+
+            var normalPortraitPath = Configuration.PortraitNormalImage;
+            ImGui.Text("Normal Portrait");
+            if (ImGui.InputText("", ref normalPortraitPath, 512))
+            {
+                Configuration.PortraitNormalImage = normalPortraitPath;
+            }
+            ImGui.SameLine();
+            if (ImGui.Button("Set"))
+            {
+                Portrait.SetPortraitNormal(Configuration.PortraitNormalImage);
+            }
+
+            var hurtPortraitPath = Configuration.PortraitHurtImage;
+            ImGui.Text("Hurt Portrait");
+            if (ImGui.InputText("", ref hurtPortraitPath, 512))
+            {
+                Configuration.PortraitHurtImage = hurtPortraitPath;
+            }
+            ImGui.SameLine();
+            if (ImGui.Button("Set"))
+            {
+                Portrait.SetPortraitHurt(Configuration.PortraitHurtImage);
+            }
+
+            var dangerPortraitPath = Configuration.PortraitDangerImage;
+            ImGui.Text("Danger Portrait");
+            if (ImGui.InputText("", ref dangerPortraitPath, 512))
+            {
+                Configuration.PortraitDangerImage = dangerPortraitPath;
+            }
+            ImGui.SameLine();
+            if (ImGui.Button("Set"))
+            {
+                Portrait.SetPortraitDanger(Configuration.PortraitDangerImage);
+            }
+
+            var combatPortraitPath = Configuration.PortraitCombatImage;
+            ImGui.Text("Combat Portrait");
+            if (ImGui.InputText("", ref combatPortraitPath, 512))
+            {
+                Configuration.PortraitCombatImage = combatPortraitPath;
+            }
+            ImGui.SameLine();
+            if (ImGui.Button("Set"))
+            {
+                Portrait.SetPortraitDanger(Configuration.PortraitCombatImage);
+            }
         }
 
         public void DrawSettingsWindow()
@@ -849,6 +981,7 @@ namespace KingdomHeartsPlugin
                 ResourceSettings();
                 LimitSettings();
                 ClassSettings();
+                PortraitSettings();
 
                 ImGui.EndTabBar();
                 ImGui.Separator();

@@ -3,7 +3,7 @@ using KingdomHeartsPlugin.Enums;
 
 namespace KingdomHeartsPlugin.Configuration
 {
-    public static class Defaults
+    public static partial class Defaults
     {
         #region General
         public const bool Locked = false;

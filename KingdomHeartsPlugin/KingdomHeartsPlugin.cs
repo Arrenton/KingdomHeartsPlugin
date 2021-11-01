@@ -12,6 +12,7 @@ using System.Globalization;
 using System.IO;
 using Dalamud.Logging;
 using KingdomHeartsPlugin.Configuration;
+using KingdomHeartsPlugin.UIElements.Experience;
 using Lumina.Excel.GeneratedSheets;
 
 namespace KingdomHeartsPlugin
@@ -52,6 +53,8 @@ namespace KingdomHeartsPlugin
             configuration.Initialize(Pi);
 
             Ui = new PluginUI(configuration);
+
+            Portrait.SetAllPortraits();
 
             Fw.Update += OnUpdate;
 

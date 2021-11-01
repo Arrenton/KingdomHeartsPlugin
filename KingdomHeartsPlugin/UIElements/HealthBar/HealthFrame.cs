@@ -13,7 +13,7 @@ using System.Numerics;
 
 namespace KingdomHeartsPlugin.UIElements.HealthBar
 {
-    class HealthFrame : IDisposable
+    public class HealthFrame : IDisposable
     {
         private float _verticalAnimationTicks;
         private readonly Vector3 _bgColor;
@@ -166,21 +166,20 @@ namespace KingdomHeartsPlugin.UIElements.HealthBar
 
         private void UpdateDamagedHealth()
         {
-            if (DamagedHealthAlpha > 0.97f)
+            switch (DamagedHealthAlpha)
             {
-                DamagedHealthAlpha -= 0.09f * KingdomHeartsPlugin.UiSpeed;
-            }
-            else if (DamagedHealthAlpha > 0.6f)
-            {
-                DamagedHealthAlpha -= 0.8f * KingdomHeartsPlugin.UiSpeed;
-            }
-            else if (DamagedHealthAlpha > 0.59f)
-            {
-                DamagedHealthAlpha -= 0.005f * KingdomHeartsPlugin.UiSpeed;
-            }
-            else if (DamagedHealthAlpha > 0.0f)
-            {
-                DamagedHealthAlpha -= 1f * KingdomHeartsPlugin.UiSpeed;
+                case > 0.97f:
+                    DamagedHealthAlpha -= 0.09f * KingdomHeartsPlugin.UiSpeed;
+                    break;
+                case > 0.6f:
+                    DamagedHealthAlpha -= 0.8f * KingdomHeartsPlugin.UiSpeed;
+                    break;
+                case > 0.59f:
+                    DamagedHealthAlpha -= 0.005f * KingdomHeartsPlugin.UiSpeed;
+                    break;
+                case > 0.0f:
+                    DamagedHealthAlpha -= 1f * KingdomHeartsPlugin.UiSpeed;
+                    break;
             }
 
             // Vertical wobble
@@ -379,8 +378,8 @@ namespace KingdomHeartsPlugin.UIElements.HealthBar
         private float HpLengthMultiplier { get; set; }
 
         // Alpha Channels
-        private float DamagedHealthAlpha { get; set; }
-        private float LowHealthAlpha { get; set; }
+        public float DamagedHealthAlpha { get; private set; }
+        public float LowHealthAlpha { get; private set; }
         private int LowHealthAlphaDirection { get; set; }
 
         // Timers

@@ -6,7 +6,7 @@ using KingdomHeartsPlugin.Enums;
 namespace KingdomHeartsPlugin.Configuration
 {
     [Serializable]
-    public class Settings : IPluginConfiguration
+    public partial class Settings : IPluginConfiguration
     {
         public int Version { get; set; } = 0;
 
