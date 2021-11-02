@@ -92,7 +92,7 @@ namespace KingdomHeartsPlugin.UIElements.Experience
 
             //ImGuiAdditions.TextShadowedDrawList(drawList,24, $"{KingdomHeartsPlugin.Cs.LocalPlayer.StatusFlags}", ImGui.GetItemRectMin() + new Vector2(0,0), new Vector4(1, 1, 1, 1), new Vector4(0,0,0,1));
 
-            if (damagedAlpha > 0.59f && PortraitHurt != null)
+            if (damagedAlpha > 0.595f && PortraitHurt != null)
             {
                 ImageDrawing.DrawImage(drawList, PortraitHurt, drawPosition, ImGui.GetColorU32(new Vector4(1 - lowHealthAlpha - portraitDangerAlpha, 1 - damagedAlpha - portraitDangerAlpha, 1 - damagedAlpha - portraitDangerAlpha, 1)));
             }
