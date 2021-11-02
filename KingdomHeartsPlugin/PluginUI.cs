@@ -908,6 +908,12 @@ namespace KingdomHeartsPlugin
                 Configuration.PortraitY = portraitPos.Y;
             }
 
+            var portraitScale = Configuration.PortraitScale;
+            if (ImGui.DragFloat("Scale##Portrait", ref portraitScale, 0.001f, 0, 10f))
+            {
+                Configuration.PortraitScale = portraitScale;
+            }
+
 
             ImGui.NewLine();
             ImGui.Text("Portrait image paths");

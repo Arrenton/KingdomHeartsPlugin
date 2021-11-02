@@ -12,6 +12,7 @@ namespace KingdomHeartsPlugin.Configuration
     {
         public const float PortraitX = 0;
         public const float PortraitY = 0;
+        public const float PortraitScale = 1f;
         public const string PortraitNormalImage = "";
         public const string PortraitHurtImage = "";
         public const string PortraitDangerImage = "";
@@ -22,6 +23,7 @@ namespace KingdomHeartsPlugin.Configuration
     {
         public float PortraitX { get; set; } = Defaults.PortraitX;
         public float PortraitY { get; set; } = Defaults.PortraitY;
+        public float PortraitScale { get; set; } = Defaults.PortraitScale;
         public string PortraitNormalImage { get; set; } = Defaults.PortraitNormalImage;
         public string PortraitHurtImage { get; set; } = Defaults.PortraitHurtImage;
         public string PortraitDangerImage { get; set; } = Defaults.PortraitDangerImage;
@@ -94,19 +96,19 @@ namespace KingdomHeartsPlugin.UIElements.Experience
 
             if (damagedAlpha > 0.595f && PortraitHurt != null)
             {
-                ImageDrawing.DrawImage(drawList, PortraitHurt, drawPosition, ImGui.GetColorU32(new Vector4(1 - lowHealthAlpha - portraitDangerAlpha, 1 - damagedAlpha - portraitDangerAlpha, 1 - damagedAlpha - portraitDangerAlpha, 1)));
+                ImageDrawing.DrawImage(drawList, PortraitHurt, KingdomHeartsPlugin.Ui.Configuration.PortraitScale, drawPosition, ImGui.GetColorU32(new Vector4(1 - lowHealthAlpha - portraitDangerAlpha, 1 - damagedAlpha - portraitDangerAlpha, 1 - damagedAlpha - portraitDangerAlpha, 1)));
             }
             else if (dangerStatus && PortraitDanger != null)
             {
-                ImageDrawing.DrawImage(drawList, PortraitDanger, drawPosition, ImGui.GetColorU32(new Vector4(1 - lowHealthAlpha, 0.2f, 0.2f, 1)));
+                ImageDrawing.DrawImage(drawList, PortraitDanger, KingdomHeartsPlugin.Ui.Configuration.PortraitScale, drawPosition, ImGui.GetColorU32(new Vector4(1 - lowHealthAlpha, 0.2f, 0.2f, 1)));
             }
             else if (inCombat && PortraitCombat != null)
             {
-                ImageDrawing.DrawImage(drawList, PortraitCombat, drawPosition, ImGui.GetColorU32(new Vector4(1 - lowHealthAlpha - portraitDangerAlpha, 1 - damagedAlpha - portraitDangerAlpha, 1 - damagedAlpha - portraitDangerAlpha, 1)));
+                ImageDrawing.DrawImage(drawList, PortraitCombat, KingdomHeartsPlugin.Ui.Configuration.PortraitScale, drawPosition, ImGui.GetColorU32(new Vector4(1 - lowHealthAlpha - portraitDangerAlpha, 1 - damagedAlpha - portraitDangerAlpha, 1 - damagedAlpha - portraitDangerAlpha, 1)));
             }
             else if (PortraitNormal != null)
             {
-                ImageDrawing.DrawImage(drawList, PortraitNormal, drawPosition, ImGui.GetColorU32(new Vector4(1 - lowHealthAlpha, 1 - damagedAlpha - portraitDangerAlpha, 1 - damagedAlpha - portraitDangerAlpha, 1)));
+                ImageDrawing.DrawImage(drawList, PortraitNormal, KingdomHeartsPlugin.Ui.Configuration.PortraitScale, drawPosition, ImGui.GetColorU32(new Vector4(1 - lowHealthAlpha, 1 - damagedAlpha - portraitDangerAlpha, 1 - damagedAlpha - portraitDangerAlpha, 1)));
             }
         }
 

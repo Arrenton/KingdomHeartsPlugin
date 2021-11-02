@@ -160,6 +160,25 @@ namespace KingdomHeartsPlugin.Utilities
         /// </summary>
         /// <param name="d"></param>
         /// <param name="image"></param>
+        /// <param name="scale">image scale</param>
+        /// <param name="position">additive position</param>
+        /// <param name="color">image color</param>
+        public static void DrawImage(ImDrawListPtr d, TextureWrap image, float scale, Vector2 position, uint color = UInt32.MaxValue)
+        {
+            var basePosition = ImGui.GetItemRectMin();
+            var imageSize = new Vector2(image.Width, image.Height) * KingdomHeartsPlugin.Ui.Configuration.Scale * scale;
+            var finalPosition = basePosition + position * KingdomHeartsPlugin.Ui.Configuration.Scale * scale;
+
+            d.PushClipRect(finalPosition - imageSize * 2, finalPosition + imageSize * 2);
+            d.AddImage(image.ImGuiHandle, finalPosition, finalPosition + imageSize, new Vector2(0, 0), new Vector2(1, 1), color);
+            d.PopClipRect();
+        }
+
+        /// <summary>
+        /// Places an image relative to current draw list
+        /// </summary>
+        /// <param name="d"></param>
+        /// <param name="image"></param>
         /// <param name="position">additive position</param>
         /// <param name="imagePortion">Area which to draw in the image (0 - 1) (Left, Top, Right, Bottom)</param>
         public static void DrawImage(ImDrawListPtr d, TextureWrap image, Vector2 position, Vector4 imagePortion, uint color = UInt32.MaxValue)
