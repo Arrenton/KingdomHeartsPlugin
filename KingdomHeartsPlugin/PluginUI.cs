@@ -1,14 +1,14 @@
 ﻿using Dalamud.Interface;
-using ImGuiNET;
-using KingdomHeartsPlugin.Utilities;
-using System;
-using System.Numerics;
 using FFXIVClientStructs.FFXIV.Component.GUI;
+using ImGuiNET;
 using KingdomHeartsPlugin.Configuration;
 using KingdomHeartsPlugin.Enums;
 using KingdomHeartsPlugin.UIElements.Experience;
 using KingdomHeartsPlugin.UIElements.HealthBar;
-using Microsoft.VisualBasic;
+using KingdomHeartsPlugin.Utilities;
+using System;
+using System.Numerics;
+using NAudio.Wave;
 
 namespace KingdomHeartsPlugin
 {
@@ -961,6 +961,104 @@ namespace KingdomHeartsPlugin
             {
                 Portrait.SetPortraitCombat(Configuration.PortraitCombatImage);
             }
+
+            ImGui.EndTabItem();
+        }
+
+        private void SoundSettings()
+        {
+            if (!ImGui.BeginTabItem("Sound")) return;
+
+            ImGui.NewLine();
+            var deviceId = Configuration.SoundDeviceId;
+            var deviceName = "Default";
+            if (deviceId > -1)
+            {
+                if (deviceId < WaveOut.DeviceCount)
+                {
+                    deviceName = WaveOut.GetCapabilities(deviceId).ProductName;
+                }
+                else
+                {
+                    Configuration.SoundDeviceId = -1;
+                }
+            }
+            else
+            {
+                Configuration.SoundDeviceId = -1;
+            }
+
+            if (ImGui.BeginCombo("Sound Device", deviceName))
+            {
+                if (ImGui.Selectable("Default"))
+                {
+                    Configuration.SoundDeviceId = -1;
+                }
+
+                for (int i = 0; i < WaveOut.DeviceCount; i++)
+                {
+                    if (ImGui.Selectable(WaveOut.GetCapabilities(i).ProductName))
+                    {
+                        Configuration.SoundDeviceId = i;
+                    }
+                }
+
+                ImGui.EndCombo();
+            }
+
+            ImGui.NewLine();
+            if (ImGui.TreeNode("Low HP"))
+            {
+                ImGui.Text("Plays a sound when HP is low, based on the setting in the Health tab.");
+                var enabled = Configuration.LowHealthSoundEnabled;
+                if (ImGui.Checkbox("Enabled##LowHpSound", ref enabled))
+                {
+                    Configuration.LowHealthSoundEnabled = enabled;
+                }
+
+                var lowHealthSoundPath = Configuration.LowHealthSoundPath;
+                ImGui.Text("Sound File Path");
+                if (ImGui.InputText("##LowHpPath", ref lowHealthSoundPath, 512))
+                {
+                    Configuration.LowHealthSoundPath = lowHealthSoundPath;
+                }
+
+                ImGui.SameLine();
+                if (ImGui.Button("Test##LowHpPath"))
+                {
+                    SoundEngine.PlaySound(Configuration.LowHealthSoundPath, Configuration.LowHealthSoundVolume);
+                }
+
+                var lowHealthVolume = Configuration.LowHealthSoundVolume * 100f;
+                if (ImGui.SliderFloat("Volume##LowHP", ref lowHealthVolume, 0, 100.0f, "%.1f%%"))
+                {
+                    Configuration.LowHealthSoundVolume = Math.Min(lowHealthVolume / 100f, 1);
+                }
+
+                var lowHealthDelay = Configuration.LowHealthSoundDelay;
+                if (ImGui.InputFloat("Loop Time##LowHP", ref lowHealthDelay, 0.05f, 0.2f))
+                {
+                    if (lowHealthDelay < 0.05f && lowHealthDelay != -100) lowHealthDelay = 0.05f;
+                    Configuration.LowHealthSoundDelay = lowHealthDelay;
+                }
+
+                if (ImGui.IsItemHovered())
+                {
+                    Tooltip("Sets the timer for when the sound will play again. (In Seconds)\nEx: 0.4 will play the sound every 0.4 seconds.\nSet to -100 for no looping");
+                }
+            }
+
+            ImGui.NewLine();
+            ImGui.EndTabItem();
+        }
+
+        private void Tooltip(string message)
+        {
+            Vector2 m = ImGui.GetIO().MousePos;
+            ImGui.SetNextWindowPos(new Vector2(m.X + 20, m.Y + 20));
+            ImGui.Begin("KHTT", ImGuiWindowFlags.Tooltip | ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoTitleBar);
+            ImGui.Text(message);
+            ImGui.End();
         }
 
         public void DrawSettingsWindow()
@@ -982,6 +1080,7 @@ namespace KingdomHeartsPlugin
                 LimitSettings();
                 ClassSettings();
                 PortraitSettings();
+                SoundSettings();
 
                 ImGui.EndTabBar();
                 ImGui.Separator();

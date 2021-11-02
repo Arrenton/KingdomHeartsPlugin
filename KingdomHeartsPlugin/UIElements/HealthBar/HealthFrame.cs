@@ -214,6 +214,24 @@ namespace KingdomHeartsPlugin.UIElements.HealthBar
 
         private void UpdateLowHealth(uint health, uint maxHealth)
         {
+            if (LowHealthSoundTime > 0)
+            {
+                LowHealthSoundTime -= KingdomHeartsPlugin.UiSpeed;
+            }
+            
+            // Sound player
+            if (LowHealthSoundTime is <= 0 and > -100 && health <= maxHealth * (KingdomHeartsPlugin.Ui.Configuration.LowHpPercent / 100f) && health > 0)
+            {
+                if (KingdomHeartsPlugin.Ui.Configuration.LowHealthSoundEnabled)
+                    SoundEngine.PlaySound(KingdomHeartsPlugin.Ui.Configuration.LowHealthSoundPath, KingdomHeartsPlugin.Ui.Configuration.LowHealthSoundVolume);
+
+                LowHealthSoundTime = KingdomHeartsPlugin.Ui.Configuration.LowHealthSoundDelay;
+            }
+            else if (health > maxHealth * (KingdomHeartsPlugin.Ui.Configuration.LowHpPercent / 100f) || health == 0 || LowHealthSoundTime == -100 && KingdomHeartsPlugin.Ui.Configuration.LowHealthSoundDelay != -100)
+            {
+                LowHealthSoundTime = 0;
+            }
+
             if ((health > maxHealth * (KingdomHeartsPlugin.Ui.Configuration.LowHpPercent / 100f) || health <= 0) && LowHealthAlpha <= 0) return;
 
             if (LowHealthAlphaDirection == 0)
@@ -232,6 +250,7 @@ namespace KingdomHeartsPlugin.UIElements.HealthBar
             }
 
             HealthRingBg.Color = ColorAddons.Interpolate(_bgColor, new Vector3(1, 0, 0), LowHealthAlpha);
+
         }
 
         private void DrawHealth(ImDrawListPtr drawList, uint hp, uint maxHp)
@@ -384,6 +403,7 @@ namespace KingdomHeartsPlugin.UIElements.HealthBar
 
         // Timers
         private float HealthRestoreTime { get; set; }
+        private float LowHealthSoundTime { get; set; }
 
         // Positioning
         private float HealthY { get; set; }

@@ -90,6 +90,16 @@ namespace KingdomHeartsPlugin.Configuration
 
         #endregion
 
+        #region Sound
+
+        public int SoundDeviceId { get; set; } = Defaults.SoundDeviceId;
+        public bool LowHealthSoundEnabled { get; set; } = Defaults.LevelEnabled;
+        public float LowHealthSoundVolume { get; set; } = Defaults.LowHealthSoundVolume;
+        public string LowHealthSoundPath { get; set; } = Defaults.LowHealthSoundPath;
+        public float LowHealthSoundDelay { get; set; } = Defaults.LowHealthSoundDelay;
+
+        #endregion
+
         // the below exist just to make saving less cumbersome
 
         [NonSerialized]

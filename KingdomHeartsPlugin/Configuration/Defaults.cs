@@ -84,5 +84,15 @@ namespace KingdomHeartsPlugin.Configuration
         public const bool ClassIconEnabled  = true;
 
         #endregion
+
+        #region Sound
+
+        public const int SoundDeviceId = -1;
+        public const bool LowHealthSoundEnabled = false;
+        public const float LowHealthSoundVolume = 1.0f;
+        public const float LowHealthSoundDelay = 0.4f;
+        public const string LowHealthSoundPath = "";
+
+        #endregion
     }
 }
