@@ -88,7 +88,9 @@ namespace KingdomHeartsPlugin.UIElements.Experience
             var lowHealthAlpha = KingdomHeartsPlugin.Ui.HealthFrame.LowHealthAlpha;
             var dangerStatus = KingdomHeartsPlugin.Cs.LocalPlayer.CurrentHp <= KingdomHeartsPlugin.Cs.LocalPlayer.MaxHp * (KingdomHeartsPlugin.Ui.Configuration.LowHpPercent / 100f);
             var portraitDangerAlpha = dangerStatus ? 1 : 0;
-            var inCombat = (KingdomHeartsPlugin.Cs.LocalPlayer.StatusFlags & StatusFlags.InCombat) != 0;
+            var inCombat = (KingdomHeartsPlugin.Cs.LocalPlayer.StatusFlags & StatusFlags.InCombat) == StatusFlags.InCombat;
+
+            //ImGuiAdditions.TextShadowedDrawList(drawList,24, $"{KingdomHeartsPlugin.Cs.LocalPlayer.StatusFlags}", ImGui.GetItemRectMin() + new Vector2(0,0), new Vector4(1, 1, 1, 1), new Vector4(0,0,0,1));
 
             if (damagedAlpha > 0.59f && PortraitHurt != null)
             {
@@ -96,7 +98,7 @@ namespace KingdomHeartsPlugin.UIElements.Experience
             }
             else if (dangerStatus && PortraitDanger != null)
             {
-                ImageDrawing.DrawImage(drawList, PortraitDanger, drawPosition, ImGui.GetColorU32(new Vector4(1 - lowHealthAlpha - portraitDangerAlpha, 0, 0, 1)));
+                ImageDrawing.DrawImage(drawList, PortraitDanger, drawPosition, ImGui.GetColorU32(new Vector4(1 - lowHealthAlpha, 0.2f, 0.2f, 1)));
             }
             else if (inCombat && PortraitCombat != null)
             {

@@ -913,53 +913,53 @@ namespace KingdomHeartsPlugin
             ImGui.Text("Portrait image paths");
             ImGui.Separator();
             ImGui.NewLine();
-
+            
             var normalPortraitPath = Configuration.PortraitNormalImage;
             ImGui.Text("Normal Portrait");
-            if (ImGui.InputText("", ref normalPortraitPath, 512))
+            if (ImGui.InputText("##Normal", ref normalPortraitPath, 512))
             {
                 Configuration.PortraitNormalImage = normalPortraitPath;
             }
             ImGui.SameLine();
-            if (ImGui.Button("Set"))
+            if (ImGui.Button("Set##Normal"))
             {
                 Portrait.SetPortraitNormal(Configuration.PortraitNormalImage);
             }
 
             var hurtPortraitPath = Configuration.PortraitHurtImage;
             ImGui.Text("Hurt Portrait");
-            if (ImGui.InputText("", ref hurtPortraitPath, 512))
+            if (ImGui.InputText("##Hurt", ref hurtPortraitPath, 512))
             {
                 Configuration.PortraitHurtImage = hurtPortraitPath;
             }
             ImGui.SameLine();
-            if (ImGui.Button("Set"))
+            if (ImGui.Button("Set##Hurt"))
             {
                 Portrait.SetPortraitHurt(Configuration.PortraitHurtImage);
             }
 
             var dangerPortraitPath = Configuration.PortraitDangerImage;
             ImGui.Text("Danger Portrait");
-            if (ImGui.InputText("", ref dangerPortraitPath, 512))
+            if (ImGui.InputText("##Danger", ref dangerPortraitPath, 512))
             {
                 Configuration.PortraitDangerImage = dangerPortraitPath;
             }
             ImGui.SameLine();
-            if (ImGui.Button("Set"))
+            if (ImGui.Button("Set##Danger"))
             {
                 Portrait.SetPortraitDanger(Configuration.PortraitDangerImage);
             }
 
             var combatPortraitPath = Configuration.PortraitCombatImage;
             ImGui.Text("Combat Portrait");
-            if (ImGui.InputText("", ref combatPortraitPath, 512))
+            if (ImGui.InputText("##Combat", ref combatPortraitPath, 512))
             {
                 Configuration.PortraitCombatImage = combatPortraitPath;
             }
             ImGui.SameLine();
-            if (ImGui.Button("Set"))
+            if (ImGui.Button("Set##Combat"))
             {
-                Portrait.SetPortraitDanger(Configuration.PortraitCombatImage);
+                Portrait.SetPortraitCombat(Configuration.PortraitCombatImage);
             }
         }
 
