@@ -917,6 +917,7 @@ namespace KingdomHeartsPlugin
 
             ImGui.NewLine();
             ImGui.Text("Portrait image paths");
+            ImGui.Text("To set a portrait, include the full path to the image you want.\nEx: 'C:/images/image.png' without quotes");
             ImGui.Separator();
             ImGui.NewLine();
             
