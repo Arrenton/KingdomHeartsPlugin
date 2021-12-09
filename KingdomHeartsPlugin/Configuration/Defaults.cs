@@ -69,7 +69,7 @@ namespace KingdomHeartsPlugin.Configuration
         #region Experience
 
         public const bool ExpBarEnabled  = true;
-        public const bool ExpValueTextEnabled = true;
+        public const bool ExpValueTextEnabled = false;
         public const float ExpValueTextSize = 24;
         public const int ExpValueTextAlignment = 0;
         public const NumberFormatStyle ExpValueTextFormatStyle = NumberFormatStyle.NoFormatting;

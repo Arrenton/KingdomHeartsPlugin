@@ -12,13 +12,13 @@ namespace KingdomHeartsPlugin.Configuration
 {
     public partial class Defaults
     {
-        public const float LevelTextX = 134;
-        public const float LevelTextY = 76;
+        public const float LevelTextX = 132;
+        public const float LevelTextY = 81;
         public const float LevelTextSize = 32;
         public const TextAlignment LevelTextAlignment = TextAlignment.Center;
 
-        public const float ClassIconX = 130;
-        public const float ClassIconY = 140;
+        public const float ClassIconX = 128;
+        public const float ClassIconY = 150;
     }
 
     public partial class Settings

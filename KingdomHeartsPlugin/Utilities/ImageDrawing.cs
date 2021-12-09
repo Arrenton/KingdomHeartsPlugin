@@ -167,7 +167,7 @@ namespace KingdomHeartsPlugin.Utilities
         {
             var basePosition = ImGui.GetItemRectMin();
             var imageSize = new Vector2(image.Width, image.Height) * KingdomHeartsPlugin.Ui.Configuration.Scale * scale;
-            var finalPosition = basePosition + position * KingdomHeartsPlugin.Ui.Configuration.Scale * scale;
+            var finalPosition = basePosition + position * KingdomHeartsPlugin.Ui.Configuration.Scale;
 
             d.PushClipRect(finalPosition - imageSize * 2, finalPosition + imageSize * 2);
             d.AddImage(image.ImGuiHandle, finalPosition, finalPosition + imageSize, new Vector2(0, 0), new Vector2(1, 1), color);
