@@ -914,6 +914,18 @@ namespace KingdomHeartsPlugin
                 Configuration.PortraitScale = portraitScale;
             }
 
+            var redWhenDamaged = Configuration.PortraitRedWhenDamaged;
+            if (ImGui.Checkbox("Red Color When Damaged##Portrait", ref redWhenDamaged))
+            {
+                Configuration.PortraitRedWhenDamaged = redWhenDamaged;
+            }
+
+            var redWhenDanger = Configuration.PortraitRedWhenDanger;
+            if (ImGui.Checkbox("Red Color When Danger Status##Portrait", ref redWhenDanger))
+            {
+                Configuration.PortraitRedWhenDanger = redWhenDanger;
+            }
+
 
             ImGui.NewLine();
             ImGui.Text("Portrait image paths");
