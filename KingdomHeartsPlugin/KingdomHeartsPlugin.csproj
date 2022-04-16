@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0-windows</TargetFramework>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <Version>1.0.2.0</Version>
+    <Version>1.0.4.0</Version>
     <Authors>Gotest</Authors>
     <Platforms>x64</Platforms>
   </PropertyGroup>
@@ -26,33 +26,33 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DalamudPackager" Version="2.1.4" />
+    <PackageReference Include="DalamudPackager" Version="2.1.5" />
     <PackageReference Include="NAudio" Version="2.0.1" />
   </ItemGroup>
   
   <ItemGroup>
     <Reference Include="Dalamud">
-      <HintPath>$(APPDATA)\XIVLauncher\addon\Hooks\6.2.0.5\Dalamud.dll</HintPath>
+      <HintPath>$(APPDATA)\XIVLauncher\addon\Hooks\dev\Dalamud.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="ImGui.NET">
-      <HintPath>$(APPDATA)\XIVLauncher\addon\Hooks\6.2.0.5\ImGui.NET.dll</HintPath>
+      <HintPath>$(APPDATA)\XIVLauncher\addon\Hooks\dev\ImGui.NET.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="ImGuiScene">
-      <HintPath>$(APPDATA)\XIVLauncher\addon\Hooks\6.2.0.5\ImGuiScene.dll</HintPath>
+      <HintPath>$(APPDATA)\XIVLauncher\addon\Hooks\dev\ImGuiScene.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="Lumina">
-      <HintPath>$(APPDATA)\XIVLauncher\addon\Hooks\6.2.0.5\Lumina.dll</HintPath>
+      <HintPath>$(APPDATA)\XIVLauncher\addon\Hooks\dev\Lumina.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="FFXIVClientStructs">
-      <HintPath>$(APPDATA)\XIVLauncher\addon\Hooks\6.2.0.5\FFXIVClientStructs.dll</HintPath>
+      <HintPath>$(APPDATA)\XIVLauncher\addon\Hooks\dev\FFXIVClientStructs.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="Lumina.Excel">
-      <HintPath>$(APPDATA)\XIVLauncher\addon\Hooks\6.2.0.5\Lumina.Excel.dll</HintPath>
+      <HintPath>$(APPDATA)\XIVLauncher\addon\Hooks\dev\Lumina.Excel.dll</HintPath>
       <Private>false</Private>
     </Reference>
   </ItemGroup>
@@ -62,6 +62,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Textures\bar_textures.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Textures\Experience\ring_experience_colorless_segment.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Textures\Experience\ring_experience_outline.png">
@@ -91,7 +94,13 @@
     <None Update="Textures\HealthBar\ring_end_edge.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Textures\HealthBar\ring_health_restored_segment.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Textures\HealthBar\ring_health_segment.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Textures\HealthBar\ring_health_segment_2.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Textures\HealthBar\ring_outline_segment.png">

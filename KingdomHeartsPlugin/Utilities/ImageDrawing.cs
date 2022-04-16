@@ -78,7 +78,7 @@ namespace KingdomHeartsPlugin.Utilities
             var basePosition = ImGui.GetItemRectMin();
             var imageWidth = image.Width;
             var imageHeight = image.Height;
-            var finalPosition = basePosition + position;
+            var finalPosition = basePosition + position * KingdomHeartsPlugin.Ui.Configuration.Scale;
 
             d.AddImage(image.ImGuiHandle, finalPosition, finalPosition + size, finalPosition + new Vector2(imageArea.X / imageWidth, imageArea.Y / imageHeight), finalPosition + new Vector2((imageArea.X + imageArea.Z) / imageWidth,
                 (imageArea.Y + imageArea.W) / imageHeight), color);
@@ -203,7 +203,9 @@ namespace KingdomHeartsPlugin.Utilities
                 if (tex != null && tex.ImGuiHandle != IntPtr.Zero)
                 {
                     var iconSize = new Vector2(IconTextures[icon].Width, IconTextures[icon].Height) * size;
-                    DrawImageArea(d, IconTextures[icon], iconSize, position - new Vector2((int)Math.Floor(iconSize.X / 2f), (int)Math.Floor(iconSize.Y / 2f)), new Vector4(0, 0, IconTextures[icon].Width, IconTextures[icon].Height));
+                    var imagePosition = position - new Vector2((int)Math.Floor(iconSize.X / 2f), (int)Math.Floor(iconSize.Y / 2f));
+                    //DrawImageArea(d, IconTextures[icon], iconSize, imagePosition, new Vector4(0, 0, IconTextures[icon].Width, IconTextures[icon].Height));
+                    DrawImage(d, IconTextures[icon], new Vector4(imagePosition.X, imagePosition.Y, iconSize.X, iconSize.Y));
                 }
             }
             else

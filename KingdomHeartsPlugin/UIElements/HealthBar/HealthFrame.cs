@@ -37,6 +37,7 @@ namespace KingdomHeartsPlugin.UIElements.HealthBar
             BarRecoveryTexture = KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\bar_recovery.png"));
             BarEdgeTexture = KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\bar_edge.png"));
             HealthRingSegmentTexture = KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\ring_health_segment.png"));
+            HealthRestoredRingSegmentTexture = KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\ring_health_restored_segment.png"));
             RingValueSegmentTexture = KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\ring_value_segment.png"));
             RingOutlineTexture = KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\ring_outline_segment.png"));
             RingTrackTexture = KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\ring_track.png"));
@@ -47,7 +48,7 @@ namespace KingdomHeartsPlugin.UIElements.HealthBar
             HealthLostRing = new Ring(RingValueSegmentTexture, 1, 0, 0);
             RingOutline = new Ring(RingOutlineTexture);
             HealthRing = new Ring(HealthRingSegmentTexture);
-            HealthRestoredRing = new Ring(HealthRingSegmentTexture) {Flip = true};
+            HealthRestoredRing = new Ring(HealthRestoredRingSegmentTexture);
             _limitGauge = new LimitGauge();
             _resourceBar = new ResourceBar();
             _expBar = new ClassBar();
@@ -355,6 +356,7 @@ namespace KingdomHeartsPlugin.UIElements.HealthBar
         {
             RingOutlineTexture?.Dispose();
             HealthRingSegmentTexture?.Dispose();
+            HealthRestoredRingSegmentTexture?.Dispose();
             RingValueSegmentTexture?.Dispose();
             RingTrackTexture?.Dispose();
             RingBaseTexture?.Dispose();
@@ -378,6 +380,7 @@ namespace KingdomHeartsPlugin.UIElements.HealthBar
             HealthLostRing = null;
             RingOutlineTexture = null;
             HealthRingSegmentTexture = null;
+            HealthRestoredRingSegmentTexture = null;
             RingValueSegmentTexture = null;
             RingTrackTexture = null;
             RingBaseTexture = null;
@@ -411,6 +414,7 @@ namespace KingdomHeartsPlugin.UIElements.HealthBar
 
         // Textures
         private TextureWrap HealthRingSegmentTexture { get; set; }
+        private TextureWrap HealthRestoredRingSegmentTexture { get; set; }
         private TextureWrap BarOutlineTexture { get; set; }
         private TextureWrap BarColorlessTexture { get; set; }
         private TextureWrap BarForegroundTexture { get; set; }

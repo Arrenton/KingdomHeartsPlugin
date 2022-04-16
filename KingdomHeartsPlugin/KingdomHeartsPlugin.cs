@@ -97,8 +97,6 @@ namespace KingdomHeartsPlugin
             Pi.UiBuilder.Draw -= DrawUi;
             Cs.TerritoryChanged -= OnTerritoryChange;
 
-            Pi?.Dispose();
-
             Timer = null;
         }
 

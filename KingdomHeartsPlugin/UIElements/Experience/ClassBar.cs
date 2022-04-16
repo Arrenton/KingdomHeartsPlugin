@@ -36,18 +36,19 @@ namespace KingdomHeartsPlugin.UIElements.Experience
 {
     public class ClassBar
     {
-        private TextureWrap _expBarSegmentTexture, _expBarBaseTexture;
+        private TextureWrap _expBarSegmentTexture, _expColorlessBarSegmentTexture, _expBarBaseTexture;
         private IntPtr _expAddonPtr;
 
         public ClassBar()
         {
             _expBarBaseTexture = KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\Experience\ring_experience_outline.png"));
             _expBarSegmentTexture = KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\Experience\ring_experience_segment.png"));
+            _expColorlessBarSegmentTexture = KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\Experience\ring_experience_colorless_segment.png"));
 
             ExperienceRing = new Ring(_expBarSegmentTexture);
             ExperienceRingRest = new Ring(_expBarSegmentTexture, alpha: 0.25f);
-            ExperienceRingGain = new Ring(_expBarSegmentTexture, 0.65f, 0.92f, 1.00f) { Flip = true };
-            ExperienceRingBg = new Ring(_expBarSegmentTexture, 0.07843f, 0.07843f, 0.0745f) { Flip = true };
+            ExperienceRingGain = new Ring(_expColorlessBarSegmentTexture, 0.65f, 0.92f, 1.00f);
+            ExperienceRingBg = new Ring(_expColorlessBarSegmentTexture, 0.07843f, 0.07843f, 0.0745f);
         }
 
         private void Update(PlayerCharacter player)
@@ -156,28 +157,28 @@ namespace KingdomHeartsPlugin.UIElements.Experience
 
             if (KingdomHeartsPlugin.Ui.Configuration.ClassIconEnabled)
             {
-                float iconSize = 3f * KingdomHeartsPlugin.Ui.Configuration.Scale;
+                float iconSize = 3f;
 
                 if (KingdomHeartsPlugin.Cs.LocalPlayer is null) return;
 
                 ImageDrawing.DrawIcon(drawList, (ushort)(62000 + KingdomHeartsPlugin.Cs.LocalPlayer.ClassJob.Id),
                     new Vector2(iconSize, iconSize),
                     //new Vector2((int)(size / 2f), (int)(size / 2f + 18 * KingdomHeartsPlugin.Ui.Configuration.Scale)) +
-                    new Vector2(KingdomHeartsPlugin.Ui.Configuration.ClassIconX, KingdomHeartsPlugin.Ui.Configuration.ClassIconY) +
+                    new Vector2((int)(KingdomHeartsPlugin.Ui.Configuration.ClassIconX), (int)(KingdomHeartsPlugin.Ui.Configuration.ClassIconY)) +
                     new Vector2(0, (int)(healthY * KingdomHeartsPlugin.Ui.Configuration.Scale)));
             }
 
             if (KingdomHeartsPlugin.Ui.Configuration.LevelEnabled)
                 ImGuiAdditions.TextShadowedDrawList(drawList, KingdomHeartsPlugin.Ui.Configuration.LevelTextSize,
                     $"Lv{KingdomHeartsPlugin.Cs.LocalPlayer.Level}",
-                    drawPosition + new Vector2(KingdomHeartsPlugin.Ui.Configuration.LevelTextX, KingdomHeartsPlugin.Ui.Configuration.LevelTextY),
+                    drawPosition + new Vector2(KingdomHeartsPlugin.Ui.Configuration.LevelTextX, KingdomHeartsPlugin.Ui.Configuration.LevelTextY) * KingdomHeartsPlugin.Ui.Configuration.Scale,
                     new Vector4(249 / 255f, 247 / 255f, 232 / 255f, 0.9f),
                     new Vector4(96 / 255f, 78 / 255f, 23 / 255f, 0.25f), 3,
                     KingdomHeartsPlugin.Ui.Configuration.LevelTextAlignment);
 
             if (KingdomHeartsPlugin.Ui.Configuration.ExpValueTextEnabled)
                 ImGuiAdditions.TextShadowedDrawList(drawList, KingdomHeartsPlugin.Ui.Configuration.ExpValueTextSize,
-                    $"{StringFormatting.FormatDigits(Experience, (NumberFormatStyle)KingdomHeartsPlugin.Ui.Configuration.ExpValueTextFormatStyle)} / {StringFormatting.FormatDigits(MaxExperience, (NumberFormatStyle)KingdomHeartsPlugin.Ui.Configuration.ExpValueTextFormatStyle)}",
+                    $"{StringFormatting.FormatDigits(Experience, KingdomHeartsPlugin.Ui.Configuration.ExpValueTextFormatStyle)} / {StringFormatting.FormatDigits(MaxExperience, KingdomHeartsPlugin.Ui.Configuration.ExpValueTextFormatStyle)}",
                     drawPosition + new Vector2(KingdomHeartsPlugin.Ui.Configuration.ExpValueTextPositionX, KingdomHeartsPlugin.Ui.Configuration.ExpValueTextPositionY),
                     new Vector4(255 / 255f, 255 / 255f, 255 / 255f, 1f),
                     new Vector4(0 / 255f, 0 / 255f, 0 / 255f, 0.25f),
