@@ -1,4 +1,5 @@
 ﻿using Dalamud.Interface;
+using Dalamud.Utility;
 using FFXIVClientStructs.FFXIV.Component.GUI;
 using ImGuiNET;
 using KingdomHeartsPlugin.Configuration;
@@ -7,8 +8,9 @@ using KingdomHeartsPlugin.UIElements.Experience;
 using KingdomHeartsPlugin.UIElements.HealthBar;
 using KingdomHeartsPlugin.Utilities;
 using System;
+using System.IO;
+using System.Linq;
 using System.Numerics;
-using NAudio.Wave;
 
 namespace KingdomHeartsPlugin
 {
@@ -934,7 +936,10 @@ namespace KingdomHeartsPlugin
             ImGui.NewLine();
             
             var normalPortraitPath = Configuration.PortraitNormalImage;
+
             ImGui.Text("Normal Portrait");
+            ImGui.SameLine();
+            ImGui.TextColored(new Vector4(1,0,0,1),FindImageMessage(normalPortraitPath));
             if (ImGui.InputText("##Normal", ref normalPortraitPath, 512))
             {
                 Configuration.PortraitNormalImage = normalPortraitPath;
@@ -947,6 +952,8 @@ namespace KingdomHeartsPlugin
 
             var hurtPortraitPath = Configuration.PortraitHurtImage;
             ImGui.Text("Hurt Portrait");
+            ImGui.SameLine();
+            ImGui.TextColored(new Vector4(1, 0, 0, 1), FindImageMessage(hurtPortraitPath));
             if (ImGui.InputText("##Hurt", ref hurtPortraitPath, 512))
             {
                 Configuration.PortraitHurtImage = hurtPortraitPath;
@@ -959,6 +966,8 @@ namespace KingdomHeartsPlugin
 
             var dangerPortraitPath = Configuration.PortraitDangerImage;
             ImGui.Text("Danger Portrait");
+            ImGui.SameLine();
+            ImGui.TextColored(new Vector4(1, 0, 0, 1), FindImageMessage(dangerPortraitPath));
             if (ImGui.InputText("##Danger", ref dangerPortraitPath, 512))
             {
                 Configuration.PortraitDangerImage = dangerPortraitPath;
@@ -971,6 +980,8 @@ namespace KingdomHeartsPlugin
 
             var combatPortraitPath = Configuration.PortraitCombatImage;
             ImGui.Text("Combat Portrait");
+            ImGui.SameLine();
+            ImGui.TextColored(new Vector4(1, 0, 0, 1), FindImageMessage(combatPortraitPath));
             if (ImGui.InputText("##Combat", ref combatPortraitPath, 512))
             {
                 Configuration.PortraitCombatImage = combatPortraitPath;
@@ -989,84 +1000,7 @@ namespace KingdomHeartsPlugin
             if (!ImGui.BeginTabItem("Sound")) return;
 
             ImGui.NewLine();
-            var deviceId = Configuration.SoundDeviceId;
-            var deviceName = "Default";
-            if (deviceId > -1)
-            {
-                if (deviceId < WaveOut.DeviceCount)
-                {
-                    deviceName = WaveOut.GetCapabilities(deviceId).ProductName;
-                }
-                else
-                {
-                    Configuration.SoundDeviceId = -1;
-                }
-            }
-            else
-            {
-                Configuration.SoundDeviceId = -1;
-            }
-
-            if (ImGui.BeginCombo("Sound Device", deviceName))
-            {
-                if (ImGui.Selectable("Default"))
-                {
-                    Configuration.SoundDeviceId = -1;
-                }
-
-                for (int i = 0; i < WaveOut.DeviceCount; i++)
-                {
-                    if (ImGui.Selectable(WaveOut.GetCapabilities(i).ProductName))
-                    {
-                        Configuration.SoundDeviceId = i;
-                    }
-                }
-
-                ImGui.EndCombo();
-            }
-
-            ImGui.NewLine();
-            if (ImGui.TreeNode("Low HP"))
-            {
-                ImGui.Text("Plays a sound when HP is low, based on the setting in the Health tab.");
-                var enabled = Configuration.LowHealthSoundEnabled;
-                if (ImGui.Checkbox("Enabled##LowHpSound", ref enabled))
-                {
-                    Configuration.LowHealthSoundEnabled = enabled;
-                }
-
-                var lowHealthSoundPath = Configuration.LowHealthSoundPath;
-                ImGui.Text("Sound File Path");
-                if (ImGui.InputText("##LowHpPath", ref lowHealthSoundPath, 512))
-                {
-                    Configuration.LowHealthSoundPath = lowHealthSoundPath;
-                }
-
-                ImGui.SameLine();
-                if (ImGui.Button("Test##LowHpPath"))
-                {
-                    SoundEngine.PlaySound(Configuration.LowHealthSoundPath, Configuration.LowHealthSoundVolume);
-                }
-
-                var lowHealthVolume = Configuration.LowHealthSoundVolume * 100f;
-                if (ImGui.SliderFloat("Volume##LowHP", ref lowHealthVolume, 0, 100.0f, "%.1f%%"))
-                {
-                    Configuration.LowHealthSoundVolume = Math.Min(lowHealthVolume / 100f, 1);
-                }
-
-                var lowHealthDelay = Configuration.LowHealthSoundDelay;
-                if (ImGui.InputFloat("Loop Time##LowHP", ref lowHealthDelay, 0.05f, 0.2f))
-                {
-                    if (lowHealthDelay < 0.05f && lowHealthDelay != -100) lowHealthDelay = 0.05f;
-                    Configuration.LowHealthSoundDelay = lowHealthDelay;
-                }
-
-                if (ImGui.IsItemHovered())
-                {
-                    Tooltip("Sets the timer for when the sound will play again. (In Seconds)\nEx: 0.4 will play the sound every 0.4 seconds.\nSet to -100 for no looping");
-                }
-            }
-
+            ImGui.TextColored(new Vector4(1, 0, 0, 1), "This feature has been made in to a new plugin called Audible Character Status.");
             ImGui.NewLine();
             ImGui.EndTabItem();
         }
@@ -1111,5 +1045,25 @@ namespace KingdomHeartsPlugin
             ImGui.End();
         }
 
+        /// <summary>
+        /// Returns a message depending on if an image is found or not, and if it is not a supported format.
+        /// Supported formats are png, jpg, jpeg, and bmp.
+        /// </summary>
+        /// <param name="path">Path to image</param>
+        /// <returns>string</returns>
+        private string FindImageMessage(string path)
+        {
+            if (path.IsNullOrEmpty()) return "";
+
+            var fileFound = File.Exists(path);
+
+            if (!fileFound) return "File not found.";
+
+            string[] supportedImages = { ".png", ".jpg", ".jpeg", ".bmp" };
+
+            var isImage = supportedImages.Any(ext => Path.GetExtension(path) == ext);
+
+            return isImage ? "" : "File is not an image. png, jpg, jpeg, bmp are supported.";
+        }
     }
 }
