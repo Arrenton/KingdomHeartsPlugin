@@ -8,9 +8,11 @@ using KingdomHeartsPlugin.UIElements.Experience;
 using KingdomHeartsPlugin.UIElements.HealthBar;
 using KingdomHeartsPlugin.Utilities;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Numerics;
+using Dalamud.Interface.ImGuiFileDialog;
 
 namespace KingdomHeartsPlugin
 {
@@ -20,6 +22,7 @@ namespace KingdomHeartsPlugin
     {
         internal Settings Configuration;
         public readonly HealthFrame HealthFrame;
+        private readonly FileDialogManager _dialogManager;
         /*private TextureWrap _testTextureWrap;
         private float _width;
         private float _height;
@@ -48,6 +51,7 @@ namespace KingdomHeartsPlugin
         {
             Configuration = configuration;
             HealthFrame = new HealthFrame();
+            _dialogManager = SetupDialogManager();
 
             /*_testTextureWrap = KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\LimitGauge\number_2.png"));
             pos = new float[4];
@@ -901,6 +905,8 @@ namespace KingdomHeartsPlugin
 
         private void PortraitSettings()
         {
+            string supportedImages = "Image Files{.png,.jpg,.jpeg,.bmp}";
+
             if (!ImGui.BeginTabItem("Portrait")) return;
 
             var portraitPos = new Vector2(Configuration.PortraitX, Configuration.PortraitY);
@@ -931,7 +937,6 @@ namespace KingdomHeartsPlugin
 
             ImGui.NewLine();
             ImGui.Text("Portrait image paths");
-            ImGui.Text("To set a portrait, include the full path to the image you want.\nEx: 'C:/images/image.png' without quotes");
             ImGui.Separator();
             ImGui.NewLine();
             
@@ -940,56 +945,96 @@ namespace KingdomHeartsPlugin
             ImGui.Text("Normal Portrait");
             ImGui.SameLine();
             ImGui.TextColored(new Vector4(1,0,0,1),FindImageMessage(normalPortraitPath));
-            if (ImGui.InputText("##Normal", ref normalPortraitPath, 512))
-            {
-                Configuration.PortraitNormalImage = normalPortraitPath;
-            }
+
+            ImGui.InputText("##Normal", ref normalPortraitPath, 512, ImGuiInputTextFlags.ReadOnly);
+
             ImGui.SameLine();
-            if (ImGui.Button("Set##Normal"))
+            if (ImGui.Button("Browse...##NormalPortrait"))
             {
-                Portrait.SetPortraitNormal(Configuration.PortraitNormalImage);
+                var startDir = Path.GetDirectoryName(Configuration.PortraitNormalImage);
+
+                void UpdatePath(bool success, List<string> paths)
+                {
+                    if (success && paths.Count > 0)
+                    {
+                        Configuration.PortraitNormalImage = paths[0];
+                        Portrait.SetPortraitNormal(Configuration.PortraitNormalImage);
+                    }
+                }
+
+                _dialogManager.OpenFileDialog("Choose an image file for Normal Portrait", supportedImages, UpdatePath, 1, startDir);
             }
 
             var hurtPortraitPath = Configuration.PortraitHurtImage;
             ImGui.Text("Hurt Portrait");
             ImGui.SameLine();
             ImGui.TextColored(new Vector4(1, 0, 0, 1), FindImageMessage(hurtPortraitPath));
-            if (ImGui.InputText("##Hurt", ref hurtPortraitPath, 512))
-            {
-                Configuration.PortraitHurtImage = hurtPortraitPath;
-            }
+            
+            ImGui.InputText("##HurtPortrait", ref hurtPortraitPath, 512, ImGuiInputTextFlags.ReadOnly);
+
             ImGui.SameLine();
-            if (ImGui.Button("Set##Hurt"))
+            if (ImGui.Button("Browse...##HurtPortrait"))
             {
-                Portrait.SetPortraitHurt(Configuration.PortraitHurtImage);
+                var startDir = Path.GetDirectoryName(Configuration.PortraitHurtImage);
+
+                void UpdatePath(bool success, List<string> paths)
+                {
+                    if (success && paths.Count > 0)
+                    {
+                        Configuration.PortraitHurtImage = paths[0];
+                        Portrait.SetPortraitHurt(Configuration.PortraitHurtImage);
+                    }
+                }
+
+                _dialogManager.OpenFileDialog("Choose an image file for Hurt Portrait", supportedImages, UpdatePath, 1, startDir);
             }
 
             var dangerPortraitPath = Configuration.PortraitDangerImage;
             ImGui.Text("Danger Portrait");
             ImGui.SameLine();
             ImGui.TextColored(new Vector4(1, 0, 0, 1), FindImageMessage(dangerPortraitPath));
-            if (ImGui.InputText("##Danger", ref dangerPortraitPath, 512))
-            {
-                Configuration.PortraitDangerImage = dangerPortraitPath;
-            }
+
+            ImGui.InputText("##Danger", ref dangerPortraitPath, 512, ImGuiInputTextFlags.ReadOnly);
+
             ImGui.SameLine();
-            if (ImGui.Button("Set##Danger"))
+            if (ImGui.Button("Browse...##DangerPortrait"))
             {
-                Portrait.SetPortraitDanger(Configuration.PortraitDangerImage);
+                var startDir = Path.GetDirectoryName(Configuration.PortraitDangerImage);
+
+                void UpdatePath(bool success, List<string> paths)
+                {
+                    if (success && paths.Count > 0)
+                    {
+                        Configuration.PortraitDangerImage = paths[0];
+                        Portrait.SetPortraitDanger(Configuration.PortraitDangerImage);
+                    }
+                }
+
+                _dialogManager.OpenFileDialog("Choose an image file for Danger Portrait", supportedImages, UpdatePath, 1, startDir);
             }
 
             var combatPortraitPath = Configuration.PortraitCombatImage;
             ImGui.Text("Combat Portrait");
             ImGui.SameLine();
             ImGui.TextColored(new Vector4(1, 0, 0, 1), FindImageMessage(combatPortraitPath));
-            if (ImGui.InputText("##Combat", ref combatPortraitPath, 512))
-            {
-                Configuration.PortraitCombatImage = combatPortraitPath;
-            }
+
+            ImGui.InputText("##Combat", ref combatPortraitPath, 512, ImGuiInputTextFlags.ReadOnly);
+
             ImGui.SameLine();
-            if (ImGui.Button("Set##Combat"))
+            if (ImGui.Button("Browse...##CombatPortrait"))
             {
-                Portrait.SetPortraitCombat(Configuration.PortraitCombatImage);
+                var startDir = Path.GetDirectoryName(Configuration.PortraitCombatImage);
+
+                void UpdatePath(bool success, List<string> paths)
+                {
+                    if (success && paths.Count > 0)
+                    {
+                        Configuration.PortraitCombatImage = paths[0];
+                        Portrait.SetPortraitCombat(Configuration.PortraitCombatImage);
+                    }
+                }
+
+                _dialogManager.OpenFileDialog("Choose an image file for Combat Portrait", supportedImages, UpdatePath, 1, startDir);
             }
 
             ImGui.EndTabItem();
@@ -1034,6 +1079,7 @@ namespace KingdomHeartsPlugin
                 ClassSettings();
                 PortraitSettings();
                 SoundSettings();
+                _dialogManager.Draw();
 
                 ImGui.EndTabBar();
                 ImGui.Separator();
@@ -1064,6 +1110,15 @@ namespace KingdomHeartsPlugin
             var isImage = supportedImages.Any(ext => Path.GetExtension(path) == ext);
 
             return isImage ? "" : "File is not an image. png, jpg, jpeg, bmp are supported.";
+        }
+        private FileDialogManager SetupDialogManager()
+        {
+            var fileManager = new FileDialogManager { AddedWindowFlags = ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoDocking };
+
+            // Remove Videos and Music.
+            fileManager.CustomSideBarItems.Add(("Videos", string.Empty, 0, -1));
+
+            return fileManager;
         }
     }
 }
