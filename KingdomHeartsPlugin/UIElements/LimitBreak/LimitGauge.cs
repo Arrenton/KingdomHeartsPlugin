@@ -217,6 +217,7 @@ namespace KingdomHeartsPlugin.UIElements.LimitBreak
             _gaugeForegroundTexture.Dispose();
             _limitTextTexture.Dispose();
             _maxLimitTexture.Dispose();
+            _orbTexture.Dispose();
 
             for (int i = 0; i < _numbers.Length; i++)
             {
@@ -229,6 +230,7 @@ namespace KingdomHeartsPlugin.UIElements.LimitBreak
             _gaugeForegroundTexture = null;
             _limitTextTexture = null;
             _maxLimitTexture = null;
+            _orbTexture = null;
         }
 
         private int LimitBreakLevel { get; set; }
