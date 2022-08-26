@@ -78,22 +78,22 @@ namespace KingdomHeartsPlugin.UIElements.ParameterResource
             var textPosition = new Vector2(KingdomHeartsPlugin.Ui.Configuration.ResourceTextPositionX, KingdomHeartsPlugin.Ui.Configuration.ResourceTextPositionY) * KingdomHeartsPlugin.Ui.Configuration.Scale;
 
             // Base
-            ImageDrawing.DrawImage(drawList, _mpBaseTexture, new Vector2(basePosition.X - 1, basePosition.Y - 1), new Vector4(0, 0, 74 / 80f, 1));
+            ImageDrawing.DrawImage(drawList, _mpBaseTexture, new Vector2(basePosition.X - 1, basePosition.Y), new Vector4(0, 0, 74 / 80f, 1));
 
             // BG
-            ImageDrawing.DrawImage(drawList, _barBackgroundTexture, new Vector4(basePosition.X - MaxResourceLength, basePosition.Y, MaxResourceLength, _barBackgroundTexture.Height));
+            ImageDrawing.DrawImageScaled(drawList, _barBackgroundTexture, new Vector2(basePosition.X + 0.33f - MaxResourceLength, basePosition.Y), new Vector2(MaxResourceLength, 1f));
 
             // FG
-            ImageDrawing.DrawImage(drawList, _barForegroundTexture, new Vector4(basePosition.X - ResourceLength, basePosition.Y + 5, ResourceLength, _barForegroundTexture.Height));
+            ImageDrawing.DrawImageScaled(drawList, _barForegroundTexture, new Vector2(basePosition.X + 0.33f - ResourceLength, basePosition.Y + 5), new Vector2(ResourceLength, 1f));
 
             // Edge
-            ImageDrawing.DrawImage(drawList, _barEdgeTexture, new Vector2(basePosition.X - MaxResourceLength - 6, basePosition.Y - 1));
+            ImageDrawing.DrawImage(drawList, _barEdgeTexture, new Vector2(basePosition.X + 0.65f - MaxResourceLength - 6, basePosition.Y));
             // Base Edge
-            ImageDrawing.DrawImageRotated(drawList, _barEdgeTexture, new Vector2(basePosition.X + 74, basePosition.Y + 15), new Vector2(_barEdgeTexture.Width, _barEdgeTexture.Height), (float)Math.PI);
+            ImageDrawing.DrawImageRotated(drawList, _barEdgeTexture, new Vector2(basePosition.X + 74, basePosition.Y + 16), new Vector2(_barEdgeTexture.Width, _barEdgeTexture.Height), (float)Math.PI);
 
             if (KingdomHeartsPlugin.Ui.Configuration.ShowResourceVal)
                 ImGuiAdditions.TextShadowedDrawList(drawList, KingdomHeartsPlugin.Ui.Configuration.ResourceTextSize, $"{StringFormatting.FormatDigits(KingdomHeartsPlugin.Ui.Configuration.TruncateMp && ResourceType == Resource.Mp ? ResourceValue / 100 : ResourceValue, KingdomHeartsPlugin.Ui.Configuration.ResourceTextStyle)}", ImGui.GetItemRectMin() + basePosition * KingdomHeartsPlugin.Ui.Configuration.Scale + textPosition, new Vector4(255 / 255f, 255 / 255f, 255 / 255f, 1f), new Vector4(0 / 255f, 0 / 255f, 0 / 255f, 0.25f), 3, (TextAlignment)KingdomHeartsPlugin.Ui.Configuration.ResourceTextAlignment);
-        }
+         }
 
         public void Dispose()
         {

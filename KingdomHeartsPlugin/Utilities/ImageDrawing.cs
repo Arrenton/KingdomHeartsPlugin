@@ -73,6 +73,7 @@ namespace KingdomHeartsPlugin.Utilities
         /// <param name="size">(width, height)</param>
         /// <param name="position">(top, left)</param>
         /// <param name="imageArea">(left, top, width, height)</param>
+        /// <param name="color"></param>
         public static void DrawImageArea(ImDrawListPtr d, TextureWrap image, Vector2 size, Vector2 position, Vector4 imageArea, uint color = UInt32.MaxValue)
         {
             var basePosition = ImGui.GetItemRectMin();
@@ -93,6 +94,7 @@ namespace KingdomHeartsPlugin.Utilities
         /// <param name="URPos">Upper Right Corner</param>
         /// <param name="LRPos">Lower Right Corner</param>
         /// <param name="LLPos">Lower Left Corner</param>
+        /// <param name="color"></param>
         public static void DrawImageQuad(ImDrawListPtr d, TextureWrap image, Vector2 position, Vector2 ULPos, Vector2 URPos, Vector2 LRPos, Vector2 LLPos, uint color = UInt32.MaxValue)
         {
             var basePosition = ImGui.GetItemRectMin();
@@ -108,6 +110,31 @@ namespace KingdomHeartsPlugin.Utilities
 
             d.PushClipRect(finalPosition - imageSize * 2, finalPosition + imageSize * 2);
             d.AddImageQuad(image.ImGuiHandle, finalPosition + ULPos * KingdomHeartsPlugin.Ui.Configuration.Scale, finalPosition + new Vector2(imageSize.X, 0) + URPos * KingdomHeartsPlugin.Ui.Configuration.Scale, finalPosition + imageSize + LRPos * KingdomHeartsPlugin.Ui.Configuration.Scale, finalPosition + new Vector2(0, imageSize.Y) + LLPos * KingdomHeartsPlugin.Ui.Configuration.Scale, uvs[0], uvs[1], uvs[2], uvs[3], color);
+            d.PopClipRect();
+        }
+
+        /// <summary>
+        /// Places an image with specified scale multiplier
+        /// </summary>
+        /// <param name="d"></param>
+        /// <param name="image"></param>
+        /// <param name="scale"></param
+        /// <param name="color"></param>
+        public static void DrawImageScaled(ImDrawListPtr d, TextureWrap image, Vector2 position, Vector2 scale, uint color = UInt32.MaxValue)
+        {
+            var basePosition = ImGui.GetItemRectMin();
+            var imageSize = new Vector2(image.Width, image.Height) * KingdomHeartsPlugin.Ui.Configuration.Scale * scale;
+            var finalPosition = basePosition + position * KingdomHeartsPlugin.Ui.Configuration.Scale;
+
+            Vector2[] uvs = {
+                new(0.0f, 0.0f),
+                new(1.0f, 0.0f),
+                new(1.0f, 1.0f),
+                new(0.0f, 1.0f)
+            };
+
+            d.PushClipRect(finalPosition - Vector2.One * 3, finalPosition + imageSize + Vector2.One * 3);
+            d.AddImageQuad(image.ImGuiHandle, finalPosition, finalPosition + new Vector2(imageSize.X, 0), finalPosition + imageSize, finalPosition + new Vector2(0, imageSize.Y), uvs[0], uvs[1], uvs[2], uvs[3], color);
             d.PopClipRect();
         }
         public static void DrawImageQuad(ImDrawListPtr d, TextureWrap image, Vector2 position, Vector2 ULPos, Vector2 URPos, Vector2 LRPos, Vector2 LLPos, Vector2 uv1, Vector2 uv2, Vector2 uv3, Vector2 uv4, uint color = UInt32.MaxValue)
@@ -127,6 +154,7 @@ namespace KingdomHeartsPlugin.Utilities
         /// <param name="d"></param>
         /// <param name="image"></param>
         /// <param name="position">additive position</param>
+        /// <param name="color"></param>
         public static void DrawImage(ImDrawListPtr d, TextureWrap image, Vector2 position, uint color = UInt32.MaxValue)
         {
             var basePosition = ImGui.GetItemRectMin();
@@ -144,6 +172,7 @@ namespace KingdomHeartsPlugin.Utilities
         /// <param name="d"></param>
         /// <param name="image"></param>
         /// <param name="position">additive position, width and height</param>
+        /// <param name="color"></param>
         public static void DrawImage(ImDrawListPtr d, TextureWrap image, Vector4 position, uint color = UInt32.MaxValue)
         {
             var basePosition = ImGui.GetItemRectMin();
@@ -181,6 +210,7 @@ namespace KingdomHeartsPlugin.Utilities
         /// <param name="image"></param>
         /// <param name="position">additive position</param>
         /// <param name="imagePortion">Area which to draw in the image (0 - 1) (Left, Top, Right, Bottom)</param>
+        /// <param name="color"></param>
         public static void DrawImage(ImDrawListPtr d, TextureWrap image, Vector2 position, Vector4 imagePortion, uint color = UInt32.MaxValue)
         {
             var basePosition = ImGui.GetItemRectMin();

@@ -298,28 +298,28 @@ namespace KingdomHeartsPlugin.UIElements.HealthBar
             if (maxHealthLength > 0)
             {
                 Vector3 lowHealthColor = ColorAddons.Interpolate(_bgColor, new Vector3(1, 0, 0), LowHealthAlpha);
-                ImageDrawing.DrawImage(drawList, BarEdgeTexture, new Vector2(basePosition.X- 6 - maxHealthLength, basePosition.Y));
-                ImageDrawing.DrawImage(drawList, BarColorlessTexture, new Vector4(basePosition.X - maxHealthLength, basePosition.Y + 4, maxHealthLength, BarColorlessTexture.Height), ImGui.GetColorU32(new Vector4(lowHealthColor.X, lowHealthColor.Y, lowHealthColor.Z, 1)));
+                ImageDrawing.DrawImage(drawList, BarEdgeTexture, new Vector2(basePosition.X - 5.4f - maxHealthLength, basePosition.Y));
+                ImageDrawing.DrawImageScaled(drawList, BarColorlessTexture, new Vector2(basePosition.X - maxHealthLength, basePosition.Y + 4), new Vector2(maxHealthLength, 1), ImGui.GetColorU32(new Vector4(lowHealthColor.X, lowHealthColor.Y, lowHealthColor.Z, 1)));
             }
 
             if (damagedHealthLength > 0)
             {
-                ImageDrawing.DrawImage(drawList, BarColorlessTexture, new Vector4(basePosition.X - damagedHealthLength, basePosition.Y + 4, damagedHealthLength, BarColorlessTexture.Height), ImGui.GetColorU32(new Vector4(1f, 0f, 0f, DamagedHealthAlpha)));
+                ImageDrawing.DrawImageScaled(drawList, BarColorlessTexture, new Vector2(basePosition.X - damagedHealthLength, basePosition.Y + 4), new Vector2(damagedHealthLength, 1), ImGui.GetColorU32(new Vector4(1f, 0f, 0f, DamagedHealthAlpha)));
             }
 
             if (restoredHealthLength > 0)
             {
-                ImageDrawing.DrawImage(drawList, BarRecoveryTexture, new Vector4(basePosition.X - restoredHealthLength, basePosition.Y + 4, restoredHealthLength, BarRecoveryTexture.Height));
+                ImageDrawing.DrawImageScaled(drawList, BarRecoveryTexture, new Vector2(basePosition.X - restoredHealthLength, basePosition.Y + 4), new Vector2(restoredHealthLength, 1));
             }
 
             if (healthLength > 0)
             {
-                ImageDrawing.DrawImage(drawList, BarForegroundTexture, new Vector4(basePosition.X - healthLength, basePosition.Y + 4, healthLength, BarForegroundTexture.Height));
+                ImageDrawing.DrawImageScaled(drawList, BarForegroundTexture, new Vector2(basePosition.X - healthLength, basePosition.Y + 4), new Vector2(healthLength, 1));
             }
 
             if (maxHealthLength > 0)
             {
-                ImageDrawing.DrawImage(drawList, BarOutlineTexture, new Vector4(basePosition.X - maxHealthLength, basePosition.Y, maxHealthLength, BarOutlineTexture.Height));
+                ImageDrawing.DrawImageScaled(drawList, BarOutlineTexture, new Vector2(basePosition.X - maxHealthLength, basePosition.Y), new Vector2(maxHealthLength, 1));
             }
         }
 

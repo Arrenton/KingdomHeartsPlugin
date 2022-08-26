@@ -61,7 +61,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Textures\bar_textures.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
     <None Update="Textures\Experience\ring_experience_colorless_segment.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
