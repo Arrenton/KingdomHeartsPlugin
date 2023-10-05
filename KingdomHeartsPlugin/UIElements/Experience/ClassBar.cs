@@ -7,6 +7,7 @@ using System.IO;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using KingdomHeartsPlugin.Enums;
+using Dalamud.Interface.Internal;
 
 namespace KingdomHeartsPlugin.Configuration
 {
@@ -36,14 +37,14 @@ namespace KingdomHeartsPlugin.UIElements.Experience
 {
     public class ClassBar
     {
-        private TextureWrap _expBarSegmentTexture, _expColorlessBarSegmentTexture, _expBarBaseTexture;
+        private IDalamudTextureWrap _expBarSegmentTexture, _expColorlessBarSegmentTexture, _expBarBaseTexture;
         private IntPtr _expAddonPtr;
 
         public ClassBar()
         {
-            _expBarBaseTexture = KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\Experience\ring_experience_outline.png"));
-            _expBarSegmentTexture = KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\Experience\ring_experience_segment.png"));
-            _expColorlessBarSegmentTexture = KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\Experience\ring_experience_colorless_segment.png"));
+            _expBarBaseTexture =  KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\Experience\ring_experience_outline.png"));
+            _expBarSegmentTexture =  KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\Experience\ring_experience_segment.png"));
+            _expColorlessBarSegmentTexture =  KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\Experience\ring_experience_colorless_segment.png"));
 
             ExperienceRing = new Ring(_expBarSegmentTexture);
             ExperienceRingRest = new Ring(_expBarSegmentTexture, alpha: 0.25f);

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Numerics;
+using Dalamud.Interface.Internal;
 using FFXIVClientStructs.FFXIV.Component.GUI;
 using ImGuiNET;
 using ImGuiScene;
@@ -11,9 +12,9 @@ namespace KingdomHeartsPlugin.UIElements.LimitBreak
     public class LimitGauge
     {
 
-        private TextureWrap _gaugeBackgroundTexture, _gaugeForegroundTexture, _gaugeForegroundColorlessTexture, _maxLimitTexture, _limitTextTexture, _orbTexture;
+        private IDalamudTextureWrap _gaugeBackgroundTexture, _gaugeForegroundTexture, _gaugeForegroundColorlessTexture, _maxLimitTexture, _limitTextTexture, _orbTexture;
 
-        private TextureWrap[] _numbers;
+        private IDalamudTextureWrap[] _numbers;
 
         private Orb[] _orbs;
 
@@ -24,13 +25,13 @@ namespace KingdomHeartsPlugin.UIElements.LimitBreak
         public LimitGauge()
         {
             LimitBreakBarWidth = new int[5];
-            _gaugeBackgroundTexture = KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\LimitGauge\background.png"));
-            _gaugeForegroundTexture = KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\LimitGauge\gauge_colored.png"));
-            _gaugeForegroundColorlessTexture = KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\LimitGauge\gauge_white.png"));
-            _limitTextTexture = KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\LimitGauge\limit_text.png"));
-            _maxLimitTexture = KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\LimitGauge\max.png"));
-            _orbTexture = KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\LimitGauge\orb.png"));
-            _numbers = new[]
+            _gaugeBackgroundTexture =  KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\LimitGauge\background.png"));
+            _gaugeForegroundTexture =  KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\LimitGauge\gauge_colored.png"));
+            _gaugeForegroundColorlessTexture =  KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\LimitGauge\gauge_white.png"));
+            _limitTextTexture =  KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\LimitGauge\limit_text.png"));
+            _maxLimitTexture =  KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\LimitGauge\max.png"));
+            _orbTexture =  KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\LimitGauge\orb.png"));
+            _numbers = (new[]
             {
                 KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\LimitGauge\number_0.png")),
                 KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\LimitGauge\number_1.png")),
@@ -38,7 +39,7 @@ namespace KingdomHeartsPlugin.UIElements.LimitBreak
                 KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\LimitGauge\number_3.png")),
                 KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\LimitGauge\number_4.png")),
                 KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\LimitGauge\number_5.png"))
-            };
+            });
             _orbs = new Orb[5];
             for (int i = 0; i < 5; i++)
             {

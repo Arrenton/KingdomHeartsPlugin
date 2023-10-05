@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Numerics;
 using Dalamud.Game.ClientState.Objects.Enums;
+using Dalamud.Interface.Internal;
 using Dalamud.Utility;
 using ImGuiNET;
 using ImGuiScene;
@@ -69,13 +70,13 @@ namespace KingdomHeartsPlugin.UIElements.Experience
             PortraitCombat = GetTexture(path);
         }
 
-        private static TextureWrap GetTexture(string path)
+        private static IDalamudTextureWrap GetTexture(string path)
         {
             if (path.IsNullOrEmpty() || !File.Exists(path)) return null;
 
             try
             {
-                return KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(path);
+                return (IDalamudTextureWrap)KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(path);
             }
             catch
             {
@@ -126,9 +127,9 @@ namespace KingdomHeartsPlugin.UIElements.Experience
         }
 
 
-        private static TextureWrap PortraitNormal { get; set; }
-        private static TextureWrap PortraitHurt { get; set; }
-        private static TextureWrap PortraitDanger { get; set; }
-        private static TextureWrap PortraitCombat { get; set; }
+        private static IDalamudTextureWrap PortraitNormal { get; set; }
+        private static IDalamudTextureWrap PortraitHurt { get; set; }
+        private static IDalamudTextureWrap PortraitDanger { get; set; }
+        private static IDalamudTextureWrap PortraitCombat { get; set; }
     }
 }

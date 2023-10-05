@@ -1,17 +1,17 @@
-﻿using ImGuiNET;
+﻿using Dalamud.Interface.Internal;
+using ImGuiNET;
 using ImGuiScene;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Threading.Tasks;
-using Dalamud.Utility;
 
 namespace KingdomHeartsPlugin.Utilities
 {
     internal static class ImageDrawing
     {
 
-        private static readonly Dictionary<ushort, TextureWrap> IconTextures = new();
+        private static readonly Dictionary<ushort, IDalamudTextureWrap> IconTextures = new();
         private static Vector2 ImRotate(Vector2 v, float cosA, float sinA)
         {
             return new Vector2(v.X * cosA - v.Y * sinA, v.X * sinA + v.Y * cosA);
@@ -36,7 +36,7 @@ namespace KingdomHeartsPlugin.Utilities
 
             d.AddImageQuad(texId, pos[0], pos[1], pos[2], pos[3], uvs[0], uvs[1], uvs[2], uvs[3], col);
         }
-        public static void DrawImageRotated(ImDrawListPtr d, TextureWrap texture, Vector2 position, Vector2 size, float angle, uint col = UInt32.MaxValue)
+        public static void DrawImageRotated(ImDrawListPtr d, IDalamudTextureWrap texture, Vector2 position, Vector2 size, float angle, uint col = UInt32.MaxValue)
         {
             var basePosition = ImGui.GetItemRectMin();
             var finalPosition = basePosition + position * KingdomHeartsPlugin.Ui.Configuration.Scale;
@@ -74,7 +74,7 @@ namespace KingdomHeartsPlugin.Utilities
         /// <param name="position">(top, left)</param>
         /// <param name="imageArea">(left, top, width, height)</param>
         /// <param name="color"></param>
-        public static void DrawImageArea(ImDrawListPtr d, TextureWrap image, Vector2 size, Vector2 position, Vector4 imageArea, uint color = UInt32.MaxValue)
+        public static void DrawImageArea(ImDrawListPtr d, IDalamudTextureWrap image, Vector2 size, Vector2 position, Vector4 imageArea, uint color = UInt32.MaxValue)
         {
             var basePosition = ImGui.GetItemRectMin();
             var imageWidth = image.Width;
@@ -95,7 +95,7 @@ namespace KingdomHeartsPlugin.Utilities
         /// <param name="LRPos">Lower Right Corner</param>
         /// <param name="LLPos">Lower Left Corner</param>
         /// <param name="color"></param>
-        public static void DrawImageQuad(ImDrawListPtr d, TextureWrap image, Vector2 position, Vector2 ULPos, Vector2 URPos, Vector2 LRPos, Vector2 LLPos, uint color = UInt32.MaxValue)
+        public static void DrawImageQuad(ImDrawListPtr d, IDalamudTextureWrap image, Vector2 position, Vector2 ULPos, Vector2 URPos, Vector2 LRPos, Vector2 LLPos, uint color = UInt32.MaxValue)
         {
             var basePosition = ImGui.GetItemRectMin();
             var imageSize = new Vector2(image.Width, image.Height) * KingdomHeartsPlugin.Ui.Configuration.Scale;
@@ -120,7 +120,7 @@ namespace KingdomHeartsPlugin.Utilities
         /// <param name="image"></param>
         /// <param name="scale"></param
         /// <param name="color"></param>
-        public static void DrawImageScaled(ImDrawListPtr d, TextureWrap image, Vector2 position, Vector2 scale, uint color = UInt32.MaxValue)
+        public static void DrawImageScaled(ImDrawListPtr d, IDalamudTextureWrap   image, Vector2 position, Vector2 scale, uint color = UInt32.MaxValue)
         {
             var basePosition = ImGui.GetItemRectMin();
             var imageSize = new Vector2(image.Width, image.Height) * KingdomHeartsPlugin.Ui.Configuration.Scale * scale;
@@ -137,7 +137,7 @@ namespace KingdomHeartsPlugin.Utilities
             d.AddImageQuad(image.ImGuiHandle, finalPosition, finalPosition + new Vector2(imageSize.X, 0), finalPosition + imageSize, finalPosition + new Vector2(0, imageSize.Y), uvs[0], uvs[1], uvs[2], uvs[3], color);
             d.PopClipRect();
         }
-        public static void DrawImageQuad(ImDrawListPtr d, TextureWrap image, Vector2 position, Vector2 ULPos, Vector2 URPos, Vector2 LRPos, Vector2 LLPos, Vector2 uv1, Vector2 uv2, Vector2 uv3, Vector2 uv4, uint color = UInt32.MaxValue)
+        public static void DrawImageQuad(ImDrawListPtr d, IDalamudTextureWrap image, Vector2 position, Vector2 ULPos, Vector2 URPos, Vector2 LRPos, Vector2 LLPos, Vector2 uv1, Vector2 uv2, Vector2 uv3, Vector2 uv4, uint color = UInt32.MaxValue)
         {
             var basePosition = ImGui.GetItemRectMin();
             var imageSize = new Vector2(image.Width, image.Height);
@@ -155,7 +155,7 @@ namespace KingdomHeartsPlugin.Utilities
         /// <param name="image"></param>
         /// <param name="position">additive position</param>
         /// <param name="color"></param>
-        public static void DrawImage(ImDrawListPtr d, TextureWrap image, Vector2 position, uint color = UInt32.MaxValue)
+        public static void DrawImage(ImDrawListPtr d, IDalamudTextureWrap image, Vector2 position, uint color = UInt32.MaxValue)
         {
             var basePosition = ImGui.GetItemRectMin();
             var imageSize = new Vector2(image.Width, image.Height) * KingdomHeartsPlugin.Ui.Configuration.Scale;
@@ -173,7 +173,7 @@ namespace KingdomHeartsPlugin.Utilities
         /// <param name="image"></param>
         /// <param name="position">additive position, width and height</param>
         /// <param name="color"></param>
-        public static void DrawImage(ImDrawListPtr d, TextureWrap image, Vector4 position, uint color = UInt32.MaxValue)
+        public static void DrawImage(ImDrawListPtr d, IDalamudTextureWrap image, Vector4 position, uint color = UInt32.MaxValue)
         {
             var basePosition = ImGui.GetItemRectMin();
             var imageSize = new Vector2(position.Z, position.W) * KingdomHeartsPlugin.Ui.Configuration.Scale;
@@ -192,7 +192,7 @@ namespace KingdomHeartsPlugin.Utilities
         /// <param name="scale">image scale</param>
         /// <param name="position">additive position</param>
         /// <param name="color">image color</param>
-        public static void DrawImage(ImDrawListPtr d, TextureWrap image, float scale, Vector2 position, uint color = UInt32.MaxValue)
+        public static void DrawImage(ImDrawListPtr d, IDalamudTextureWrap image, float scale, Vector2 position, uint color = UInt32.MaxValue)
         {
             var basePosition = ImGui.GetItemRectMin();
             var imageSize = new Vector2(image.Width, image.Height) * KingdomHeartsPlugin.Ui.Configuration.Scale * scale;
@@ -211,7 +211,7 @@ namespace KingdomHeartsPlugin.Utilities
         /// <param name="position">additive position</param>
         /// <param name="imagePortion">Area which to draw in the image (0 - 1) (Left, Top, Right, Bottom)</param>
         /// <param name="color"></param>
-        public static void DrawImage(ImDrawListPtr d, TextureWrap image, Vector2 position, Vector4 imagePortion, uint color = UInt32.MaxValue)
+        public static void DrawImage(ImDrawListPtr d, IDalamudTextureWrap image, Vector2 position, Vector4 imagePortion, uint color = UInt32.MaxValue)
         {
             var basePosition = ImGui.GetItemRectMin();
             var imageSize = new Vector2(image.Width, image.Height) * KingdomHeartsPlugin.Ui.Configuration.Scale;
@@ -246,14 +246,13 @@ namespace KingdomHeartsPlugin.Utilities
                 Task.Run(() => {
                     try
                     {
-                        var iconTex = KingdomHeartsPlugin.Dm.GetIcon(icon);
-
+                        var iconTex = KingdomHeartsPlugin.Tp.GetIcon(icon);
+                
                         if (iconTex == null) return;
-
-                        var tex = KingdomHeartsPlugin.Pi.UiBuilder.LoadImageRaw(iconTex.GetRgbaImageData(), iconTex.Header.Width, iconTex.Header.Height, 4);
-                        if (tex.ImGuiHandle != IntPtr.Zero)
+                        
+                        if (iconTex.ImGuiHandle != IntPtr.Zero)
                         {
-                            IconTextures[icon] = tex;
+                            IconTextures[icon] = iconTex;
                         }
                     }
                     catch
