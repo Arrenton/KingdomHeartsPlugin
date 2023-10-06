@@ -22,9 +22,8 @@ namespace KingdomHeartsPlugin
     {
         public string Name => "Kingdom Hearts UI Plugin";
 
-        private const string SettingsCommand = "/khp";
-        private const string HideCommand = "/khphide";
-        private const string ShowCommand = "/khpshow";
+        private const string SettingsCommand = "/khpconfig";
+        private const string ToggleCommand = "/khp";
 
         public static string TemplateLocation;
 
@@ -69,14 +68,9 @@ namespace KingdomHeartsPlugin
                 HelpMessage = "Opens configuration for Kingdom Hearts UI Bars."
             });
 
-            Cm.AddHandler(HideCommand, new CommandInfo(OnHideCommand)
+            Cm.AddHandler(ToggleCommand, new CommandInfo(OnToggleCommand)
             {
-                HelpMessage = "Disables the KH UI."
-            });
-
-            Cm.AddHandler(ShowCommand, new CommandInfo(OnShowCommand)
-            {
-                HelpMessage = "Enables the KH UI."
+                HelpMessage = "Toggles the KH UI."
             });
 
             Pi.UiBuilder.Draw += DrawUi;
@@ -94,8 +88,7 @@ namespace KingdomHeartsPlugin
             Ui?.Dispose();
 
             Cm.RemoveHandler(SettingsCommand);
-            Cm.RemoveHandler(HideCommand);
-            Cm.RemoveHandler(ShowCommand);
+            Cm.RemoveHandler(ToggleCommand);
 
             Fw.Update -= OnUpdate;
 
@@ -116,14 +109,9 @@ namespace KingdomHeartsPlugin
         {
             DrawConfigUi();
         }
-        private void OnHideCommand(string command, string args)
+        private void OnToggleCommand(string command, string args)
         {
-            Ui.Configuration.Enabled = false;
-            Ui.Configuration.Save();
-        }
-        private void OnShowCommand(string command, string args)
-        {
-            Ui.Configuration.Enabled = true;
+            Ui.Configuration.Enabled = !Ui.Configuration.Enabled;
             Ui.Configuration.Save();
         }
 
