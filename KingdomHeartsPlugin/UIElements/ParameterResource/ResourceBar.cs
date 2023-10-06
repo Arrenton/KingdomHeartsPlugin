@@ -2,6 +2,7 @@
 using System.IO;
 using System.Numerics;
 using Dalamud.Game.ClientState.Objects.SubKinds;
+using Dalamud.Interface.Internal;
 using ImGuiNET;
 using ImGuiScene;
 using KingdomHeartsPlugin.Enums;
@@ -11,7 +12,7 @@ namespace KingdomHeartsPlugin.UIElements.ParameterResource
 {
     public class ResourceBar
     {
-        private TextureWrap _barBackgroundTexture, _barForegroundTexture, _mpBaseTexture, _barEdgeTexture;
+        private IDalamudTextureWrap _barBackgroundTexture, _barForegroundTexture, _mpBaseTexture, _barEdgeTexture;
 
         private enum Resource
         {

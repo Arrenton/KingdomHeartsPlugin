@@ -1,7 +1,7 @@
 ﻿using Dalamud.Game.ClientState.Objects.SubKinds;
+using Dalamud.Interface.Internal;
 using FFXIVClientStructs.FFXIV.Component.GUI;
 using ImGuiNET;
-using ImGuiScene;
 using KingdomHeartsPlugin.Enums;
 using KingdomHeartsPlugin.UIElements.Experience;
 using KingdomHeartsPlugin.UIElements.LimitBreak;
@@ -31,18 +31,18 @@ namespace KingdomHeartsPlugin.UIElements.HealthBar
             LowHealthAlphaDirection = 0;
             _bgColor = new Vector3(0.07843f, 0.07843f, 0.0745f);
 
-            BarOutlineTexture = KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\bar_outline.png"));
-            BarColorlessTexture = KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\bar_colorless.png"));
-            BarForegroundTexture = KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\bar_foreground.png"));
-            BarRecoveryTexture = KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\bar_recovery.png"));
-            BarEdgeTexture = KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\bar_edge.png"));
-            HealthRingSegmentTexture = KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\ring_health_segment.png"));
-            HealthRestoredRingSegmentTexture = KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\ring_health_restored_segment.png"));
-            RingValueSegmentTexture = KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\ring_value_segment.png"));
-            RingOutlineTexture = KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\ring_outline_segment.png"));
-            RingTrackTexture = KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\ring_track.png"));
-            RingBaseTexture = KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\ring_base_edge.png"));
-            RingEndTexture = KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\ring_end_edge.png"));
+            BarOutlineTexture =  KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\bar_outline.png"));
+            BarColorlessTexture =  KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\bar_colorless.png"));
+            BarForegroundTexture =  KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\bar_foreground.png"));
+            BarRecoveryTexture =  KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\bar_recovery.png"));
+            BarEdgeTexture =  KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\bar_edge.png"));
+            HealthRingSegmentTexture =  KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\ring_health_segment.png"));
+            HealthRestoredRingSegmentTexture =  KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\ring_health_restored_segment.png"));
+            RingValueSegmentTexture =  KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\ring_value_segment.png"));
+            RingOutlineTexture =  KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\ring_outline_segment.png"));
+            RingTrackTexture =  KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\ring_track.png"));
+            RingBaseTexture =  KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\ring_base_edge.png"));
+            RingEndTexture =  KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\ring_end_edge.png"));
 
             HealthRingBg = new Ring(RingValueSegmentTexture, _bgColor.X, _bgColor.Y, _bgColor.Z);
             HealthLostRing = new Ring(RingValueSegmentTexture, 1, 0, 0);
@@ -394,19 +394,19 @@ namespace KingdomHeartsPlugin.UIElements.HealthBar
         private float HealthVerticalSpeed { get; set; }
 
         // Textures
-        private TextureWrap HealthRingSegmentTexture { get; set; }
-        private TextureWrap HealthRestoredRingSegmentTexture { get; set; }
-        private TextureWrap BarOutlineTexture { get; set; }
-        private TextureWrap BarColorlessTexture { get; set; }
-        private TextureWrap BarForegroundTexture { get; set; }
-        private TextureWrap BarRecoveryTexture { get; set; }
-        private TextureWrap BarEdgeTexture { get; set; }
-        private TextureWrap RingValueSegmentTexture { get; set; }
-        private TextureWrap RingOutlineTexture { get; set; }
-        private TextureWrap RingTrackTexture { get; set; }
-        private TextureWrap RingBaseTexture { get; set; }
+        private IDalamudTextureWrap HealthRingSegmentTexture { get; set; }
+        private IDalamudTextureWrap HealthRestoredRingSegmentTexture { get; set; }
+        private IDalamudTextureWrap BarOutlineTexture { get; set; }
+        private IDalamudTextureWrap BarColorlessTexture { get; set; }
+        private IDalamudTextureWrap BarForegroundTexture { get; set; }
+        private IDalamudTextureWrap BarRecoveryTexture { get; set; }
+        private IDalamudTextureWrap BarEdgeTexture { get; set; }
+        private IDalamudTextureWrap RingValueSegmentTexture { get; set; }
+        private IDalamudTextureWrap RingOutlineTexture { get; set; }
+        private IDalamudTextureWrap RingTrackTexture { get; set; }
+        private IDalamudTextureWrap RingBaseTexture { get; set; }
 
-        private TextureWrap RingEndTexture { get; set; }
+        private IDalamudTextureWrap RingEndTexture { get; set; }
 
         // Rings
         private Ring HealthRing { get; set; }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Numerics;
+using Dalamud.Interface.Internal;
 using ImGuiNET;
 using ImGuiScene;
 using KingdomHeartsPlugin.Utilities;
@@ -8,7 +9,7 @@ namespace KingdomHeartsPlugin.UIElements
 {
     internal class Ring : IDisposable
     {
-        public Ring(TextureWrap image, float colorR = 1f, float colorG = 1f, float colorB = 1f, float alpha = 1f)
+        public Ring(IDalamudTextureWrap image, float colorR = 1f, float colorG = 1f, float colorB = 1f, float alpha = 1f)
         {
             Image = image;
             Color = new Vector3(colorR, colorG, colorB);
@@ -61,7 +62,7 @@ namespace KingdomHeartsPlugin.UIElements
         {
         }
 
-        private TextureWrap Image { get; }
+        private IDalamudTextureWrap Image { get; }
         internal Vector3 Color { get; set; }
         internal float Alpha { get; set; }
     }

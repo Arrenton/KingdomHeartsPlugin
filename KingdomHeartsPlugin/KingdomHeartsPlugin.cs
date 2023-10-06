@@ -14,6 +14,7 @@ using Dalamud.Logging;
 using KingdomHeartsPlugin.Configuration;
 using KingdomHeartsPlugin.UIElements.Experience;
 using Lumina.Excel.GeneratedSheets;
+using Dalamud.Plugin.Services;
 
 namespace KingdomHeartsPlugin
 {
@@ -29,11 +30,14 @@ namespace KingdomHeartsPlugin
 
         public KingdomHeartsPlugin(
             [RequiredVersion("1.0")] DalamudPluginInterface pluginInterface,
-            [RequiredVersion("1.0")] Framework framework,
-            [RequiredVersion("1.0")] CommandManager commandManager,
-            [RequiredVersion("1.0")] ClientState clientState,
-            [RequiredVersion("1.0")] GameGui gameGui,
-            [RequiredVersion("1.0")] DataManager dataManager)
+            [RequiredVersion("1.0")] IFramework framework,
+            [RequiredVersion("1.0")] ICommandManager commandManager,
+            [RequiredVersion("1.0")] IClientState clientState,
+            [RequiredVersion("1.0")] IGameGui gameGui,
+            [RequiredVersion("1.0")] IDataManager dataManager,
+            [RequiredVersion("1.0")] ITextureProvider textureProvider
+
+            )
         {
             Pi = pluginInterface;
             Fw = framework;
@@ -41,14 +45,15 @@ namespace KingdomHeartsPlugin
             Cs = clientState;
             Gui = gameGui;
             Dm = dataManager;
-            
-            
+            Tp = textureProvider;
+
+
             Timer = Stopwatch.StartNew();
 
             var assemblyLocation = pluginInterface.AssemblyLocation.DirectoryName + "\\";
 
             TemplateLocation = Path.GetDirectoryName(assemblyLocation);
-            
+
             var configuration = Pi.GetPluginConfig() as Settings ?? new Settings();
             configuration.Initialize(Pi);
 
@@ -93,14 +98,14 @@ namespace KingdomHeartsPlugin
             Cm.RemoveHandler(ShowCommand);
 
             Fw.Update -= OnUpdate;
-            
+
             Pi.UiBuilder.Draw -= DrawUi;
             Cs.TerritoryChanged -= OnTerritoryChange;
 
             Timer = null;
         }
 
-        private void OnUpdate(Framework framework)
+        private void OnUpdate(IFramework framework)
         {
             UiSpeed = Timer.ElapsedMilliseconds / 1000f;
             Timer.Restart();
@@ -122,7 +127,7 @@ namespace KingdomHeartsPlugin
             Ui.Configuration.Save();
         }
 
-        private void OnTerritoryChange(object sender, ushort e)
+        private void OnTerritoryChange(ushort e)
         {
             IsInPvp = GetTerritoryPvP(e);
         }
@@ -163,11 +168,14 @@ namespace KingdomHeartsPlugin
         }
 
         public static DalamudPluginInterface Pi { get; private set; }
-        public static Framework Fw { get; private set; }
-        public static CommandManager Cm { get; private set; }
-        public static ClientState Cs { get; private set; }
-        public static GameGui Gui { get; private set; }
-        public static DataManager Dm { get; private set; }
+        public static IFramework Fw { get; private set; }
+        public static ICommandManager Cm { get; private set; }
+        public static IClientState Cs { get; private set; }
+        public static IGameGui Gui { get; private set; }
+        public static IDataManager Dm { get; private set; }
+
+        public static ITextureProvider Tp { get; private set; }
+
         public static PluginUI Ui { get; private set; }
 
         public static Stopwatch Timer { get; private set; }
