@@ -20,6 +20,7 @@ namespace KingdomHeartsPlugin.Configuration
 
         public const float ClassIconX = 128;
         public const float ClassIconY = 150;
+        public const float ClassIconScale = 1.0f;
     }
 
     public partial class Settings
@@ -30,6 +31,7 @@ namespace KingdomHeartsPlugin.Configuration
         public TextAlignment LevelTextAlignment { get; set; } = Defaults.LevelTextAlignment;
         public float ClassIconX { get; set; } = Defaults.ClassIconX;
         public float ClassIconY { get; set; } = Defaults.ClassIconY;
+        public float ClassIconScale { get; set; } = Defaults.ClassIconScale;
     }
 }
 
@@ -158,7 +160,7 @@ namespace KingdomHeartsPlugin.UIElements.Experience
 
             if (KingdomHeartsPlugin.Ui.Configuration.ClassIconEnabled)
             {
-                float iconSize = 3f;
+                float iconSize = KingdomHeartsPlugin.Ui.Configuration.ClassIconScale;
 
                 if (KingdomHeartsPlugin.Cs.LocalPlayer is null) return;
 
@@ -166,7 +168,7 @@ namespace KingdomHeartsPlugin.UIElements.Experience
                     new Vector2(iconSize, iconSize),
                     //new Vector2((int)(size / 2f), (int)(size / 2f + 18 * KingdomHeartsPlugin.Ui.Configuration.Scale)) +
                     new Vector2((int)(KingdomHeartsPlugin.Ui.Configuration.ClassIconX), (int)(KingdomHeartsPlugin.Ui.Configuration.ClassIconY)) +
-                    new Vector2(0, (int)(healthY * KingdomHeartsPlugin.Ui.Configuration.Scale)));
+                    new Vector2(0, (int)(healthY * KingdomHeartsPlugin.Ui.Configuration.ClassIconScale * KingdomHeartsPlugin.Ui.Configuration.Scale / 3f)));
             }
 
             if (KingdomHeartsPlugin.Ui.Configuration.LevelEnabled)

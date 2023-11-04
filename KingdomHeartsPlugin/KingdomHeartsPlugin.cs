@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using Dalamud.Data;
-using Dalamud.Game;
-using Dalamud.Game.ClientState;
+﻿using System.Collections.Generic;
 using Dalamud.Game.Command;
-using Dalamud.Game.Gui;
-using Dalamud.IoC;
 using Dalamud.Plugin;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using Dalamud.Logging;
 using KingdomHeartsPlugin.Configuration;
 using KingdomHeartsPlugin.UIElements.Experience;
 using Lumina.Excel.GeneratedSheets;
@@ -28,13 +21,14 @@ namespace KingdomHeartsPlugin
         public static string TemplateLocation;
 
         public KingdomHeartsPlugin(
-            [RequiredVersion("1.0")] DalamudPluginInterface pluginInterface,
-            [RequiredVersion("1.0")] IFramework framework,
-            [RequiredVersion("1.0")] ICommandManager commandManager,
-            [RequiredVersion("1.0")] IClientState clientState,
-            [RequiredVersion("1.0")] IGameGui gameGui,
-            [RequiredVersion("1.0")] IDataManager dataManager,
-            [RequiredVersion("1.0")] ITextureProvider textureProvider
+            DalamudPluginInterface pluginInterface,
+            IFramework framework,
+            ICommandManager commandManager,
+            IClientState clientState,
+            IGameGui gameGui,
+            IDataManager dataManager,
+            ITextureProvider textureProvider,
+            IPluginLog pluginLog
 
             )
         {
@@ -45,6 +39,7 @@ namespace KingdomHeartsPlugin
             Gui = gameGui;
             Dm = dataManager;
             Tp = textureProvider;
+            Pl = pluginLog;
 
 
             Timer = Stopwatch.StartNew();
@@ -139,7 +134,7 @@ namespace KingdomHeartsPlugin
             }
             catch (KeyNotFoundException)
             {
-                PluginLog.Warning("Could not get territory for current zone");
+                Pl.Warning("Could not get territory for current zone");
                 return false;
             }
         }
@@ -161,7 +156,7 @@ namespace KingdomHeartsPlugin
         public static IClientState Cs { get; private set; }
         public static IGameGui Gui { get; private set; }
         public static IDataManager Dm { get; private set; }
-
+        public static IPluginLog Pl { get; private set; }
         public static ITextureProvider Tp { get; private set; }
 
         public static PluginUI Ui { get; private set; }

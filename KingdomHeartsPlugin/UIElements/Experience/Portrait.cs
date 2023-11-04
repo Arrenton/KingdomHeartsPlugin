@@ -80,7 +80,7 @@ namespace KingdomHeartsPlugin.UIElements.Experience
             }
             catch
             {
-                Dalamud.Logging.PluginLog.Warning($"Could not load image for portrait at: \"{path}\"");
+                KingdomHeartsPlugin.Pl.Warning($"Could not load image for portrait at: \"{path}\"");
                 return null;
             }
         }

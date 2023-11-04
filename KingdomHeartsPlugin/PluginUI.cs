@@ -901,6 +901,16 @@ namespace KingdomHeartsPlugin
                 Configuration.ClassIconY = classIconPos.Y;
             }
 
+            var scale = Configuration.ClassIconScale;
+            if (ImGui.InputFloat("Scale", ref scale, 0.025f, 0.1f))
+            {
+                Configuration.ClassIconScale = scale;
+                if (Configuration.ClassIconScale < 0.1f)
+                    Configuration.ClassIconScale = 0.1f;
+                if (Configuration.ClassIconScale > 3)
+                    Configuration.ClassIconScale = 3;
+            }
+
             ImGui.EndTabItem();
         }
 
