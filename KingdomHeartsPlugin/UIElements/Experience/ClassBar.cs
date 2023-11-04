@@ -164,11 +164,12 @@ namespace KingdomHeartsPlugin.UIElements.Experience
 
                 if (KingdomHeartsPlugin.Cs.LocalPlayer is null) return;
 
+                
                 ImageDrawing.DrawIcon(drawList, (ushort)(62000 + KingdomHeartsPlugin.Cs.LocalPlayer.ClassJob.Id),
                     new Vector2(iconSize, iconSize),
                     //new Vector2((int)(size / 2f), (int)(size / 2f + 18 * KingdomHeartsPlugin.Ui.Configuration.Scale)) +
                     new Vector2((int)(KingdomHeartsPlugin.Ui.Configuration.ClassIconX), (int)(KingdomHeartsPlugin.Ui.Configuration.ClassIconY)) +
-                    new Vector2(0, (int)(healthY * KingdomHeartsPlugin.Ui.Configuration.ClassIconScale * KingdomHeartsPlugin.Ui.Configuration.Scale / 3f)));
+                    new Vector2(0, (int)(healthY * KingdomHeartsPlugin.Ui.Configuration.ClassIconScale * KingdomHeartsPlugin.Ui.Configuration.Scale)));
             }
 
             if (KingdomHeartsPlugin.Ui.Configuration.LevelEnabled)

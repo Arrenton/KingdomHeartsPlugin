@@ -1,4 +1,5 @@
 ﻿using Dalamud.Interface.Internal;
+using Dalamud.Plugin.Services;
 using ImGuiNET;
 using ImGuiScene;
 using System;
@@ -11,7 +12,7 @@ namespace KingdomHeartsPlugin.Utilities
     internal static class ImageDrawing
     {
 
-        private static readonly Dictionary<ushort, IDalamudTextureWrap> IconTextures = new();
+        private static readonly Dictionary<uint, IDalamudTextureWrap> _iconTextures = new();
         private static Vector2 ImRotate(Vector2 v, float cosA, float sinA)
         {
             return new Vector2(v.X * cosA - v.Y * sinA, v.X * sinA + v.Y * cosA);
@@ -223,54 +224,41 @@ namespace KingdomHeartsPlugin.Utilities
             d.PopClipRect();
         }
 
-        internal static void DrawIcon(ImDrawListPtr d, ushort icon, Vector2 size, Vector2 position)
+        internal static void DrawIcon(ImDrawListPtr d, uint icon, Vector2 size, Vector2 position)
         {
-            if (icon is >= 65000 or <= 62000) return;
-
-            if (IconTextures.ContainsKey(icon))
+            var tex = GetIconImage(icon);
+            if (tex != null && tex.ImGuiHandle != IntPtr.Zero)
             {
-                var tex = IconTextures[icon];
-                if (tex != null && tex.ImGuiHandle != IntPtr.Zero)
-                {
-                    var iconSize = new Vector2(IconTextures[icon].Width, IconTextures[icon].Height) * size;
-                    var imagePosition = position - new Vector2((int)Math.Floor(iconSize.X / 2f), (int)Math.Floor(iconSize.Y / 2f));
-                    //DrawImageArea(d, IconTextures[icon], iconSize, imagePosition, new Vector4(0, 0, IconTextures[icon].Width, IconTextures[icon].Height));
-                    DrawImage(d, IconTextures[icon], new Vector4(imagePosition.X, imagePosition.Y, iconSize.X, iconSize.Y));
-                }
+                var iconSize = new Vector2(tex.Width, tex.Height) * size;
+                var imagePosition = position - new Vector2((int)Math.Floor(iconSize.X / 2f), (int)Math.Floor(iconSize.Y / 2f));
+                //DrawImageArea(d, IconTextures[icon], iconSize, imagePosition, new Vector4(0, 0, IconTextures[icon].Width, IconTextures[icon].Height));
+                DrawImage(d, tex, new Vector4(imagePosition.X, imagePosition.Y, iconSize.X, iconSize.Y));
             }
-            else
+        }
+
+        private static IDalamudTextureWrap? GetIconImage(uint? icon, uint stackCount = 0)
+        {
+            if (icon is { } idx)
             {
-
-                IconTextures[icon] = null;
-
-                Task.Run(() => {
-                    try
-                    {
-                        var iconTex = KingdomHeartsPlugin.Tp.GetIcon(icon);
-                
-                        if (iconTex == null) return;
-                        
-                        if (iconTex.ImGuiHandle != IntPtr.Zero)
-                        {
-                            IconTextures[icon] = iconTex;
-                        }
-                    }
-                    catch
-                    {
-                        // Ignore
-                    }
-                });
+                if (stackCount > 1)
+                    idx += stackCount - 1;
+                if (_iconTextures.TryGetValue(idx, out var tex))
+                    return tex;
+                if (KingdomHeartsPlugin.Tp.GetIcon(idx, ITextureProvider.IconFlags.HiRes) is { } t)
+                    return _iconTextures[idx] = t;
             }
+
+            return null;
         }
 
         public static void Dispose()
         {
-            foreach (var tex in IconTextures)
+            foreach (var tex in _iconTextures)
             {
                 tex.Value?.Dispose();
             }
 
-            IconTextures.Clear();
+            _iconTextures.Clear();
         }
     }
 }
