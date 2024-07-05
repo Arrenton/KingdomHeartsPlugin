@@ -21,7 +21,7 @@ namespace KingdomHeartsPlugin
         public static string TemplateLocation;
 
         public KingdomHeartsPlugin(
-            DalamudPluginInterface pluginInterface,
+            IDalamudPluginInterface pluginInterface,
             IFramework framework,
             ICommandManager commandManager,
             IClientState clientState,
@@ -69,6 +69,7 @@ namespace KingdomHeartsPlugin
             });
 
             Pi.UiBuilder.Draw += DrawUi;
+            Pi.UiBuilder.OpenMainUi += ToggleMainVisibility;
             Pi.UiBuilder.OpenConfigUi += DrawConfigUi;
             Cs.TerritoryChanged += OnTerritoryChange;
 
@@ -88,6 +89,8 @@ namespace KingdomHeartsPlugin
             Fw.Update -= OnUpdate;
 
             Pi.UiBuilder.Draw -= DrawUi;
+            Pi.UiBuilder.OpenMainUi -= ToggleMainVisibility;
+            Pi.UiBuilder.OpenConfigUi -= DrawConfigUi;
             Cs.TerritoryChanged -= OnTerritoryChange;
 
             Timer = null;
@@ -98,6 +101,11 @@ namespace KingdomHeartsPlugin
             UiSpeed = Timer.ElapsedMilliseconds / 1000f;
             Timer.Restart();
             Ui.OnUpdate();
+        }
+
+        private void ToggleMainVisibility()
+        {
+            Ui.Configuration.Enabled = !Ui.Configuration.Enabled;
         }
 
         private void OnSettingsCommand(string command, string args)
@@ -150,7 +158,7 @@ namespace KingdomHeartsPlugin
             }
         }
 
-        public static DalamudPluginInterface Pi { get; private set; }
+        public static IDalamudPluginInterface Pi { get; private set; }
         public static IFramework Fw { get; private set; }
         public static ICommandManager Cm { get; private set; }
         public static IClientState Cs { get; private set; }

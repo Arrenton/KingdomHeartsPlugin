@@ -3,6 +3,7 @@ using System.IO;
 using System.Numerics;
 using Dalamud.Game.ClientState.Objects.SubKinds;
 using Dalamud.Interface.Internal;
+using Dalamud.Interface.Textures;
 using ImGuiNET;
 using ImGuiScene;
 using KingdomHeartsPlugin.Enums;
@@ -12,7 +13,22 @@ namespace KingdomHeartsPlugin.UIElements.ParameterResource
 {
     public class ResourceBar
     {
-        private IDalamudTextureWrap _barBackgroundTexture, _barForegroundTexture, _mpBaseTexture, _barEdgeTexture;
+        private ISharedImmediateTexture _barBackgroundTexture
+        {
+            get => ImageDrawing.GetSharedTexture(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\ResourceBar\background.png"));
+        }
+        private ISharedImmediateTexture _barForegroundTexture
+        {
+            get => ImageDrawing.GetSharedTexture(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\ResourceBar\foreground.png"));
+        }
+        private ISharedImmediateTexture _mpBaseTexture
+        {
+            get => ImageDrawing.GetSharedTexture(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\ResourceBar\MP_base.png"));
+        }
+        private ISharedImmediateTexture _barEdgeTexture
+        {
+            get => ImageDrawing.GetSharedTexture(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\ResourceBar\edge.png"));
+        }
 
         private enum Resource
         {
@@ -23,13 +39,9 @@ namespace KingdomHeartsPlugin.UIElements.ParameterResource
 
         public ResourceBar()
         {
-            _barBackgroundTexture = KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\ResourceBar\background.png"));
-            _barForegroundTexture = KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\ResourceBar\foreground.png"));
-            _mpBaseTexture = KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\ResourceBar\MP_base.png"));
-            _barEdgeTexture = KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\ResourceBar\edge.png"));
         }
 
-        public void Update(PlayerCharacter player)
+        public void Update(IPlayerCharacter player)
         {
             var minLength = 1;
             var maxLength = 1;
@@ -71,7 +83,7 @@ namespace KingdomHeartsPlugin.UIElements.ParameterResource
             ResourceLength = (int)Math.Ceiling(ResourceValue / lengthRate * lengthMultiplier);
         }
 
-        public void Draw(PlayerCharacter player)
+        public void Draw(IPlayerCharacter player)
         {
             Update(player);
             var drawList = ImGui.GetWindowDrawList();
@@ -90,7 +102,7 @@ namespace KingdomHeartsPlugin.UIElements.ParameterResource
             // Edge
             ImageDrawing.DrawImage(drawList, _barEdgeTexture, new Vector2(basePosition.X + 0.65f - MaxResourceLength - 6, basePosition.Y));
             // Base Edge
-            ImageDrawing.DrawImageRotated(drawList, _barEdgeTexture, new Vector2(basePosition.X + 74, basePosition.Y + 16), new Vector2(_barEdgeTexture.Width, _barEdgeTexture.Height), (float)Math.PI);
+            ImageDrawing.DrawImageRotated(drawList, _barEdgeTexture, new Vector2(basePosition.X + 74, basePosition.Y + 16), new Vector2(_barEdgeTexture.GetWrapOrEmpty().Width, _barEdgeTexture.GetWrapOrEmpty().Height), (float)Math.PI);
 
             if (KingdomHeartsPlugin.Ui.Configuration.ShowResourceVal)
                 ImGuiAdditions.TextShadowedDrawList(drawList, KingdomHeartsPlugin.Ui.Configuration.ResourceTextSize, $"{StringFormatting.FormatDigits(KingdomHeartsPlugin.Ui.Configuration.TruncateMp && ResourceType == Resource.Mp ? ResourceValue / 100 : ResourceValue, KingdomHeartsPlugin.Ui.Configuration.ResourceTextStyle)}", ImGui.GetItemRectMin() + basePosition * KingdomHeartsPlugin.Ui.Configuration.Scale + textPosition, new Vector4(255 / 255f, 255 / 255f, 255 / 255f, 1f), new Vector4(0 / 255f, 0 / 255f, 0 / 255f, 0.25f), 3, (TextAlignment)KingdomHeartsPlugin.Ui.Configuration.ResourceTextAlignment);
@@ -98,15 +110,6 @@ namespace KingdomHeartsPlugin.UIElements.ParameterResource
 
         public void Dispose()
         {
-            _barBackgroundTexture.Dispose();
-            _barEdgeTexture.Dispose();
-            _barForegroundTexture.Dispose();
-            _mpBaseTexture.Dispose();
-
-            _barBackgroundTexture = null;
-            _barForegroundTexture = null;
-            _mpBaseTexture = null;
-            _barEdgeTexture = null;
         }
 
         private uint ResourceValue { get; set; }

@@ -8,6 +8,7 @@ using System.Numerics;
 using System.Runtime.InteropServices;
 using KingdomHeartsPlugin.Enums;
 using Dalamud.Interface.Internal;
+using Dalamud.Interface.Textures;
 
 namespace KingdomHeartsPlugin.Configuration
 {
@@ -39,22 +40,29 @@ namespace KingdomHeartsPlugin.UIElements.Experience
 {
     public class ClassBar
     {
-        private IDalamudTextureWrap _expBarSegmentTexture, _expColorlessBarSegmentTexture, _expBarBaseTexture;
+        private ISharedImmediateTexture _expBarSegmentTexture
+        {
+            get => ImageDrawing.GetSharedTexture(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\Experience\ring_experience_segment.png"));
+        }
+        private ISharedImmediateTexture _expColorlessBarSegmentTexture
+        {
+            get => ImageDrawing.GetSharedTexture(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\Experience\ring_experience_colorless_segment.png"));
+        }
+        private ISharedImmediateTexture _expBarBaseTexture
+        {
+            get => ImageDrawing.GetSharedTexture(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\Experience\ring_experience_outline.png"));
+        }
         private IntPtr _expAddonPtr;
 
         public ClassBar()
         {
-            _expBarBaseTexture =  KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\Experience\ring_experience_outline.png"));
-            _expBarSegmentTexture =  KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\Experience\ring_experience_segment.png"));
-            _expColorlessBarSegmentTexture =  KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\Experience\ring_experience_colorless_segment.png"));
-
-            ExperienceRing = new Ring(_expBarSegmentTexture);
-            ExperienceRingRest = new Ring(_expBarSegmentTexture, alpha: 0.25f);
-            ExperienceRingGain = new Ring(_expColorlessBarSegmentTexture, 0.65f, 0.92f, 1.00f);
-            ExperienceRingBg = new Ring(_expColorlessBarSegmentTexture, 0.07843f, 0.07843f, 0.0745f);
+            ExperienceRing = new Ring(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\Experience\ring_experience_segment.png"));
+            ExperienceRingRest = new Ring(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\Experience\ring_experience_segment.png"), alpha: 0.25f);
+            ExperienceRingGain = new Ring(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\Experience\ring_experience_colorless_segment.png"), 0.65f, 0.92f, 1.00f);
+            ExperienceRingBg = new Ring(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\Experience\ring_experience_colorless_segment.png"), 0.07843f, 0.07843f, 0.0745f);
         }
 
-        private void Update(PlayerCharacter player)
+        private void Update(IPlayerCharacter player)
         {
             _expAddonPtr = KingdomHeartsPlugin.Gui.GetAddonByName("_Exp", 1);
 
@@ -132,7 +140,7 @@ namespace KingdomHeartsPlugin.UIElements.Experience
                 ExpTemp = exp;
         }
 
-        public void Draw(PlayerCharacter player, float healthY)
+        public void Draw(IPlayerCharacter player, float healthY)
         {
             Update(player);
             var drawList = ImGui.GetWindowDrawList();
@@ -152,7 +160,7 @@ namespace KingdomHeartsPlugin.UIElements.Experience
                 ExperienceRing.Draw(drawList, ExpTemp / MaxExperience, drawPosition, 4, KingdomHeartsPlugin.Ui.Configuration.Scale);
 
                 drawList.PushClipRect(drawPosition, drawPosition + new Vector2(size, size));
-                drawList.AddImage(_expBarBaseTexture.ImGuiHandle, drawPosition, drawPosition + new Vector2(size, size));
+                drawList.AddImage(_expBarBaseTexture.GetWrapOrEmpty().ImGuiHandle, drawPosition, drawPosition + new Vector2(size, size));
                 drawList.PopClipRect();
             }
 
@@ -192,15 +200,11 @@ namespace KingdomHeartsPlugin.UIElements.Experience
 
         public void Dispose()
         {
-            _expBarBaseTexture?.Dispose();
-            _expBarSegmentTexture?.Dispose();
             ExperienceRing.Dispose();
             ExperienceRingRest.Dispose();
             ExperienceRingGain.Dispose();
             ExperienceRingBg.Dispose();
 
-            _expBarBaseTexture = null;
-            _expBarSegmentTexture = null;
             ExperienceRing = null;
             ExperienceRingRest = null;
             ExperienceRingGain = null;

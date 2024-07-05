@@ -1,5 +1,6 @@
 ﻿using Dalamud.Game.ClientState.Objects.SubKinds;
 using Dalamud.Interface.Internal;
+using Dalamud.Interface.Textures;
 using FFXIVClientStructs.FFXIV.Component.GUI;
 using ImGuiNET;
 using KingdomHeartsPlugin.Enums;
@@ -31,24 +32,11 @@ namespace KingdomHeartsPlugin.UIElements.HealthBar
             LowHealthAlphaDirection = 0;
             _bgColor = new Vector3(0.07843f, 0.07843f, 0.0745f);
 
-            BarOutlineTexture =  KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\bar_outline.png"));
-            BarColorlessTexture =  KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\bar_colorless.png"));
-            BarForegroundTexture =  KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\bar_foreground.png"));
-            BarRecoveryTexture =  KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\bar_recovery.png"));
-            BarEdgeTexture =  KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\bar_edge.png"));
-            HealthRingSegmentTexture =  KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\ring_health_segment.png"));
-            HealthRestoredRingSegmentTexture =  KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\ring_health_restored_segment.png"));
-            RingValueSegmentTexture =  KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\ring_value_segment.png"));
-            RingOutlineTexture =  KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\ring_outline_segment.png"));
-            RingTrackTexture =  KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\ring_track.png"));
-            RingBaseTexture =  KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\ring_base_edge.png"));
-            RingEndTexture =  KingdomHeartsPlugin.Pi.UiBuilder.LoadImage(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\ring_end_edge.png"));
-
-            HealthRingBg = new Ring(RingValueSegmentTexture, _bgColor.X, _bgColor.Y, _bgColor.Z);
-            HealthLostRing = new Ring(RingValueSegmentTexture, 1, 0, 0);
-            RingOutline = new Ring(RingOutlineTexture);
-            HealthRing = new Ring(HealthRingSegmentTexture);
-            HealthRestoredRing = new Ring(HealthRestoredRingSegmentTexture);
+            HealthRingBg = new Ring(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\ring_value_segment.png"), _bgColor.X, _bgColor.Y, _bgColor.Z);
+            HealthLostRing = new Ring(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\ring_value_segment.png"), 1, 0, 0);
+            RingOutline = new Ring(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\ring_outline_segment.png"));
+            HealthRing = new Ring(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\ring_health_segment.png"));
+            HealthRestoredRing = new Ring(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\ring_health_restored_segment.png"));
             _limitGauge = new LimitGauge();
             _resourceBar = new ResourceBar();
             _expBar = new ClassBar();
@@ -110,7 +98,7 @@ namespace KingdomHeartsPlugin.UIElements.HealthBar
             }
         }
         
-        private void UpdateHealth(PlayerCharacter player)
+        private void UpdateHealth(IPlayerCharacter player)
         {
             if (LastHp > player.CurrentHp && LastHp <= player.MaxHp)
                 DamagedHealth(LastHp);
@@ -328,26 +316,14 @@ namespace KingdomHeartsPlugin.UIElements.HealthBar
             var size = 256 * KingdomHeartsPlugin.Ui.Configuration.Scale;
 
             drawList.PushClipRect(position, position + new Vector2(size, size));
-            drawList.AddImage(RingTrackTexture.ImGuiHandle, position, position + new Vector2(size, size));
-            drawList.AddImage(RingBaseTexture.ImGuiHandle, position, position + new Vector2(size, size));
-            ImageDrawing.ImageRotated(drawList, RingEndTexture.ImGuiHandle, new Vector2(position.X + size / 2f, position.Y + size / 2f), new Vector2(RingEndTexture.Width * KingdomHeartsPlugin.Ui.Configuration.Scale, RingEndTexture.Height * KingdomHeartsPlugin.Ui.Configuration.Scale), Math.Min(percent, 1) * 0.75f * (float)Math.PI * 2);
+            drawList.AddImage(RingTrackTexture.GetWrapOrEmpty().ImGuiHandle, position, position + new Vector2(size, size));
+            drawList.AddImage(RingBaseTexture.GetWrapOrEmpty().ImGuiHandle, position, position + new Vector2(size, size));
+            ImageDrawing.ImageRotated(drawList, RingEndTexture.GetWrapOrEmpty().ImGuiHandle, new Vector2(position.X + size / 2f, position.Y + size / 2f), new Vector2(RingEndTexture.GetWrapOrEmpty().Width * KingdomHeartsPlugin.Ui.Configuration.Scale, RingEndTexture.GetWrapOrEmpty().Height * KingdomHeartsPlugin.Ui.Configuration.Scale), Math.Min(percent, 1) * 0.75f * (float)Math.PI * 2);
             drawList.PopClipRect();
         }
 
         public void Dispose()
         {
-            RingOutlineTexture?.Dispose();
-            HealthRingSegmentTexture?.Dispose();
-            HealthRestoredRingSegmentTexture?.Dispose();
-            RingValueSegmentTexture?.Dispose();
-            RingTrackTexture?.Dispose();
-            RingBaseTexture?.Dispose();
-            RingEndTexture?.Dispose();
-            BarColorlessTexture?.Dispose();
-            BarEdgeTexture?.Dispose();
-            BarForegroundTexture?.Dispose();
-            BarOutlineTexture?.Dispose();
-            BarRecoveryTexture?.Dispose();
             _limitGauge?.Dispose();
             _resourceBar?.Dispose();
             _expBar?.Dispose();
@@ -360,18 +336,6 @@ namespace KingdomHeartsPlugin.UIElements.HealthBar
             RingOutline = null;
             HealthRestoredRing = null;
             HealthLostRing = null;
-            RingOutlineTexture = null;
-            HealthRingSegmentTexture = null;
-            HealthRestoredRingSegmentTexture = null;
-            RingValueSegmentTexture = null;
-            RingTrackTexture = null;
-            RingBaseTexture = null;
-            RingEndTexture = null;
-            BarColorlessTexture = null;
-            BarEdgeTexture = null;
-            BarForegroundTexture = null;
-            BarOutlineTexture = null;
-            BarRecoveryTexture = null;
         }
 
         // Temp Health Values
@@ -394,19 +358,54 @@ namespace KingdomHeartsPlugin.UIElements.HealthBar
         private float HealthVerticalSpeed { get; set; }
 
         // Textures
-        private IDalamudTextureWrap HealthRingSegmentTexture { get; set; }
-        private IDalamudTextureWrap HealthRestoredRingSegmentTexture { get; set; }
-        private IDalamudTextureWrap BarOutlineTexture { get; set; }
-        private IDalamudTextureWrap BarColorlessTexture { get; set; }
-        private IDalamudTextureWrap BarForegroundTexture { get; set; }
-        private IDalamudTextureWrap BarRecoveryTexture { get; set; }
-        private IDalamudTextureWrap BarEdgeTexture { get; set; }
-        private IDalamudTextureWrap RingValueSegmentTexture { get; set; }
-        private IDalamudTextureWrap RingOutlineTexture { get; set; }
-        private IDalamudTextureWrap RingTrackTexture { get; set; }
-        private IDalamudTextureWrap RingBaseTexture { get; set; }
-
-        private IDalamudTextureWrap RingEndTexture { get; set; }
+        private ISharedImmediateTexture HealthRingSegmentTexture
+        {
+            get => ImageDrawing.GetSharedTexture(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\ring_health_segment.png"));
+        }
+        private ISharedImmediateTexture HealthRestoredRingSegmentTexture
+        {
+            get => ImageDrawing.GetSharedTexture(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\ring_health_restored_segment.png"));
+        }
+        private ISharedImmediateTexture BarOutlineTexture
+        {
+            get => ImageDrawing.GetSharedTexture(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\bar_outline.png"));
+        }
+        private ISharedImmediateTexture BarColorlessTexture
+        {
+            get => ImageDrawing.GetSharedTexture(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\bar_colorless.png"));
+        }
+        private ISharedImmediateTexture BarForegroundTexture
+        {
+            get => ImageDrawing.GetSharedTexture(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\bar_foreground.png"));
+        }
+        private ISharedImmediateTexture BarRecoveryTexture
+        {
+            get => ImageDrawing.GetSharedTexture(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\bar_recovery.png"));
+        }
+        private ISharedImmediateTexture BarEdgeTexture
+        {
+            get => ImageDrawing.GetSharedTexture(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\bar_edge.png"));
+        }
+        private ISharedImmediateTexture RingValueSegmentTexture
+        {
+            get => ImageDrawing.GetSharedTexture(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\ring_value_segment.png"));
+        }
+        private ISharedImmediateTexture RingOutlineTexture
+        {
+            get => ImageDrawing.GetSharedTexture(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\ring_outline_segment.png"));
+        }
+        private ISharedImmediateTexture RingTrackTexture
+        {
+            get => ImageDrawing.GetSharedTexture(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\ring_track.png"));
+        }
+        private ISharedImmediateTexture RingBaseTexture
+        {
+            get => ImageDrawing.GetSharedTexture(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\ring_base_edge.png"));
+        }
+        private ISharedImmediateTexture RingEndTexture
+        {
+            get => ImageDrawing.GetSharedTexture(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\ring_end_edge.png"));
+        }
 
         // Rings
         private Ring HealthRing { get; set; }
