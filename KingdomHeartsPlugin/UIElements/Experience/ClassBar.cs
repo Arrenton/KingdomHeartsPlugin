@@ -9,6 +9,8 @@ using System.Runtime.InteropServices;
 using KingdomHeartsPlugin.Enums;
 using Dalamud.Interface.Internal;
 using Dalamud.Interface.Textures;
+using FFXIVClientStructs.Attributes;
+using FFXIVClientStructs.FFXIV.Client.UI;
 
 namespace KingdomHeartsPlugin.Configuration
 {
@@ -52,7 +54,9 @@ namespace KingdomHeartsPlugin.UIElements.Experience
         {
             get => ImageDrawing.GetSharedTexture(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\Experience\ring_experience_outline.png"));
         }
-        private IntPtr _expAddonPtr;
+
+        unsafe
+        private AddonExp* _addonExp;
 
         public ClassBar()
         {
@@ -62,22 +66,18 @@ namespace KingdomHeartsPlugin.UIElements.Experience
             ExperienceRingBg = new Ring(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\Experience\ring_experience_colorless_segment.png"), 0.07843f, 0.07843f, 0.0745f);
         }
 
-        private void Update(IPlayerCharacter player)
+        private unsafe void Update(IPlayerCharacter player)
         {
-            _expAddonPtr = KingdomHeartsPlugin.Gui.GetAddonByName("_Exp", 1);
-
+            _addonExp = (AddonExp*)KingdomHeartsPlugin.Gui.GetAddonByName("_Exp", 1);
             try
             {
-                var current = Marshal.ReadInt32(_expAddonPtr + 0x278);
-                var max = Marshal.ReadInt32(_expAddonPtr + 0x27C);
-                int rest = Marshal.ReadInt32(_expAddonPtr + 0x280);
-                UpdateExperience(current, max, rest, player.ClassJob.Id, player.Level);
+                UpdateExperience(_addonExp->CurrentExp, _addonExp->RequiredExp, _addonExp->RestedExp, player.ClassJob.Id, player.Level);
             }
             catch
             {
                 try
                 {
-                    _expAddonPtr = KingdomHeartsPlugin.Gui.GetAddonByName("_Exp", 1);
+                    _addonExp = (AddonExp*)KingdomHeartsPlugin.Gui.GetAddonByName("_Exp", 1);
                 }
                 catch
                 {
@@ -85,8 +85,10 @@ namespace KingdomHeartsPlugin.UIElements.Experience
                 }
             }
         }
-        private void UpdateExperience(int exp, int maxExp, int rest, uint job, byte level)
+        private unsafe void UpdateExperience(uint exp, uint maxExp, uint rest, uint job, byte level)
         {
+            if (_addonExp == null) return;
+
             if (LastLevel < level)
             {
                 ExpTemp = 0;
@@ -114,7 +116,7 @@ namespace KingdomHeartsPlugin.UIElements.Experience
             RestedBonusExperience = rest;
         }
 
-        private void GainExperience(int exp)
+        private void GainExperience(uint exp)
         {
             if (ExpGainTime <= 0)
             {
@@ -125,7 +127,7 @@ namespace KingdomHeartsPlugin.UIElements.Experience
             ExpGainTime = 3f;
         }
 
-        private void UpdateGainedExperience(int exp)
+        private void UpdateGainedExperience(uint exp)
         {
             if (ExpGainTime > 0)
             {
@@ -198,7 +200,7 @@ namespace KingdomHeartsPlugin.UIElements.Experience
                     (TextAlignment)KingdomHeartsPlugin.Ui.Configuration.ExpValueTextAlignment);
         }
 
-        public void Dispose()
+        public unsafe void Dispose()
         {
             ExperienceRing.Dispose();
             ExperienceRingRest.Dispose();
@@ -209,16 +211,16 @@ namespace KingdomHeartsPlugin.UIElements.Experience
             ExperienceRingRest = null;
             ExperienceRingGain = null;
             ExperienceRingBg = null;
-            _expAddonPtr = IntPtr.Zero;
+            _addonExp = null;
         }
 
-        private int Experience { get; set; }
-        private int RestedBonusExperience { get; set; }
-        private int MaxExperience { get; set; }
-        private int LastExp { get; set; }
+        private uint Experience { get; set; }
+        private uint RestedBonusExperience { get; set; }
+        private uint MaxExperience { get; set; }
+        private uint LastExp { get; set; }
         private uint LastJob { get; set; }
         private byte LastLevel { get; set; }
-        private int ExpBeforeGain { get; set; }
+        private uint ExpBeforeGain { get; set; }
         private float ExpTemp { get; set; }
         private float ExpGainTime { get; set; }
         private Ring ExperienceRing { get; set; }
