@@ -223,6 +223,11 @@ namespace KingdomHeartsPlugin
             {
                 Configuration.HpBarEnabled = enabled;
             }
+            var shieldEnabled = Configuration.ShieldBarEnabled;
+            if (ImGui.Checkbox("Shield Overlay Enabled", ref shieldEnabled))
+            {
+                Configuration.ShieldBarEnabled = shieldEnabled;
+            }
             ImGui.NewLine();
             ImGui.Separator();
             ImGui.Text("Length");

@@ -37,6 +37,7 @@ namespace KingdomHeartsPlugin.Configuration
         public float LowHpPercent { get; set; } = Defaults.LowHpPercent;
         public bool ShowHpRecovery { get; set; } = Defaults.ShowHpRecovery;
         public bool ShowHpVal { get; set; } = Defaults.ShowHpVal;
+        public bool ShieldBarEnabled { get; set; } = Defaults.ShieldBarEnabled;
         #endregion
 
         #region Resource

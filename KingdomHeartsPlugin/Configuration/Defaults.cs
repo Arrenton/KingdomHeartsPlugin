@@ -31,6 +31,7 @@ namespace KingdomHeartsPlugin.Configuration
         public const float LowHpPercent  = 25f;
         public const bool ShowHpRecovery  = true;
         public const bool ShowHpVal  = true;
+        public const bool ShieldBarEnabled = true;
         #endregion
 
         #region Resource
