@@ -36,6 +36,8 @@ namespace KingdomHeartsPlugin.Configuration
 
         #region Resource
         public const bool ResourceBarEnabled  = true;
+        public const bool LowMpEnabled  = false;
+        public const float LowMpPercent = 33;
         public const float ResourceBarPositionX  = 0;
         public const float ResourceBarPositionY  = 200;
         public const float ResourceTextPositionX  = -10;

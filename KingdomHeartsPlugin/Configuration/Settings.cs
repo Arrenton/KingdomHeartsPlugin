@@ -42,6 +42,8 @@ namespace KingdomHeartsPlugin.Configuration
 
         #region Resource
         public bool ResourceBarEnabled { get; set; } = Defaults.ResourceBarEnabled;
+        public bool LowMpEnabled { get; set; } = Defaults.LowMpEnabled;
+        public float LowMpPercent { get; set; } = Defaults.LowMpPercent;
         public float ResourceBarPositionX { get; set; } = Defaults.ResourceBarPositionX;
         public float ResourceBarPositionY { get; set; } = Defaults.ResourceBarPositionY;
         public float ResourceTextPositionX { get; set; } = Defaults.ResourceTextPositionX;

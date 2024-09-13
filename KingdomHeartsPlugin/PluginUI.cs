@@ -492,6 +492,19 @@ namespace KingdomHeartsPlugin
             }
             ImGui.NewLine();
             ImGui.Separator();
+            ImGui.Text("Low MP");
+            var enableLowMp = Configuration.LowMpEnabled;
+            if (ImGui.Checkbox("Low MP Enabled", ref enableLowMp))
+            {
+                Configuration.LowMpEnabled = enableLowMp;
+            }
+            var lowMpPercent = Configuration.LowMpPercent;
+            if (ImGui.SliderFloat("Percent To Trigger Low MP", ref lowMpPercent, 0, 100))
+            {
+                Configuration.LowMpPercent = lowMpPercent;
+            }
+            ImGui.NewLine();
+            ImGui.Separator();
             ImGui.Text("Position");
             var resourcePos = new Vector2(Configuration.ResourceBarPositionX, Configuration.ResourceBarPositionY);
             if (ImGui.DragFloat2("Position (X, Y)", ref resourcePos))
