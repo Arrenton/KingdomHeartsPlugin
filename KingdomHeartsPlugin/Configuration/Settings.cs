@@ -92,6 +92,10 @@ namespace KingdomHeartsPlugin.Configuration
         public bool ClassIconEnabled { get; set; } = Defaults.ClassIconEnabled;
 
         #endregion
+        
+        #region Party
+        public bool PartyEnabled { get; set; } = Defaults.PartyEnabled;
+        #endregion
 
         // the below exist just to make saving less cumbersome
 

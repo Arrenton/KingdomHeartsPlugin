@@ -81,9 +81,14 @@ namespace KingdomHeartsPlugin.Configuration
         #endregion
 
         #region ClassInfo
-
         public const bool LevelEnabled  = true;
         public const bool ClassIconEnabled  = true;
+
+        #endregion
+        
+        #region PartyInfo
+
+        public const bool PartyEnabled = true;
 
         #endregion
     }

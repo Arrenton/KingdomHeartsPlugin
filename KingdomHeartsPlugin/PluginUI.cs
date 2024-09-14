@@ -937,6 +937,14 @@ namespace KingdomHeartsPlugin
             string supportedImages = "Image Files{.png,.jpg,.jpeg,.bmp}";
 
             if (!ImGui.BeginTabItem("Portrait")) return;
+            ImGui.Text("Portrait Info");
+            ImGui.Separator();
+            var portaitEnabled = Configuration.PortraitEnabled;
+            if (ImGui.Checkbox("Portrait Enabled", ref portaitEnabled))
+            {
+                Configuration.PortraitEnabled = portaitEnabled;
+            }
+            ImGui.Separator();
 
             var portraitPos = new Vector2(Configuration.PortraitX, Configuration.PortraitY);
             if (ImGui.DragFloat2("Position (X, Y)", ref portraitPos))
@@ -1069,6 +1077,19 @@ namespace KingdomHeartsPlugin
             ImGui.EndTabItem();
         }
 
+        private void PartySettings(){
+            if (!ImGui.BeginTabItem("Party Info")) return;
+            
+            ImGui.Text("Party Info");
+            ImGui.Separator();
+
+            var partyEnabled = Configuration.PartyEnabled;
+            if (ImGui.Checkbox("Party Enabled", ref partyEnabled))
+            {
+                Configuration.PartyEnabled = partyEnabled;
+            }
+        }
+
         private void SoundSettings()
         {
             if (!ImGui.BeginTabItem("Sound")) return;
@@ -1108,6 +1129,7 @@ namespace KingdomHeartsPlugin
                 ClassSettings();
                 PortraitSettings();
                 SoundSettings();
+                PartySettings();
                 _dialogManager.Draw();
 
                 ImGui.EndTabBar();

@@ -79,13 +79,20 @@ namespace KingdomHeartsPlugin.UIElements.HealthBar
                 // UpdateShield(player);
                 DrawShield(drawList, player.ShieldPercentage, player.MaxHp);
             }
-
+            if (KingdomHeartsPlugin.Ui.Configuration.PortraitEnabled)
+            {
+                Portrait.Draw(this.HealthY);
+            }
             if (KingdomHeartsPlugin.Ui.Configuration.ResourceBarEnabled) _resourceBar.Draw(player);
             if (KingdomHeartsPlugin.Ui.Configuration.LimitBarEnabled) _limitGauge.Draw();
+            if (KingdomHeartsPlugin.Ui.Configuration.PartyEnabled)
+            {
+                // UpdateParty(player);
+                DrawParty(drawList);
+            }
             _expBar.Draw(player, HealthY * KingdomHeartsPlugin.Ui.Configuration.HpDamageWobbleIntensity / 100f);
 
-            if (KingdomHeartsPlugin.Ui.Configuration.ShowHpVal && KingdomHeartsPlugin.Ui.Configuration.HpBarEnabled)
-            {
+            if (KingdomHeartsPlugin.Ui.Configuration.ShowHpVal && KingdomHeartsPlugin.Ui.Configuration.HpBarEnabled){
                 // Draw HP Value
                 var basePosition = ImGui.GetItemRectMin() + new Vector2(KingdomHeartsPlugin.Ui.Configuration.HpValueTextPositionX, KingdomHeartsPlugin.Ui.Configuration.HpValueTextPositionY) * KingdomHeartsPlugin.Ui.Configuration.Scale;
                 /*float hp = KingdomHeartsPlugin.Ui.Configuration.TruncateHp && player.CurrentHp >= 10000
@@ -387,6 +394,11 @@ namespace KingdomHeartsPlugin.UIElements.HealthBar
         private void UpdateDamagedShield()
         {
             //todo: implement shield damage/recovery code if desired
+        }
+
+        private void DrawParty(ImDrawListPtr drawList)
+        {
+            
         }
 
         private void DrawRingEdgesAndTrack(ImDrawListPtr drawList, float percent, Vector2 position)
