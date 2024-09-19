@@ -38,6 +38,7 @@ namespace KingdomHeartsPlugin.Configuration
         public bool ShowHpRecovery { get; set; } = Defaults.ShowHpRecovery;
         public bool ShowHpVal { get; set; } = Defaults.ShowHpVal;
         public bool ShieldBarEnabled { get; set; } = Defaults.ShieldBarEnabled;
+        public float ShieldBarTransparency { get; set; } = Defaults.ShieldBarTransparency;
         #endregion
 
         #region Resource
@@ -95,6 +96,12 @@ namespace KingdomHeartsPlugin.Configuration
         
         #region Party
         public bool PartyEnabled { get; set; } = Defaults.PartyEnabled;
+        public int PartyDisplayNumber { get; set; } = Defaults.PartyDisplayNumber;
+        public int PartyXModifier { get; set; } = Defaults.PartyXModifier;
+        public int PartyYModifier { get; set; } = Defaults.PartyYModifier;
+        public float PartyXDistance { get; set; } = Defaults.PartyYDistance;
+        public float PartyYDistance { get; set; } = Defaults.PartyYDistance;
+
         #endregion
 
         // the below exist just to make saving less cumbersome

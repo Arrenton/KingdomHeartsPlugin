@@ -21,6 +21,7 @@ namespace KingdomHeartsPlugin.UIElements.HealthBar
         private LimitGauge _limitGauge;
         private ResourceBar _resourceBar;
         private ClassBar _expBar;
+        private PartyFrame.PartyFrame _partyFrame;
 
 
         public HealthFrame()
@@ -41,6 +42,7 @@ namespace KingdomHeartsPlugin.UIElements.HealthBar
             _limitGauge = new LimitGauge();
             _resourceBar = new ResourceBar();
             _expBar = new ClassBar();
+            _partyFrame = new PartyFrame.PartyFrame();
         }
 
         public unsafe void Draw()
@@ -79,18 +81,11 @@ namespace KingdomHeartsPlugin.UIElements.HealthBar
                 // UpdateShield(player);
                 DrawShield(drawList, player.ShieldPercentage, player.MaxHp);
             }
-            if (KingdomHeartsPlugin.Ui.Configuration.PortraitEnabled)
-            {
-                Portrait.Draw(this.HealthY);
-            }
+            if (KingdomHeartsPlugin.Ui.Configuration.PortraitEnabled) Portrait.Draw(this.HealthY);
             if (KingdomHeartsPlugin.Ui.Configuration.ResourceBarEnabled) _resourceBar.Draw(player);
             if (KingdomHeartsPlugin.Ui.Configuration.LimitBarEnabled) _limitGauge.Draw();
-            if (KingdomHeartsPlugin.Ui.Configuration.PartyEnabled)
-            {
-                // UpdateParty(player);
-                DrawParty(drawList);
-            }
-            _expBar.Draw(player, HealthY * KingdomHeartsPlugin.Ui.Configuration.HpDamageWobbleIntensity / 100f);
+            if (KingdomHeartsPlugin.Ui.Configuration.PartyEnabled) { _partyFrame.Draw(); }
+            if(KingdomHeartsPlugin.Ui.Configuration.ExpBarEnabled || KingdomHeartsPlugin.Ui.Configuration.LevelEnabled || KingdomHeartsPlugin.Ui.Configuration.ExpValueTextEnabled || KingdomHeartsPlugin.Ui.Configuration.ClassIconEnabled){ _expBar.Draw(player, HealthY * KingdomHeartsPlugin.Ui.Configuration.HpDamageWobbleIntensity / 100f); }
 
             if (KingdomHeartsPlugin.Ui.Configuration.ShowHpVal && KingdomHeartsPlugin.Ui.Configuration.HpBarEnabled){
                 // Draw HP Value
@@ -325,7 +320,8 @@ namespace KingdomHeartsPlugin.UIElements.HealthBar
         }
 
         private void DrawShield(ImDrawListPtr drawList, uint shieldpercentage, uint maxHp)
-        {
+        {   
+            ShieldRing.Alpha = KingdomHeartsPlugin.Ui.Configuration.ShieldBarTransparency;
             if(shieldpercentage > 0){
                 var fullRing = KingdomHeartsPlugin.IsInPvp ? KingdomHeartsPlugin.Ui.Configuration.PvpHpForFullRing : KingdomHeartsPlugin.Ui.Configuration.HpForFullRing;
                 var minimumMaxHpSize = KingdomHeartsPlugin.IsInPvp ? KingdomHeartsPlugin.Ui.Configuration.PvpMinimumHpForLength : KingdomHeartsPlugin.Ui.Configuration.MinimumHpForLength;
@@ -347,7 +343,8 @@ namespace KingdomHeartsPlugin.UIElements.HealthBar
         }
         
         private void DrawLongShieldBar(ImDrawListPtr drawList, uint shieldpercentage, uint maxHp)
-        {
+        {   
+            //todo: add alpha transparency to long shieldbar
             if (shieldpercentage > 50)
             {
                 float effectiveshieldpercentage = shieldpercentage > 100 ? 50 : shieldpercentage - 50;// need a float for division to yield a usable percentage
@@ -396,11 +393,6 @@ namespace KingdomHeartsPlugin.UIElements.HealthBar
             //todo: implement shield damage/recovery code if desired
         }
 
-        private void DrawParty(ImDrawListPtr drawList)
-        {
-            
-        }
-
         private void DrawRingEdgesAndTrack(ImDrawListPtr drawList, float percent, Vector2 position)
         {
             var size = 256 * KingdomHeartsPlugin.Ui.Configuration.Scale;
@@ -417,7 +409,8 @@ namespace KingdomHeartsPlugin.UIElements.HealthBar
             _limitGauge?.Dispose();
             _resourceBar?.Dispose();
             _expBar?.Dispose();
-
+            _partyFrame.Dispose();
+            
             _limitGauge = null;
             _resourceBar = null;
             _expBar = null;
@@ -435,16 +428,18 @@ namespace KingdomHeartsPlugin.UIElements.HealthBar
         private uint HpBeforeRestored { get; set; }
         private float HpTemp { get; set; }
         private float HpLengthMultiplier { get; set; }
+        
+        // Shield Values
         private uint LastShieldValue { get; set; }
         private uint ShieldBeforeDamaged { get; set; }
         private uint ShieldBeforeRestored { get; set; }
         private float ShieldTemp { get; set; }
+        public float DamagedShieldAlpha { get; private set; }
         
         // Alpha Channels
         public float DamagedHealthAlpha { get; private set; }
         public float LowHealthAlpha { get; private set; }
         private int LowHealthAlphaDirection { get; set; }
-        public float DamagedShieldAlpha { get; private set; }
 
         // Timers
         private float HealthRestoreTime { get; set; }

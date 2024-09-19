@@ -223,13 +223,21 @@ namespace KingdomHeartsPlugin
             {
                 Configuration.HpBarEnabled = enabled;
             }
+            ImGui.Separator();
+            ImGui.Text("Shield");
             var shieldEnabled = Configuration.ShieldBarEnabled;
             if (ImGui.Checkbox("Shield Overlay Enabled", ref shieldEnabled))
             {
                 Configuration.ShieldBarEnabled = shieldEnabled;
             }
-            ImGui.NewLine();
+
+            var shieldTransparency = Configuration.ShieldBarTransparency;
+            if (ImGui.SliderFloat("Shield Transparency", ref shieldTransparency, 0, 1.0f))
+            {
+                Configuration.ShieldBarTransparency = shieldTransparency;
+            }
             ImGui.Separator();
+            ImGui.NewLine();
             ImGui.Text("Length");
             ImGui.Separator();
             if (ImGui.TreeNode("Standard"))
@@ -1088,6 +1096,40 @@ namespace KingdomHeartsPlugin
             {
                 Configuration.PartyEnabled = partyEnabled;
             }
+            ImGui.Separator();
+            var partyDisplayNumber = Configuration.PartyDisplayNumber;
+            if (ImGui.InputInt("Party Members Displayed", ref partyDisplayNumber))
+            {
+                Configuration.PartyDisplayNumber = partyDisplayNumber;
+                if (Configuration.PartyDisplayNumber < 1)
+                    Configuration.PartyDisplayNumber  = 1;
+                if (Configuration.PartyDisplayNumber > 7)
+                    Configuration.PartyDisplayNumber  = 7;
+                
+            }
+            ImGui.Separator();
+            var partyXModifier = Configuration.PartyXModifier;
+            if (ImGui.InputInt("Party X Location", ref partyXModifier, 1, 25))
+            {
+                Configuration.PartyXModifier = partyXModifier;
+            }
+            var partyYModifier = Configuration.PartyYModifier;
+            if (ImGui.InputInt("Party Y Location", ref partyYModifier, 1, 25))
+            {
+                Configuration.PartyYModifier = partyYModifier;
+            }
+            ImGui.Separator();
+            var partyXDistance = Configuration.PartyXDistance;
+            if (ImGui.InputFloat("X Distance Multiplier between Party Members", ref partyXDistance))
+            {
+                Configuration.PartyXDistance = partyXDistance;
+            }
+            var partyYDistance = Configuration.PartyYDistance;
+            if (ImGui.InputFloat("Y Distance Multiplier between Party Members", ref partyYDistance))
+            {
+                Configuration.PartyYDistance = partyYDistance;
+            }
+            ImGui.Separator();
         }
 
         private void SoundSettings()

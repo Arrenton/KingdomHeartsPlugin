@@ -45,7 +45,9 @@ namespace KingdomHeartsPlugin
             Timer = Stopwatch.StartNew();
 
             var assemblyLocation = pluginInterface.AssemblyLocation.DirectoryName + "\\";
-
+            
+            Service.Initialize( pluginInterface);
+            
             TemplateLocation = Path.GetDirectoryName(assemblyLocation);
 
             var configuration = Pi.GetPluginConfig() as Settings ?? new Settings();

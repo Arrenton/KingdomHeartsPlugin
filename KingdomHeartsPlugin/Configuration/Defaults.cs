@@ -31,7 +31,8 @@ namespace KingdomHeartsPlugin.Configuration
         public const float LowHpPercent  = 25f;
         public const bool ShowHpRecovery  = true;
         public const bool ShowHpVal  = true;
-        public const bool ShieldBarEnabled = true;
+        public const bool ShieldBarEnabled = false;
+        public const float ShieldBarTransparency = 1f;
         #endregion
 
         #region Resource
@@ -88,7 +89,12 @@ namespace KingdomHeartsPlugin.Configuration
         
         #region PartyInfo
 
-        public const bool PartyEnabled = true;
+        public const bool PartyEnabled = false;
+        public const int PartyDisplayNumber = 2;
+        public const int PartyXModifier = 0;
+        public const int PartyYModifier = 0;
+        public const float PartyXDistance = 0;
+        public const float PartyYDistance = 0;
 
         #endregion
     }
