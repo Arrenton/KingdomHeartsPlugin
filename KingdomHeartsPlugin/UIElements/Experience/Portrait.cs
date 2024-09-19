@@ -11,6 +11,7 @@ namespace KingdomHeartsPlugin.Configuration
 {
     public partial class Defaults
     {
+        public const bool PortraitEnabled = false;
         public const float PortraitX = 0;
         public const float PortraitY = 0;
         public const float PortraitScale = 1f;
@@ -23,7 +24,8 @@ namespace KingdomHeartsPlugin.Configuration
     }
 
     public partial class Settings
-    {
+    {   
+        public bool PortraitEnabled { get; set; } = Defaults.PortraitEnabled;
         public float PortraitX { get; set; } = Defaults.PortraitX;
         public float PortraitY { get; set; } = Defaults.PortraitY;
         public float PortraitScale { get; set; } = Defaults.PortraitScale;

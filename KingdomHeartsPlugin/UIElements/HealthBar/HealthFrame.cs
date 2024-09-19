@@ -21,6 +21,7 @@ namespace KingdomHeartsPlugin.UIElements.HealthBar
         private LimitGauge _limitGauge;
         private ResourceBar _resourceBar;
         private ClassBar _expBar;
+        private PartyFrame.PartyFrame _partyFrame;
 
 
         public HealthFrame()
@@ -37,9 +38,11 @@ namespace KingdomHeartsPlugin.UIElements.HealthBar
             RingOutline = new Ring(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\ring_outline_segment.png"));
             HealthRing = new Ring(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\ring_health_segment.png"));
             HealthRestoredRing = new Ring(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\ring_health_restored_segment.png"));
+            ShieldRing = new Ring(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\ring_shield_segment.png"));
             _limitGauge = new LimitGauge();
             _resourceBar = new ResourceBar();
             _expBar = new ClassBar();
+            _partyFrame = new PartyFrame.PartyFrame();
         }
 
         public unsafe void Draw()
@@ -73,13 +76,18 @@ namespace KingdomHeartsPlugin.UIElements.HealthBar
                 UpdateHealth(player);
                 DrawHealth(drawList, player.CurrentHp, player.MaxHp);
             }
-
+            if (KingdomHeartsPlugin.Ui.Configuration.ShieldBarEnabled)
+            {
+                // UpdateShield(player);
+                DrawShield(drawList, player.ShieldPercentage, player.MaxHp);
+            }
+            if (KingdomHeartsPlugin.Ui.Configuration.PortraitEnabled) Portrait.Draw(this.HealthY);
             if (KingdomHeartsPlugin.Ui.Configuration.ResourceBarEnabled) _resourceBar.Draw(player);
             if (KingdomHeartsPlugin.Ui.Configuration.LimitBarEnabled) _limitGauge.Draw();
-            _expBar.Draw(player, HealthY * KingdomHeartsPlugin.Ui.Configuration.HpDamageWobbleIntensity / 100f);
+            if (KingdomHeartsPlugin.Ui.Configuration.PartyEnabled) { _partyFrame.Draw(); }
+            if(KingdomHeartsPlugin.Ui.Configuration.ExpBarEnabled || KingdomHeartsPlugin.Ui.Configuration.LevelEnabled || KingdomHeartsPlugin.Ui.Configuration.ExpValueTextEnabled || KingdomHeartsPlugin.Ui.Configuration.ClassIconEnabled){ _expBar.Draw(player, HealthY * KingdomHeartsPlugin.Ui.Configuration.HpDamageWobbleIntensity / 100f); }
 
-            if (KingdomHeartsPlugin.Ui.Configuration.ShowHpVal && KingdomHeartsPlugin.Ui.Configuration.HpBarEnabled)
-            {
+            if (KingdomHeartsPlugin.Ui.Configuration.ShowHpVal && KingdomHeartsPlugin.Ui.Configuration.HpBarEnabled){
                 // Draw HP Value
                 var basePosition = ImGui.GetItemRectMin() + new Vector2(KingdomHeartsPlugin.Ui.Configuration.HpValueTextPositionX, KingdomHeartsPlugin.Ui.Configuration.HpValueTextPositionY) * KingdomHeartsPlugin.Ui.Configuration.Scale;
                 /*float hp = KingdomHeartsPlugin.Ui.Configuration.TruncateHp && player.CurrentHp >= 10000
@@ -261,7 +269,7 @@ namespace KingdomHeartsPlugin.UIElements.HealthBar
                 if (HpTemp < hp)
                     HealthRestoredRing.Draw(drawList, hp / (float)fullRing * HpLengthMultiplier, drawPosition + new Vector2(0, (int) (HealthY * KingdomHeartsPlugin.Ui.Configuration.HpDamageWobbleIntensity / 100f * KingdomHeartsPlugin.Ui.Configuration.Scale)), 3, KingdomHeartsPlugin.Ui.Configuration.Scale);
 
-                HealthRing.Draw(drawList, HpTemp / fullRing * HpLengthMultiplier, drawPosition + new Vector2(0, (int) (HealthY * KingdomHeartsPlugin.Ui.Configuration.HpDamageWobbleIntensity / 100f * KingdomHeartsPlugin.Ui.Configuration.Scale)), 3, KingdomHeartsPlugin.Ui.Configuration.Scale);
+                HealthRing.Draw(drawList, HpTemp / fullRing * HpLengthMultiplier, drawPosition + new Vector2(0, (int) (HealthY * KingdomHeartsPlugin.Ui.Configuration.HpDamageWobbleIntensity / 100f * KingdomHeartsPlugin.Ui.Configuration.Scale)), 3, KingdomHeartsPlugin.Ui.Configuration.Scale); 
             }
             else
             {
@@ -311,6 +319,80 @@ namespace KingdomHeartsPlugin.UIElements.HealthBar
             }
         }
 
+        private void DrawShield(ImDrawListPtr drawList, uint shieldpercentage, uint maxHp)
+        {   
+            ShieldRing.Alpha = KingdomHeartsPlugin.Ui.Configuration.ShieldBarTransparency;
+            if(shieldpercentage > 0){
+                var fullRing = KingdomHeartsPlugin.IsInPvp ? KingdomHeartsPlugin.Ui.Configuration.PvpHpForFullRing : KingdomHeartsPlugin.Ui.Configuration.HpForFullRing;
+                var minimumMaxHpSize = KingdomHeartsPlugin.IsInPvp ? KingdomHeartsPlugin.Ui.Configuration.PvpMinimumHpForLength : KingdomHeartsPlugin.Ui.Configuration.MinimumHpForLength;
+                var maximumMaxHpSize = KingdomHeartsPlugin.IsInPvp ? KingdomHeartsPlugin.Ui.Configuration.PvpMaximumHpForMaximumLength : KingdomHeartsPlugin.Ui.Configuration.MaximumHpForMaximumLength;
+                HpLengthMultiplier = maxHp < minimumMaxHpSize
+                    ?
+                    minimumMaxHpSize / (float) maxHp
+                    : maxHp > maximumMaxHpSize
+                        ? (float)maximumMaxHpSize / maxHp 
+                        : 1f;
+                
+                var drawPosition = ImGui.GetItemRectMin();
+                var maxShieldPercent = HpLengthMultiplier*shieldpercentage/50;
+                
+                ShieldRing.Draw(drawList, maxShieldPercent, drawPosition + new Vector2(0,  (int)(HealthY * KingdomHeartsPlugin.Ui.Configuration.HpDamageWobbleIntensity / 100f * KingdomHeartsPlugin.Ui.Configuration.Scale)), 3, KingdomHeartsPlugin.Ui.Configuration.Scale);
+                RingOutline.Draw(drawList, maxShieldPercent, drawPosition + new Vector2(0, (int)(HealthY * KingdomHeartsPlugin.Ui.Configuration.HpDamageWobbleIntensity / 100f * KingdomHeartsPlugin.Ui.Configuration.Scale)), 3, KingdomHeartsPlugin.Ui.Configuration.Scale);
+                DrawLongShieldBar(drawList, shieldpercentage, maxHp);
+            }
+        }
+        
+        private void DrawLongShieldBar(ImDrawListPtr drawList, uint shieldpercentage, uint maxHp)
+        {   
+            //todo: add alpha transparency to long shieldbar
+            if (shieldpercentage > 50)
+            {
+                float effectiveshieldpercentage = shieldpercentage > 100 ? 50 : shieldpercentage - 50;// need a float for division to yield a usable percentage
+                var fullRing = KingdomHeartsPlugin.IsInPvp ? KingdomHeartsPlugin.Ui.Configuration.PvpHpForFullRing : KingdomHeartsPlugin.Ui.Configuration.HpForFullRing;
+                var HpPerWidth = KingdomHeartsPlugin.IsInPvp ? KingdomHeartsPlugin.Ui.Configuration.PvpHpPerPixelLongBar : KingdomHeartsPlugin.Ui.Configuration.HpPerPixelLongBar;
+                var basePosition = new Vector2(129, 212 + HealthY * KingdomHeartsPlugin.Ui.Configuration.HpDamageWobbleIntensity / 100f);
+                var shieldLength = (maxHp * HpLengthMultiplier - fullRing) / HpPerWidth * (effectiveshieldpercentage/50);
+                var maxShieldLength = (maxHp * HpLengthMultiplier - fullRing) / HpPerWidth * (effectiveshieldpercentage/50);
+                
+                if (shieldLength > 0)
+                {
+                    ImageDrawing.DrawImageScaled(drawList, ShieldBarForegroundTexture, new Vector2(basePosition.X - shieldLength, basePosition.Y + 4), new Vector2(shieldLength, 1));
+
+                }
+
+                if (maxShieldLength > 0)
+                {
+                    ImageDrawing.DrawImageScaled(drawList, BarOutlineTexture, new Vector2(basePosition.X - maxShieldLength, basePosition.Y), new Vector2(maxShieldLength, 1));
+                }
+            }
+
+        }
+        
+        private void UpdateShield(IPlayerCharacter player)
+        {   
+            //todo: implement shield damage/recovery code if desired
+        }
+
+        private void DamagedShield(uint shieldvalue)
+        {
+            //todo: implement shield damage/recovery code if desired
+        }
+
+        private void RestoredShield(uint shieldvalue)
+        {
+            //todo: implement shield damage/recovery code if desired
+        }
+        
+        private void UpdateRestoredShield(uint currentShieldValue)
+        {
+            //todo: implement shield damage/recovery code if desired
+        }
+        
+        private void UpdateDamagedShield()
+        {
+            //todo: implement shield damage/recovery code if desired
+        }
+
         private void DrawRingEdgesAndTrack(ImDrawListPtr drawList, float percent, Vector2 position)
         {
             var size = 256 * KingdomHeartsPlugin.Ui.Configuration.Scale;
@@ -327,7 +409,8 @@ namespace KingdomHeartsPlugin.UIElements.HealthBar
             _limitGauge?.Dispose();
             _resourceBar?.Dispose();
             _expBar?.Dispose();
-
+            _partyFrame.Dispose();
+            
             _limitGauge = null;
             _resourceBar = null;
             _expBar = null;
@@ -336,6 +419,7 @@ namespace KingdomHeartsPlugin.UIElements.HealthBar
             RingOutline = null;
             HealthRestoredRing = null;
             HealthLostRing = null;
+            ShieldRing = null;
         }
 
         // Temp Health Values
@@ -344,7 +428,14 @@ namespace KingdomHeartsPlugin.UIElements.HealthBar
         private uint HpBeforeRestored { get; set; }
         private float HpTemp { get; set; }
         private float HpLengthMultiplier { get; set; }
-
+        
+        // Shield Values
+        private uint LastShieldValue { get; set; }
+        private uint ShieldBeforeDamaged { get; set; }
+        private uint ShieldBeforeRestored { get; set; }
+        private float ShieldTemp { get; set; }
+        public float DamagedShieldAlpha { get; private set; }
+        
         // Alpha Channels
         public float DamagedHealthAlpha { get; private set; }
         public float LowHealthAlpha { get; private set; }
@@ -406,12 +497,21 @@ namespace KingdomHeartsPlugin.UIElements.HealthBar
         {
             get => ImageDrawing.GetSharedTexture(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\ring_end_edge.png"));
         }
-
+        private ISharedImmediateTexture ShieldRingSegmentTexture
+        {
+            get => ImageDrawing.GetSharedTexture(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\ring_shield_segment.png"));
+        }
+        private ISharedImmediateTexture ShieldBarForegroundTexture
+        {
+            get => ImageDrawing.GetSharedTexture(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\HealthBar\bar_shield_foreground.png"));
+        }
+        
         // Rings
         private Ring HealthRing { get; set; }
         private Ring RingOutline { get; set; }
         private Ring HealthRingBg { get; set; }
         private Ring HealthRestoredRing { get; set; }
         private Ring HealthLostRing { get; set; }
+        private Ring ShieldRing { get; set; }
     }
 }

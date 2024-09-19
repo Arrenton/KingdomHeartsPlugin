@@ -37,10 +37,14 @@ namespace KingdomHeartsPlugin.Configuration
         public float LowHpPercent { get; set; } = Defaults.LowHpPercent;
         public bool ShowHpRecovery { get; set; } = Defaults.ShowHpRecovery;
         public bool ShowHpVal { get; set; } = Defaults.ShowHpVal;
+        public bool ShieldBarEnabled { get; set; } = Defaults.ShieldBarEnabled;
+        public float ShieldBarTransparency { get; set; } = Defaults.ShieldBarTransparency;
         #endregion
 
         #region Resource
         public bool ResourceBarEnabled { get; set; } = Defaults.ResourceBarEnabled;
+        public bool LowMpEnabled { get; set; } = Defaults.LowMpEnabled;
+        public float LowMpPercent { get; set; } = Defaults.LowMpPercent;
         public float ResourceBarPositionX { get; set; } = Defaults.ResourceBarPositionX;
         public float ResourceBarPositionY { get; set; } = Defaults.ResourceBarPositionY;
         public float ResourceTextPositionX { get; set; } = Defaults.ResourceTextPositionX;
@@ -87,6 +91,16 @@ namespace KingdomHeartsPlugin.Configuration
 
         public bool LevelEnabled { get; set; } = Defaults.LevelEnabled;
         public bool ClassIconEnabled { get; set; } = Defaults.ClassIconEnabled;
+
+        #endregion
+        
+        #region Party
+        public bool PartyEnabled { get; set; } = Defaults.PartyEnabled;
+        public int PartyDisplayNumber { get; set; } = Defaults.PartyDisplayNumber;
+        public int PartyXModifier { get; set; } = Defaults.PartyXModifier;
+        public int PartyYModifier { get; set; } = Defaults.PartyYModifier;
+        public float PartyXDistance { get; set; } = Defaults.PartyYDistance;
+        public float PartyYDistance { get; set; } = Defaults.PartyYDistance;
 
         #endregion
 

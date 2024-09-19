@@ -165,9 +165,7 @@ namespace KingdomHeartsPlugin.UIElements.Experience
                 drawList.AddImage(_expBarBaseTexture.GetWrapOrEmpty().ImGuiHandle, drawPosition, drawPosition + new Vector2(size, size));
                 drawList.PopClipRect();
             }
-
-            Portrait.Draw(healthY);
-
+            
             if (KingdomHeartsPlugin.Ui.Configuration.ClassIconEnabled)
             {
                 float iconSize = KingdomHeartsPlugin.Ui.Configuration.ClassIconScale;

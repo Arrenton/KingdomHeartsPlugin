@@ -31,10 +31,14 @@ namespace KingdomHeartsPlugin.Configuration
         public const float LowHpPercent  = 25f;
         public const bool ShowHpRecovery  = true;
         public const bool ShowHpVal  = true;
+        public const bool ShieldBarEnabled = false;
+        public const float ShieldBarTransparency = 1f;
         #endregion
 
         #region Resource
         public const bool ResourceBarEnabled  = true;
+        public const bool LowMpEnabled  = false;
+        public const float LowMpPercent = 33;
         public const float ResourceBarPositionX  = 0;
         public const float ResourceBarPositionY  = 200;
         public const float ResourceTextPositionX  = -10;
@@ -78,9 +82,19 @@ namespace KingdomHeartsPlugin.Configuration
         #endregion
 
         #region ClassInfo
-
         public const bool LevelEnabled  = true;
         public const bool ClassIconEnabled  = true;
+
+        #endregion
+        
+        #region PartyInfo
+
+        public const bool PartyEnabled = false;
+        public const int PartyDisplayNumber = 2;
+        public const int PartyXModifier = 0;
+        public const int PartyYModifier = 0;
+        public const float PartyXDistance = 0;
+        public const float PartyYDistance = 0;
 
         #endregion
     }

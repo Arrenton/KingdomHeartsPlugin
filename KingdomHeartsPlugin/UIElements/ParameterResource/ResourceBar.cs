@@ -25,6 +25,18 @@ namespace KingdomHeartsPlugin.UIElements.ParameterResource
         {
             get => ImageDrawing.GetSharedTexture(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\ResourceBar\MP_base.png"));
         }
+        private ISharedImmediateTexture _barBackgroundLowMPTexture
+        {
+            get => ImageDrawing.GetSharedTexture(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\ResourceBar\background_LowMP.png"));
+        }
+        private ISharedImmediateTexture _barForegroundLowMPTexture
+        {
+            get => ImageDrawing.GetSharedTexture(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\ResourceBar\foreground_LowMP.png"));
+        }
+        private ISharedImmediateTexture _mpBaseLowMPTexture
+        {
+            get => ImageDrawing.GetSharedTexture(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\ResourceBar\MP_base_LowMP.png"));
+        }
         private ISharedImmediateTexture _barEdgeTexture
         {
             get => ImageDrawing.GetSharedTexture(Path.Combine(KingdomHeartsPlugin.TemplateLocation, @"Textures\ResourceBar\edge.png"));
@@ -89,7 +101,7 @@ namespace KingdomHeartsPlugin.UIElements.ParameterResource
             var drawList = ImGui.GetWindowDrawList();
             var basePosition =  new Vector2(KingdomHeartsPlugin.Ui.Configuration.ResourceBarPositionX, KingdomHeartsPlugin.Ui.Configuration.ResourceBarPositionY);
             var textPosition = new Vector2(KingdomHeartsPlugin.Ui.Configuration.ResourceTextPositionX, KingdomHeartsPlugin.Ui.Configuration.ResourceTextPositionY) * KingdomHeartsPlugin.Ui.Configuration.Scale;
-
+            
             // Base
             ImageDrawing.DrawImage(drawList, _mpBaseTexture, new Vector2(basePosition.X - 1, basePosition.Y), new Vector4(0, 0, 74 / 80f, 1));
 
@@ -98,6 +110,20 @@ namespace KingdomHeartsPlugin.UIElements.ParameterResource
 
             // FG
             ImageDrawing.DrawImageScaled(drawList, _barForegroundTexture, new Vector2(basePosition.X + 0.33f - ResourceLength, basePosition.Y + 5), new Vector2(ResourceLength, 1f));
+
+            if (KingdomHeartsPlugin.Ui.Configuration.LowMpEnabled && ResourceLength/MaxResourceLength < KingdomHeartsPlugin.Ui.Configuration.LowMpPercent/100){
+                //Draws above MP bar to avoid frames where nothing is being rendered if MP<threshhold
+                // Base
+                ImageDrawing.DrawImage(drawList, _mpBaseLowMPTexture, new Vector2(basePosition.X - 1, basePosition.Y), new Vector4(0, 0, 74 / 80f, 1));
+                
+                // BG
+                ImageDrawing.DrawImageScaled(drawList, _barBackgroundLowMPTexture, new Vector2(basePosition.X + 0.33f - MaxResourceLength, basePosition.Y), new Vector2(MaxResourceLength, 1f));
+                
+                // FG
+                ImageDrawing.DrawImageScaled(drawList, _barForegroundLowMPTexture, new Vector2(basePosition.X + 0.33f - ResourceLength, basePosition.Y + 5), new Vector2(ResourceLength, 1f));
+
+            }
+
 
             // Edge
             ImageDrawing.DrawImage(drawList, _barEdgeTexture, new Vector2(basePosition.X + 0.65f - MaxResourceLength - 6, basePosition.Y));

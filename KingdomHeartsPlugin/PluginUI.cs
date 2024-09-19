@@ -223,8 +223,21 @@ namespace KingdomHeartsPlugin
             {
                 Configuration.HpBarEnabled = enabled;
             }
-            ImGui.NewLine();
             ImGui.Separator();
+            ImGui.Text("Shield");
+            var shieldEnabled = Configuration.ShieldBarEnabled;
+            if (ImGui.Checkbox("Shield Overlay Enabled", ref shieldEnabled))
+            {
+                Configuration.ShieldBarEnabled = shieldEnabled;
+            }
+
+            var shieldTransparency = Configuration.ShieldBarTransparency;
+            if (ImGui.SliderFloat("Shield Transparency", ref shieldTransparency, 0, 1.0f))
+            {
+                Configuration.ShieldBarTransparency = shieldTransparency;
+            }
+            ImGui.Separator();
+            ImGui.NewLine();
             ImGui.Text("Length");
             ImGui.Separator();
             if (ImGui.TreeNode("Standard"))
@@ -484,6 +497,19 @@ namespace KingdomHeartsPlugin
             if (ImGui.Checkbox("Enabled", ref enabled))
             {
                 Configuration.ResourceBarEnabled = enabled;
+            }
+            ImGui.NewLine();
+            ImGui.Separator();
+            ImGui.Text("Low MP");
+            var enableLowMp = Configuration.LowMpEnabled;
+            if (ImGui.Checkbox("Low MP Enabled", ref enableLowMp))
+            {
+                Configuration.LowMpEnabled = enableLowMp;
+            }
+            var lowMpPercent = Configuration.LowMpPercent;
+            if (ImGui.SliderFloat("Percent To Trigger Low MP", ref lowMpPercent, 0, 100))
+            {
+                Configuration.LowMpPercent = lowMpPercent;
             }
             ImGui.NewLine();
             ImGui.Separator();
@@ -919,6 +945,14 @@ namespace KingdomHeartsPlugin
             string supportedImages = "Image Files{.png,.jpg,.jpeg,.bmp}";
 
             if (!ImGui.BeginTabItem("Portrait")) return;
+            ImGui.Text("Portrait Info");
+            ImGui.Separator();
+            var portaitEnabled = Configuration.PortraitEnabled;
+            if (ImGui.Checkbox("Portrait Enabled", ref portaitEnabled))
+            {
+                Configuration.PortraitEnabled = portaitEnabled;
+            }
+            ImGui.Separator();
 
             var portraitPos = new Vector2(Configuration.PortraitX, Configuration.PortraitY);
             if (ImGui.DragFloat2("Position (X, Y)", ref portraitPos))
@@ -1051,6 +1085,53 @@ namespace KingdomHeartsPlugin
             ImGui.EndTabItem();
         }
 
+        private void PartySettings(){
+            if (!ImGui.BeginTabItem("Party Info")) return;
+            
+            ImGui.Text("Party Info");
+            ImGui.Separator();
+
+            var partyEnabled = Configuration.PartyEnabled;
+            if (ImGui.Checkbox("Party Enabled", ref partyEnabled))
+            {
+                Configuration.PartyEnabled = partyEnabled;
+            }
+            ImGui.Separator();
+            var partyDisplayNumber = Configuration.PartyDisplayNumber;
+            if (ImGui.InputInt("Party Members Displayed", ref partyDisplayNumber))
+            {
+                Configuration.PartyDisplayNumber = partyDisplayNumber;
+                if (Configuration.PartyDisplayNumber < 1)
+                    Configuration.PartyDisplayNumber  = 1;
+                if (Configuration.PartyDisplayNumber > 7)
+                    Configuration.PartyDisplayNumber  = 7;
+                
+            }
+            ImGui.Separator();
+            var partyXModifier = Configuration.PartyXModifier;
+            if (ImGui.InputInt("Party X Location", ref partyXModifier, 1, 25))
+            {
+                Configuration.PartyXModifier = partyXModifier;
+            }
+            var partyYModifier = Configuration.PartyYModifier;
+            if (ImGui.InputInt("Party Y Location", ref partyYModifier, 1, 25))
+            {
+                Configuration.PartyYModifier = partyYModifier;
+            }
+            ImGui.Separator();
+            var partyXDistance = Configuration.PartyXDistance;
+            if (ImGui.InputFloat("X Distance Multiplier between Party Members", ref partyXDistance))
+            {
+                Configuration.PartyXDistance = partyXDistance;
+            }
+            var partyYDistance = Configuration.PartyYDistance;
+            if (ImGui.InputFloat("Y Distance Multiplier between Party Members", ref partyYDistance))
+            {
+                Configuration.PartyYDistance = partyYDistance;
+            }
+            ImGui.Separator();
+        }
+
         private void SoundSettings()
         {
             if (!ImGui.BeginTabItem("Sound")) return;
@@ -1090,6 +1171,7 @@ namespace KingdomHeartsPlugin
                 ClassSettings();
                 PortraitSettings();
                 SoundSettings();
+                PartySettings();
                 _dialogManager.Draw();
 
                 ImGui.EndTabBar();
