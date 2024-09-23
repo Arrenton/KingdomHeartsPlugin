@@ -97,10 +97,6 @@ namespace KingdomHeartsPlugin.Configuration
         #region Party
         public bool PartyEnabled { get; set; } = Defaults.PartyEnabled;
         public int PartyDisplayNumber { get; set; } = Defaults.PartyDisplayNumber;
-        public int PartyXModifier { get; set; } = Defaults.PartyXModifier;
-        public int PartyYModifier { get; set; } = Defaults.PartyYModifier;
-        public float PartyXDistance { get; set; } = Defaults.PartyYDistance;
-        public float PartyYDistance { get; set; } = Defaults.PartyYDistance;
 
         #endregion
 

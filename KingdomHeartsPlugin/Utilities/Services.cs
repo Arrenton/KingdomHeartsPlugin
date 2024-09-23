@@ -12,6 +12,7 @@ namespace KingdomHeartsPlugin;
 public sealed class Service
 {
     [PluginService] public static IPartyList PartyList { get; private set; }
+    [PluginService] public static IPluginLog Logging { get; private set; }
     
     internal static void Initialize(IDalamudPluginInterface iface)
     {

@@ -1107,29 +1107,6 @@ namespace KingdomHeartsPlugin
                     Configuration.PartyDisplayNumber  = 7;
                 
             }
-            ImGui.Separator();
-            var partyXModifier = Configuration.PartyXModifier;
-            if (ImGui.InputInt("Party X Location", ref partyXModifier, 1, 25))
-            {
-                Configuration.PartyXModifier = partyXModifier;
-            }
-            var partyYModifier = Configuration.PartyYModifier;
-            if (ImGui.InputInt("Party Y Location", ref partyYModifier, 1, 25))
-            {
-                Configuration.PartyYModifier = partyYModifier;
-            }
-            ImGui.Separator();
-            var partyXDistance = Configuration.PartyXDistance;
-            if (ImGui.InputFloat("X Distance Multiplier between Party Members", ref partyXDistance))
-            {
-                Configuration.PartyXDistance = partyXDistance;
-            }
-            var partyYDistance = Configuration.PartyYDistance;
-            if (ImGui.InputFloat("Y Distance Multiplier between Party Members", ref partyYDistance))
-            {
-                Configuration.PartyYDistance = partyYDistance;
-            }
-            ImGui.Separator();
         }
 
         private void SoundSettings()

@@ -8,6 +8,7 @@ using KingdomHeartsPlugin.UIElements.Experience;
 using KingdomHeartsPlugin.UIElements.LimitBreak;
 using KingdomHeartsPlugin.UIElements.ParameterResource;
 using KingdomHeartsPlugin.Utilities;
+using KingdomHeartsPlugin.UIElements.TargetHealth;
 using System;
 using System.IO;
 using System.Numerics;
@@ -22,6 +23,7 @@ namespace KingdomHeartsPlugin.UIElements.HealthBar
         private ResourceBar _resourceBar;
         private ClassBar _expBar;
         private PartyFrame.PartyFrame _partyFrame;
+        // private TargetHealth.TargetHealth _targetHealth;
 
 
         public HealthFrame()
@@ -84,9 +86,8 @@ namespace KingdomHeartsPlugin.UIElements.HealthBar
             if (KingdomHeartsPlugin.Ui.Configuration.PortraitEnabled) Portrait.Draw(this.HealthY);
             if (KingdomHeartsPlugin.Ui.Configuration.ResourceBarEnabled) _resourceBar.Draw(player);
             if (KingdomHeartsPlugin.Ui.Configuration.LimitBarEnabled) _limitGauge.Draw();
-            if (KingdomHeartsPlugin.Ui.Configuration.PartyEnabled) { _partyFrame.Draw(); }
-            if(KingdomHeartsPlugin.Ui.Configuration.ExpBarEnabled || KingdomHeartsPlugin.Ui.Configuration.LevelEnabled || KingdomHeartsPlugin.Ui.Configuration.ExpValueTextEnabled || KingdomHeartsPlugin.Ui.Configuration.ClassIconEnabled){ _expBar.Draw(player, HealthY * KingdomHeartsPlugin.Ui.Configuration.HpDamageWobbleIntensity / 100f); }
-
+            if (KingdomHeartsPlugin.Ui.Configuration.PartyEnabled) _partyFrame.Draw(player); 
+            if (KingdomHeartsPlugin.Ui.Configuration.ExpBarEnabled || KingdomHeartsPlugin.Ui.Configuration.LevelEnabled || KingdomHeartsPlugin.Ui.Configuration.ExpValueTextEnabled || KingdomHeartsPlugin.Ui.Configuration.ClassIconEnabled){ _expBar.Draw(player, HealthY * KingdomHeartsPlugin.Ui.Configuration.HpDamageWobbleIntensity / 100f); }
             if (KingdomHeartsPlugin.Ui.Configuration.ShowHpVal && KingdomHeartsPlugin.Ui.Configuration.HpBarEnabled){
                 // Draw HP Value
                 var basePosition = ImGui.GetItemRectMin() + new Vector2(KingdomHeartsPlugin.Ui.Configuration.HpValueTextPositionX, KingdomHeartsPlugin.Ui.Configuration.HpValueTextPositionY) * KingdomHeartsPlugin.Ui.Configuration.Scale;
@@ -410,10 +411,13 @@ namespace KingdomHeartsPlugin.UIElements.HealthBar
             _resourceBar?.Dispose();
             _expBar?.Dispose();
             _partyFrame.Dispose();
+            // _targetHealth.Dispose();
             
             _limitGauge = null;
             _resourceBar = null;
             _expBar = null;
+            _partyFrame = null;
+            // _targetHealth = null;
             HealthRing = null;
             HealthRingBg = null;
             RingOutline = null;

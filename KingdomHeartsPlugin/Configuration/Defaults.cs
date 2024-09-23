@@ -91,10 +91,6 @@ namespace KingdomHeartsPlugin.Configuration
 
         public const bool PartyEnabled = false;
         public const int PartyDisplayNumber = 2;
-        public const int PartyXModifier = 0;
-        public const int PartyYModifier = 0;
-        public const float PartyXDistance = 0;
-        public const float PartyYDistance = 0;
 
         #endregion
     }
