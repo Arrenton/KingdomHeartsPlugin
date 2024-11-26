@@ -115,9 +115,9 @@ namespace KingdomHeartsPlugin.UIElements.Experience
         }
 
 
-        private static string PortraitNormal { get; set; }
-        private static string PortraitHurt { get; set; }
-        private static string PortraitDanger { get; set; }
-        private static string PortraitCombat { get; set; }
+        private static string PortraitNormal { get; set; } = "";
+        private static string PortraitHurt { get; set; } = "";
+        private static string PortraitDanger { get; set; } = "";
+        private static string PortraitCombat { get; set; } = "";
     }
 }

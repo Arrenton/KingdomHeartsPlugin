@@ -1,201 +1,114 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Dalamud.NET.Sdk/11.0.0">
 
   <PropertyGroup>
-    <TargetFramework>net8.0-windows7.0</TargetFramework>
-    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <Version>1.0.7.1</Version>
     <Authors>Gotest</Authors>
-    <Platforms>x64</Platforms>
-	  <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Nullable>enable</Nullable>
   </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <PlatformTarget>x64</PlatformTarget>
-  </PropertyGroup>
-  
-  <Target Name="PackagePlugin" AfterTargets="Build" Condition=" '$(Configuration)' == 'Release' ">
-    <DalamudPackager ProjectDir="$(ProjectDir)" OutputPath="$(OutputPath)" AssemblyName="$(AssemblyName)" MakeZip="true" />
-  </Target>
-
-  <PropertyGroup>
-    <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
-	<RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
-  </PropertyGroup>
-
-    <PropertyGroup>
-	    <DalamudLibPath>$(appdata)\XIVLauncher\addon\Hooks\dev\</DalamudLibPath>
-    </PropertyGroup>
-
-    <PropertyGroup Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))'">
-	    <DalamudLibPath>$(DALAMUD_HOME)/</DalamudLibPath>
-    </PropertyGroup>
-
-    <ItemGroup>
-	    <PackageReference Include="DalamudPackager" Version="2.1.13" />
-	    <Reference Include="FFXIVClientStructs">
-		    <HintPath>$(DalamudLibPath)FFXIVClientStructs.dll</HintPath>
-		    <Private>false</Private>
-	    </Reference>
-	    <Reference Include="Newtonsoft.Json">
-		    <HintPath>$(DalamudLibPath)Newtonsoft.Json.dll</HintPath>
-		    <Private>false</Private>
-	    </Reference>
-	    <Reference Include="Dalamud">
-		    <HintPath>$(DalamudLibPath)Dalamud.dll</HintPath>
-		    <Private>false</Private>
-	    </Reference>
-	    <Reference Include="ImGui.NET">
-		    <HintPath>$(DalamudLibPath)ImGui.NET.dll</HintPath>
-		    <Private>false</Private>
-	    </Reference>
-	    <Reference Include="ImGuiScene">
-		    <HintPath>$(DalamudLibPath)ImGuiScene.dll</HintPath>
-		    <Private>false</Private>
-	    </Reference>
-	    <Reference Include="Lumina">
-		    <HintPath>$(DalamudLibPath)Lumina.dll</HintPath>
-		    <Private>false</Private>
-	    </Reference>
-	    <Reference Include="Lumina.Excel">
-		    <HintPath>$(DalamudLibPath)Lumina.Excel.dll</HintPath>
-		    <Private>false</Private>
-	    </Reference>
-    </ItemGroup>
   
   <ItemGroup>
-    <None Update="KingdomHeartsPlugin.json">
+    <Content Include="KingdomHeartsPlugin.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Textures\bar_textures.png">
+    </Content>
+    <Content Include="Textures\bar_textures.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </None>
-    <None Update="Textures\Experience\ring_experience_colorless_segment.png">
+    </Content>
+    <Content Include="Textures\Experience\ring_experience_colorless_segment.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Textures\Experience\ring_experience_outline.png">
+    </Content>
+    <Content Include="Textures\Experience\ring_experience_outline.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Textures\Experience\ring_experience_segment.png">
+    </Content>
+    <Content Include="Textures\Experience\ring_experience_segment.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Textures\HealthBar\bar_colorless.png">
+    </Content>
+    <Content Include="Textures\HealthBar\bar_colorless.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Textures\HealthBar\bar_edge.png">
+    </Content>
+    <Content Include="Textures\HealthBar\bar_edge.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Textures\HealthBar\bar_foreground.png">
+    </Content>
+    <Content Include="Textures\HealthBar\bar_foreground.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Textures\HealthBar\bar_outline.png">
+    </Content>
+    <Content Include="Textures\HealthBar\bar_outline.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Textures\HealthBar\bar_recovery.png">
+    </Content>
+    <Content Include="Textures\HealthBar\bar_recovery.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Textures\HealthBar\ring_base_edge.png">
+    </Content>
+    <Content Include="Textures\HealthBar\ring_base_edge.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Textures\HealthBar\ring_end_edge.png">
+    </Content>
+    <Content Include="Textures\HealthBar\ring_end_edge.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Textures\HealthBar\ring_health_restored_segment.png">
+    </Content>
+    <Content Include="Textures\HealthBar\ring_health_restored_segment.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Textures\HealthBar\ring_health_segment.png">
+    </Content>
+    <Content Include="Textures\HealthBar\ring_health_segment.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Textures\HealthBar\ring_health_segment_2.png">
+    </Content>
+    <Content Include="Textures\HealthBar\ring_outline_segment.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Textures\HealthBar\ring_outline_segment.png">
+    </Content>
+    <Content Include="Textures\HealthBar\ring_track.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Textures\HealthBar\ring_track.png">
+    </Content>
+    <Content Include="Textures\HealthBar\ring_value_segment.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Textures\HealthBar\ring_value_segment.png">
+    </Content>
+    <Content Include="Textures\LimitGauge\background.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Textures\LimitGauge\background.png">
+    </Content>
+    <Content Include="Textures\LimitGauge\gauge_colored.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Textures\LimitGauge\gauge_colored.png">
+    </Content>
+    <Content Include="Textures\LimitGauge\gauge_white.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Textures\LimitGauge\gauge_white.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Textures\LimitGauge\limit_gauge.png">
+    </Content>
+    <Content Include="Textures\LimitGauge\limit_gauge.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </None>
-    <None Update="Textures\LimitGauge\limit_text.png">
+    </Content>
+    <Content Include="Textures\LimitGauge\limit_text.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Textures\LimitGauge\max.png">
+    </Content>
+    <Content Include="Textures\LimitGauge\max.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Textures\LimitGauge\number_0.png">
+    </Content>
+    <Content Include="Textures\LimitGauge\number_0.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Textures\LimitGauge\number_1.png">
+    </Content>
+    <Content Include="Textures\LimitGauge\number_1.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Textures\LimitGauge\number_2.png">
+    </Content>
+    <Content Include="Textures\LimitGauge\number_2.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Textures\LimitGauge\number_3.png">
+    </Content>
+    <Content Include="Textures\LimitGauge\number_3.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Textures\LimitGauge\number_4.png">
+    </Content>
+    <Content Include="Textures\LimitGauge\number_4.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Textures\LimitGauge\number_5.png">
+    </Content>
+    <Content Include="Textures\LimitGauge\number_5.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Textures\LimitGauge\orb.png">
+    </Content>
+    <Content Include="Textures\LimitGauge\orb.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Textures\ResourceBar\background.png">
+    </Content>
+    <Content Include="Textures\ResourceBar\background.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Textures\ResourceBar\edge.png">
+    </Content>
+    <Content Include="Textures\ResourceBar\edge.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Textures\ResourceBar\foreground.png">
+    </Content>
+    <Content Include="Textures\ResourceBar\foreground.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Textures\ResourceBar\MP_base.png">
+    </Content>
+    <Content Include="Textures\ResourceBar\MP_base.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Textures\ring_base_edge.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Textures\ring_end_edge.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Textures\ring_experience_outline.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Textures\ring_experience_segment.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Textures\ring_health_segment.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Textures\ring_outline_segment.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Textures\ring_track.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Textures\ring_value_segment.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    </Content>
   </ItemGroup>
 
 </Project>

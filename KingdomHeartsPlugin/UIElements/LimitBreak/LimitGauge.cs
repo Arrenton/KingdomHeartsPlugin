@@ -3,6 +3,8 @@ using System.IO;
 using System.Numerics;
 using Dalamud.Interface.Internal;
 using Dalamud.Interface.Textures;
+using FFXIVClientStructs.Attributes;
+using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using FFXIVClientStructs.FFXIV.Component.GUI;
 using ImGuiNET;
 using ImGuiScene;
@@ -67,7 +69,6 @@ namespace KingdomHeartsPlugin.UIElements.LimitBreak
             var LBWidget = (AtkUnitBase*)KingdomHeartsPlugin.Gui.GetAddonByName("_LimitBreak", 1);
             //Get Compressed Aether Bar
             var CAWidget = (AtkUnitBase*)KingdomHeartsPlugin.Gui.GetAddonByName("HWDAetherGauge", 1);
-
             var foundCaGauge = false;
 
             LimitBreakMaxLevel = 1;
@@ -158,7 +159,7 @@ namespace KingdomHeartsPlugin.UIElements.LimitBreak
             return true;
         }
 
-        public void Draw()
+        public unsafe void Draw()
         {
             if (!UpdateLimitBreak()) return;
 

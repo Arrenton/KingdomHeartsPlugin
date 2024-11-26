@@ -93,7 +93,7 @@ namespace KingdomHeartsPlugin.Configuration
         // the below exist just to make saving less cumbersome
 
         [NonSerialized]
-        private IDalamudPluginInterface _pluginInterface;
+        private IDalamudPluginInterface _pluginInterface = null!;
 
         public void Initialize(IDalamudPluginInterface pluginInterface)
         {
