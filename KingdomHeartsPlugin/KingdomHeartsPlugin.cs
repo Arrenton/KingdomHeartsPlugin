@@ -70,11 +70,6 @@ namespace KingdomHeartsPlugin
             Pi.UiBuilder.OpenMainUi += ToggleMainVisibility;
             Pi.UiBuilder.OpenConfigUi += DrawConfigUi;
             Cs.TerritoryChanged += OnTerritoryChange;
-
-            if (Cs.LocalPlayer != null)
-            {
-                IsInPvp = GetTerritoryPvP(Cs.TerritoryType);
-            }
         }
 
         public void Dispose()
