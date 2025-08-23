@@ -6,7 +6,7 @@ using Dalamud.Interface.Textures;
 using FFXIVClientStructs.Attributes;
 using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using FFXIVClientStructs.FFXIV.Component.GUI;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 using ImGuiScene;
 using KingdomHeartsPlugin.Utilities;
 
@@ -66,9 +66,9 @@ namespace KingdomHeartsPlugin.UIElements.LimitBreak
         private unsafe bool UpdateLimitBreak()
         {
             //Get Limit Break Bar
-            var LBWidget = (AtkUnitBase*)KingdomHeartsPlugin.Gui.GetAddonByName("_LimitBreak", 1);
+            var LBWidget = (AtkUnitBase*)KingdomHeartsPlugin.Gui.GetAddonByName("_LimitBreak", 1).Address;
             //Get Compressed Aether Bar
-            var CAWidget = (AtkUnitBase*)KingdomHeartsPlugin.Gui.GetAddonByName("HWDAetherGauge", 1);
+            var CAWidget = (AtkUnitBase*)KingdomHeartsPlugin.Gui.GetAddonByName("HWDAetherGauge", 1).Address;
             var foundCaGauge = false;
 
             LimitBreakMaxLevel = 1;

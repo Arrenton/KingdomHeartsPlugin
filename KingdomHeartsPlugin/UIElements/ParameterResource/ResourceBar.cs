@@ -4,7 +4,7 @@ using System.Numerics;
 using Dalamud.Game.ClientState.Objects.SubKinds;
 using Dalamud.Interface.Internal;
 using Dalamud.Interface.Textures;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 using ImGuiScene;
 using KingdomHeartsPlugin.Enums;
 using KingdomHeartsPlugin.Utilities;
