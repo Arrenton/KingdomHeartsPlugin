@@ -3,7 +3,7 @@ using System.IO;
 using System.Numerics;
 using Dalamud.Interface.Internal;
 using Dalamud.Interface.Textures;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 using ImGuiScene;
 using KingdomHeartsPlugin.Utilities;
 
@@ -29,7 +29,7 @@ namespace KingdomHeartsPlugin.UIElements
             var color = ImGui.GetColorU32(new Vector4(Color.X, Color.Y, Color.Z, Alpha));
             drawList.PushClipRect(position, position + new Vector2(sizeHalf, sizeHalf + 1));
 
-            ImageDrawing.ImageRotated(drawList, Image.GetWrapOrEmpty().ImGuiHandle, new Vector2(position.X + sizeHalf, position.Y + sizeHalf), new Vector2(size, size), (-0.25f + Math.Min(percent * 0.25f * segments, 0.25f)) * (float)Math.PI * 2, color);
+            ImageDrawing.ImageRotated(drawList, Image.GetWrapOrEmpty().Handle, new Vector2(position.X + sizeHalf, position.Y + sizeHalf), new Vector2(size, size), (-0.25f + Math.Min(percent * 0.25f * segments, 0.25f)) * (float)Math.PI * 2, color);
 
             drawList.PopClipRect();
 
@@ -38,7 +38,7 @@ namespace KingdomHeartsPlugin.UIElements
 
             drawList.PushClipRect(position + new Vector2(sizeHalf - 1, 0), position + new Vector2(sizeHalf * 2 + 2, sizeHalf));
 
-            ImageDrawing.ImageRotated(drawList, Image.GetWrapOrEmpty().ImGuiHandle, new Vector2(position.X + sizeHalf, position.Y + sizeHalf), new Vector2(size, size), (-0.25f + Math.Min(Math.Max(percent * 0.25f * segments, 0.25f), 0.5f)) * (float)Math.PI * 2, color);
+            ImageDrawing.ImageRotated(drawList, Image.GetWrapOrEmpty().Handle, new Vector2(position.X + sizeHalf, position.Y + sizeHalf), new Vector2(size, size), (-0.25f + Math.Min(Math.Max(percent * 0.25f * segments, 0.25f), 0.5f)) * (float)Math.PI * 2, color);
 
             drawList.PopClipRect();
 
@@ -47,7 +47,7 @@ namespace KingdomHeartsPlugin.UIElements
 
             drawList.PushClipRect(position + new Vector2(sizeHalf - 1, sizeHalf - 1), position + new Vector2(sizeHalf * 2 + 2, sizeHalf * 2  + 2));
 
-            ImageDrawing.ImageRotated(drawList, Image.GetWrapOrEmpty().ImGuiHandle, new Vector2(position.X + sizeHalf, position.Y + sizeHalf), new Vector2(size, size), (-0.25f + Math.Min(Math.Max(percent * 0.25f * segments, 0.5f), 0.75f)) * (float)Math.PI * 2, color);
+            ImageDrawing.ImageRotated(drawList, Image.GetWrapOrEmpty().Handle, new Vector2(position.X + sizeHalf, position.Y + sizeHalf), new Vector2(size, size), (-0.25f + Math.Min(Math.Max(percent * 0.25f * segments, 0.5f), 0.75f)) * (float)Math.PI * 2, color);
 
             drawList.PopClipRect();
             
@@ -56,7 +56,7 @@ namespace KingdomHeartsPlugin.UIElements
 
             drawList.PushClipRect(position + new Vector2(-1, sizeHalf - 1), position + new Vector2(sizeHalf + 2, sizeHalf * 2 + 2));
 
-            ImageDrawing.ImageRotated(drawList, Image.GetWrapOrEmpty().ImGuiHandle, new Vector2(position.X + sizeHalf, position.Y + sizeHalf), new Vector2(size, size), (-0.25f + Math.Min(Math.Max(percent * 0.25f * segments, 0.75f), 1f)) * (float)Math.PI * 2, color);
+            ImageDrawing.ImageRotated(drawList, Image.GetWrapOrEmpty().Handle, new Vector2(position.X + sizeHalf, position.Y + sizeHalf), new Vector2(size, size), (-0.25f + Math.Min(Math.Max(percent * 0.25f * segments, 0.75f), 1f)) * (float)Math.PI * 2, color);
 
             drawList.PopClipRect();
         }

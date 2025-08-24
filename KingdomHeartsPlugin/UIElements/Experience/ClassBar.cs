@@ -1,5 +1,5 @@
 ﻿using Dalamud.Game.ClientState.Objects.SubKinds;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 using ImGuiScene;
 using KingdomHeartsPlugin.Utilities;
 using System;
@@ -68,7 +68,7 @@ namespace KingdomHeartsPlugin.UIElements.Experience
 
         private unsafe void Update(IPlayerCharacter player)
         {
-            _addonExp = (AddonExp*)KingdomHeartsPlugin.Gui.GetAddonByName("_Exp", 1);
+            _addonExp = (AddonExp*)KingdomHeartsPlugin.Gui.GetAddonByName("_Exp", 1).Address;
             try
             {
                 UpdateExperience(_addonExp->CurrentExp, _addonExp->RequiredExp, _addonExp->RestedExp, player.ClassJob.RowId, player.Level);
@@ -77,7 +77,7 @@ namespace KingdomHeartsPlugin.UIElements.Experience
             {
                 try
                 {
-                    _addonExp = (AddonExp*)KingdomHeartsPlugin.Gui.GetAddonByName("_Exp", 1);
+                    _addonExp = (AddonExp*)KingdomHeartsPlugin.Gui.GetAddonByName("_Exp", 1).Address;
                 }
                 catch
                 {
@@ -162,7 +162,7 @@ namespace KingdomHeartsPlugin.UIElements.Experience
                 ExperienceRing?.Draw(drawList, ExpTemp / MaxExperience, drawPosition, 4, KingdomHeartsPlugin.Ui.Configuration.Scale);
 
                 drawList.PushClipRect(drawPosition, drawPosition + new Vector2(size, size));
-                drawList.AddImage(_expBarBaseTexture.GetWrapOrEmpty().ImGuiHandle, drawPosition, drawPosition + new Vector2(size, size));
+                drawList.AddImage(_expBarBaseTexture.GetWrapOrEmpty().Handle, drawPosition, drawPosition + new Vector2(size, size));
                 drawList.PopClipRect();
             }
 

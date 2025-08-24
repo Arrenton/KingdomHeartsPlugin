@@ -2,7 +2,7 @@
 using Dalamud.Interface.Internal;
 using Dalamud.Interface.Textures;
 using FFXIVClientStructs.FFXIV.Component.GUI;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 using KingdomHeartsPlugin.Enums;
 using KingdomHeartsPlugin.UIElements.Experience;
 using KingdomHeartsPlugin.UIElements.LimitBreak;
@@ -45,7 +45,7 @@ namespace KingdomHeartsPlugin.UIElements.HealthBar
         public unsafe void Draw()
         {
             var player = KingdomHeartsPlugin.Cs.LocalPlayer;
-            var parameterWidget = (AtkUnitBase*) KingdomHeartsPlugin.Gui.GetAddonByName("_ParameterWidget", 1);
+            var parameterWidget = (AtkUnitBase*) KingdomHeartsPlugin.Gui.GetAddonByName("_ParameterWidget", 1).Address;
 
             if (parameterWidget != null)
             {
@@ -64,7 +64,7 @@ namespace KingdomHeartsPlugin.UIElements.HealthBar
 
             var drawList = ImGui.GetWindowDrawList();
 
-            if (ImGui.GetDrawListSharedData() == IntPtr.Zero) return;
+            if (ImGui.GetDrawListSharedData().IsNull) return;
 
             ImGui.Dummy(new Vector2(220, 256));
 
@@ -320,9 +320,9 @@ namespace KingdomHeartsPlugin.UIElements.HealthBar
             var size = 256 * KingdomHeartsPlugin.Ui.Configuration.Scale;
 
             drawList.PushClipRect(position, position + new Vector2(size, size));
-            drawList.AddImage(RingTrackTexture.GetWrapOrEmpty().ImGuiHandle, position, position + new Vector2(size, size));
-            drawList.AddImage(RingBaseTexture.GetWrapOrEmpty().ImGuiHandle, position, position + new Vector2(size, size));
-            ImageDrawing.ImageRotated(drawList, RingEndTexture.GetWrapOrEmpty().ImGuiHandle, new Vector2(position.X + size / 2f, position.Y + size / 2f), new Vector2(RingEndTexture.GetWrapOrEmpty().Width * KingdomHeartsPlugin.Ui.Configuration.Scale, RingEndTexture.GetWrapOrEmpty().Height * KingdomHeartsPlugin.Ui.Configuration.Scale), Math.Min(percent, 1) * 0.75f * (float)Math.PI * 2);
+            drawList.AddImage(RingTrackTexture.GetWrapOrEmpty().Handle, position, position + new Vector2(size, size));
+            drawList.AddImage(RingBaseTexture.GetWrapOrEmpty().Handle, position, position + new Vector2(size, size));
+            ImageDrawing.ImageRotated(drawList, RingEndTexture.GetWrapOrEmpty().Handle, new Vector2(position.X + size / 2f, position.Y + size / 2f), new Vector2(RingEndTexture.GetWrapOrEmpty().Width * KingdomHeartsPlugin.Ui.Configuration.Scale, RingEndTexture.GetWrapOrEmpty().Height * KingdomHeartsPlugin.Ui.Configuration.Scale), Math.Min(percent, 1) * 0.75f * (float)Math.PI * 2);
             drawList.PopClipRect();
         }
 

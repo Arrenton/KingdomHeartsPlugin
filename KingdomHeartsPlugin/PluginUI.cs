@@ -1,7 +1,7 @@
 ﻿using Dalamud.Interface;
 using Dalamud.Utility;
 using FFXIVClientStructs.FFXIV.Component.GUI;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 using KingdomHeartsPlugin.Configuration;
 using KingdomHeartsPlugin.Enums;
 using KingdomHeartsPlugin.UIElements.Experience;
@@ -126,8 +126,8 @@ namespace KingdomHeartsPlugin
 
         private unsafe void CheckNpcTalkingVisibility()
         {
-            var actionBarWidget = (AtkUnitBase*)KingdomHeartsPlugin.Gui.GetAddonByName("_ActionBar", 1);
-            var actionCrossWidget = (AtkUnitBase*)KingdomHeartsPlugin.Gui.GetAddonByName("_ActionCross", 1);
+            var actionBarWidget = (AtkUnitBase*)KingdomHeartsPlugin.Gui.GetAddonByName("_ActionBar", 1).Address;
+            var actionCrossWidget = (AtkUnitBase*)KingdomHeartsPlugin.Gui.GetAddonByName("_ActionCross", 1).Address;
 
             if (actionBarWidget == null || actionCrossWidget == null || !KingdomHeartsPlugin.Ui.Configuration.HideWhenNpcTalking) return;
 
@@ -190,7 +190,7 @@ namespace KingdomHeartsPlugin
 
                 ImGui.NewLine();
 
-                //ImGui.Image(_testTextureWrap.ImGuiHandle, new Vector2(pos[0], pos[1]), new Vector2(uv[0], uv[1]), new Vector2(uv[2], uv[3]));
+                //ImGui.Image(_testTextureWrap.Handle, new Vector2(pos[0], pos[1]), new Vector2(uv[0], uv[1]), new Vector2(uv[2], uv[3]));
 
                 var dl = ImGui.GetWindowDrawList();
                 ImGui.Dummy(new Vector2(_width, _height));
@@ -199,7 +199,7 @@ namespace KingdomHeartsPlugin
                 Vector2 position = ImGui.GetItemRectMin();
 
                 dl.PushClipRect(position - new Vector2(0, 0), position + new Vector2(_width, _height));
-                dl.AddImageQuad(_testTextureWrap.ImGuiHandle, 
+                dl.AddImageQuad(_testTextureWrap.Handle, 
                     position + new Vector2((pos[0]), (pos[1])), 
                     position + new Vector2((pos[2]), (pos[3])),
                     position + new Vector2((pos2[0]), (pos2[1])),

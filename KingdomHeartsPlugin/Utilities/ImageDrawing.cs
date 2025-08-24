@@ -2,7 +2,7 @@
 using Dalamud.Interface.Internal;
 using Dalamud.Interface.Textures;
 using Dalamud.Plugin.Services;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 using ImGuiScene;
 using System;
 using System.Collections.Generic;
@@ -23,7 +23,7 @@ namespace KingdomHeartsPlugin.Utilities
         {
             return new Vector2(v.X * cosA - v.Y * sinA, v.X * sinA + v.Y * cosA);
         }
-        public static void ImageRotated(ImDrawListPtr d, IntPtr texId, Vector2 position, Vector2 size, float angle, uint col = UInt32.MaxValue)
+        public static void ImageRotated(ImDrawListPtr d, ImTextureID texId, Vector2 position, Vector2 size, float angle, uint col = UInt32.MaxValue)
         {
             float cosA = (float)Math.Cos(angle);
             float sinA = (float)Math.Sin(angle);
@@ -67,7 +67,7 @@ namespace KingdomHeartsPlugin.Utilities
             };
 
             d.PushClipRect(finalPosition - scaledSize * 2, finalPosition + scaledSize * 2);
-            d.AddImageQuad(texture.GetWrapOrEmpty().ImGuiHandle, pos[0], pos[1], pos[2], pos[3], uvs[0], uvs[1], uvs[2], uvs[3], col);
+            d.AddImageQuad(texture.GetWrapOrEmpty().Handle, pos[0], pos[1], pos[2], pos[3], uvs[0], uvs[1], uvs[2], uvs[3], col);
             d.PopClipRect();
         }
 
@@ -88,7 +88,7 @@ namespace KingdomHeartsPlugin.Utilities
             var imageHeight = image.GetWrapOrEmpty().Height;
             var finalPosition = basePosition + position * KingdomHeartsPlugin.Ui.Configuration.Scale;
 
-            d.AddImage(image.GetWrapOrEmpty().ImGuiHandle, finalPosition, finalPosition + size, finalPosition + new Vector2(imageArea.X / imageWidth, imageArea.Y / imageHeight), finalPosition + new Vector2((imageArea.X + imageArea.Z) / imageWidth,
+            d.AddImage(image.GetWrapOrEmpty().Handle, finalPosition, finalPosition + size, finalPosition + new Vector2(imageArea.X / imageWidth, imageArea.Y / imageHeight), finalPosition + new Vector2((imageArea.X + imageArea.Z) / imageWidth,
                 (imageArea.Y + imageArea.W) / imageHeight), color);
         }
 
@@ -116,7 +116,7 @@ namespace KingdomHeartsPlugin.Utilities
             };
 
             d.PushClipRect(finalPosition - imageSize * 2, finalPosition + imageSize * 2);
-            d.AddImageQuad(image.GetWrapOrEmpty().ImGuiHandle, finalPosition + ULPos * KingdomHeartsPlugin.Ui.Configuration.Scale, finalPosition + new Vector2(imageSize.X, 0) + URPos * KingdomHeartsPlugin.Ui.Configuration.Scale, finalPosition + imageSize + LRPos * KingdomHeartsPlugin.Ui.Configuration.Scale, finalPosition + new Vector2(0, imageSize.Y) + LLPos * KingdomHeartsPlugin.Ui.Configuration.Scale, uvs[0], uvs[1], uvs[2], uvs[3], color);
+            d.AddImageQuad(image.GetWrapOrEmpty().Handle, finalPosition + ULPos * KingdomHeartsPlugin.Ui.Configuration.Scale, finalPosition + new Vector2(imageSize.X, 0) + URPos * KingdomHeartsPlugin.Ui.Configuration.Scale, finalPosition + imageSize + LRPos * KingdomHeartsPlugin.Ui.Configuration.Scale, finalPosition + new Vector2(0, imageSize.Y) + LLPos * KingdomHeartsPlugin.Ui.Configuration.Scale, uvs[0], uvs[1], uvs[2], uvs[3], color);
             d.PopClipRect();
         }
 
@@ -141,7 +141,7 @@ namespace KingdomHeartsPlugin.Utilities
             };
 
             d.PushClipRect(finalPosition - Vector2.One * 3, finalPosition + imageSize + Vector2.One * 3);
-            d.AddImageQuad(image.GetWrapOrEmpty().ImGuiHandle, finalPosition, finalPosition + new Vector2(imageSize.X, 0), finalPosition + imageSize, finalPosition + new Vector2(0, imageSize.Y), uvs[0], uvs[1], uvs[2], uvs[3], color);
+            d.AddImageQuad(image.GetWrapOrEmpty().Handle, finalPosition, finalPosition + new Vector2(imageSize.X, 0), finalPosition + imageSize, finalPosition + new Vector2(0, imageSize.Y), uvs[0], uvs[1], uvs[2], uvs[3], color);
             d.PopClipRect();
         }
         public static void DrawImageQuad(ImDrawListPtr d, ISharedImmediateTexture image, Vector2 position, Vector2 ULPos, Vector2 URPos, Vector2 LRPos, Vector2 LLPos, Vector2 uv1, Vector2 uv2, Vector2 uv3, Vector2 uv4, uint color = UInt32.MaxValue)
@@ -151,7 +151,7 @@ namespace KingdomHeartsPlugin.Utilities
             var finalPosition = basePosition + position;
 
             d.PushClipRect(finalPosition - imageSize * 2, finalPosition + imageSize * 2);
-            d.AddImageQuad(image.GetWrapOrEmpty().ImGuiHandle, finalPosition + ULPos, finalPosition + new Vector2(imageSize.X, 0) + URPos, finalPosition + imageSize + LRPos, finalPosition + new Vector2(0, imageSize.Y) + LLPos, uv1, uv2, uv3, uv4, color);
+            d.AddImageQuad(image.GetWrapOrEmpty().Handle, finalPosition + ULPos, finalPosition + new Vector2(imageSize.X, 0) + URPos, finalPosition + imageSize + LRPos, finalPosition + new Vector2(0, imageSize.Y) + LLPos, uv1, uv2, uv3, uv4, color);
             d.PopClipRect();
         }
 
@@ -169,7 +169,7 @@ namespace KingdomHeartsPlugin.Utilities
             var finalPosition = basePosition + position * KingdomHeartsPlugin.Ui.Configuration.Scale;
 
             d.PushClipRect(finalPosition - imageSize * 2, finalPosition + imageSize * 2);
-            d.AddImage(image.GetWrapOrEmpty().ImGuiHandle, finalPosition, finalPosition + imageSize, new Vector2(0,0), new Vector2(1,1), color);
+            d.AddImage(image.GetWrapOrEmpty().Handle, finalPosition, finalPosition + imageSize, new Vector2(0,0), new Vector2(1,1), color);
             d.PopClipRect();
         }
 
@@ -187,7 +187,7 @@ namespace KingdomHeartsPlugin.Utilities
             var finalPosition = basePosition + new Vector2(position.X, position.Y) * KingdomHeartsPlugin.Ui.Configuration.Scale;
 
             d.PushClipRect(finalPosition - imageSize * 2, finalPosition + imageSize * 2);
-            d.AddImage(image.GetWrapOrEmpty().ImGuiHandle, finalPosition, finalPosition + imageSize, new Vector2(0, 0), new Vector2(1, 1), color);
+            d.AddImage(image.GetWrapOrEmpty().Handle, finalPosition, finalPosition + imageSize, new Vector2(0, 0), new Vector2(1, 1), color);
             d.PopClipRect();
         }
 
@@ -206,7 +206,7 @@ namespace KingdomHeartsPlugin.Utilities
             var finalPosition = basePosition + position * KingdomHeartsPlugin.Ui.Configuration.Scale;
 
             d.PushClipRect(finalPosition - imageSize * 2, finalPosition + imageSize * 2);
-            d.AddImage(image.GetWrapOrEmpty().ImGuiHandle, finalPosition, finalPosition + imageSize, new Vector2(0, 0), new Vector2(1, 1), color);
+            d.AddImage(image.GetWrapOrEmpty().Handle, finalPosition, finalPosition + imageSize, new Vector2(0, 0), new Vector2(1, 1), color);
             d.PopClipRect();
         }
 
@@ -225,7 +225,7 @@ namespace KingdomHeartsPlugin.Utilities
             var finalPosition = basePosition + position * KingdomHeartsPlugin.Ui.Configuration.Scale;
 
             d.PushClipRect(finalPosition - imageSize * 2, finalPosition + imageSize * 2);
-            d.AddImage(image.GetWrapOrEmpty().ImGuiHandle, finalPosition, finalPosition + imageSize * new Vector2(1 - imagePortion.X, 1 - imagePortion.Y) * new Vector2(imagePortion.Z, imagePortion.W),
+            d.AddImage(image.GetWrapOrEmpty().Handle, finalPosition, finalPosition + imageSize * new Vector2(1 - imagePortion.X, 1 - imagePortion.Y) * new Vector2(imagePortion.Z, imagePortion.W),
                 new Vector2(imagePortion.X, imagePortion.Y), new Vector2(imagePortion.Z, imagePortion.W), color);
             d.PopClipRect();
         }
@@ -233,7 +233,7 @@ namespace KingdomHeartsPlugin.Utilities
         internal static void DrawIcon(ImDrawListPtr d, uint icon, Vector2 size, Vector2 position)
         {
             var tex = GetIconImage(icon);
-            if (tex != null && tex.GetWrapOrEmpty().ImGuiHandle != IntPtr.Zero)
+            if (tex != null && tex.GetWrapOrEmpty().Handle != IntPtr.Zero)
             {
                 var iconSize = new Vector2(tex.GetWrapOrEmpty().Width, tex.GetWrapOrEmpty().Height) * size;
                 var imagePosition = position - new Vector2((int)Math.Floor(iconSize.X / 2f), (int)Math.Floor(iconSize.Y / 2f));
