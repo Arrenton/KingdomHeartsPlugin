@@ -1,10 +1,8 @@
 ﻿using System.IO;
 using System.Numerics;
 using Dalamud.Game.ClientState.Objects.Enums;
-using Dalamud.Interface.Internal;
 using Dalamud.Utility;
 using Dalamud.Bindings.ImGui;
-using ImGuiScene;
 using KingdomHeartsPlugin.Utilities;
 
 namespace KingdomHeartsPlugin.Configuration

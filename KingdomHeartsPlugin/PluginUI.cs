@@ -1,5 +1,4 @@
-﻿using Dalamud.Interface;
-using Dalamud.Utility;
+﻿using Dalamud.Utility;
 using FFXIVClientStructs.FFXIV.Component.GUI;
 using Dalamud.Bindings.ImGui;
 using KingdomHeartsPlugin.Configuration;

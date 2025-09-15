@@ -1,13 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Numerics;
-using Dalamud.Interface.Internal;
 using Dalamud.Interface.Textures;
-using FFXIVClientStructs.Attributes;
-using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using FFXIVClientStructs.FFXIV.Component.GUI;
 using Dalamud.Bindings.ImGui;
-using ImGuiScene;
 using KingdomHeartsPlugin.Utilities;
 
 namespace KingdomHeartsPlugin.UIElements.LimitBreak

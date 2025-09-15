@@ -1,15 +1,11 @@
 ﻿using Dalamud.Game.ClientState.Objects.SubKinds;
 using Dalamud.Bindings.ImGui;
-using ImGuiScene;
 using KingdomHeartsPlugin.Utilities;
 using System;
 using System.IO;
 using System.Numerics;
-using System.Runtime.InteropServices;
 using KingdomHeartsPlugin.Enums;
-using Dalamud.Interface.Internal;
 using Dalamud.Interface.Textures;
-using FFXIVClientStructs.Attributes;
 using FFXIVClientStructs.FFXIV.Client.UI;
 
 namespace KingdomHeartsPlugin.Configuration

@@ -1,13 +1,8 @@
-﻿using Dalamud.Interface.FontIdentifier;
-using Dalamud.Interface.Internal;
-using Dalamud.Interface.Textures;
-using Dalamud.Plugin.Services;
+﻿using Dalamud.Interface.Textures;
 using Dalamud.Bindings.ImGui;
-using ImGuiScene;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
-using System.Threading.Tasks;
 
 namespace KingdomHeartsPlugin.Utilities
 {
