@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project Sdk="Dalamud.NET.Sdk/13.1.0">
+<Project Sdk="Dalamud.NET.Sdk/14.0.1">
 
   <PropertyGroup>
-    <Version>1.0.7.4</Version>
+    <Version>1.0.7.5</Version>
     <Authors>Gotest</Authors>
   </PropertyGroup>
   
