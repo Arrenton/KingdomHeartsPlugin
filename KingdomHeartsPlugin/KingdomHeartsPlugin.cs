@@ -28,8 +28,8 @@ namespace KingdomHeartsPlugin
             IGameGui gameGui,
             IDataManager dataManager,
             ITextureProvider textureProvider,
-            IPluginLog pluginLog
-
+            IPluginLog pluginLog,
+            IObjectTable objectTable
             )
         {
             Pi = pluginInterface;
@@ -40,7 +40,7 @@ namespace KingdomHeartsPlugin
             Dm = dataManager;
             Tp = textureProvider;
             Pl = pluginLog;
-
+            Ot = objectTable;
 
             Timer = Stopwatch.StartNew();
 
@@ -161,7 +161,7 @@ namespace KingdomHeartsPlugin
         public static IDataManager Dm { get; private set; } = null!;
         public static IPluginLog Pl { get; private set; } = null!;
         public static ITextureProvider Tp { get; private set; } = null!;
-
+        public static IObjectTable Ot { get; private set; } = null!;
         public static PluginUI Ui { get; private set; } = null!;
 
         public static Stopwatch? Timer { get; private set; }

@@ -43,7 +43,7 @@ namespace KingdomHeartsPlugin.UIElements.HealthBar
 
         public unsafe void Draw()
         {
-            var player = KingdomHeartsPlugin.Cs.LocalPlayer;
+            var player = KingdomHeartsPlugin.Ot.LocalPlayer;
             var parameterWidget = (AtkUnitBase*) KingdomHeartsPlugin.Gui.GetAddonByName("_ParameterWidget", 1).Address;
 
             if (parameterWidget != null)
