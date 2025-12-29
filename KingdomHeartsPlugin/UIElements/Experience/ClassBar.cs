@@ -168,10 +168,10 @@ namespace KingdomHeartsPlugin.UIElements.Experience
             {
                 float iconSize = KingdomHeartsPlugin.Ui.Configuration.ClassIconScale;
 
-                if (KingdomHeartsPlugin.Cs.LocalPlayer is null) return;
+                if (KingdomHeartsPlugin.Ot.LocalPlayer is null) return;
 
                 
-                ImageDrawing.DrawIcon(drawList, (ushort)(62000 + KingdomHeartsPlugin.Cs.LocalPlayer.ClassJob.RowId),
+                ImageDrawing.DrawIcon(drawList, (ushort)(62000 + KingdomHeartsPlugin.Ot.LocalPlayer.ClassJob.RowId),
                     new Vector2(iconSize, iconSize),
                     //new Vector2((int)(size / 2f), (int)(size / 2f + 18 * KingdomHeartsPlugin.Ui.Configuration.Scale)) +
                     new Vector2((int)(KingdomHeartsPlugin.Ui.Configuration.ClassIconX), (int)(KingdomHeartsPlugin.Ui.Configuration.ClassIconY)) +
@@ -180,7 +180,7 @@ namespace KingdomHeartsPlugin.UIElements.Experience
 
             if (KingdomHeartsPlugin.Ui.Configuration.LevelEnabled)
                 ImGuiAdditions.TextShadowedDrawList(drawList, KingdomHeartsPlugin.Ui.Configuration.LevelTextSize,
-                    $"Lv{KingdomHeartsPlugin.Cs.LocalPlayer?.Level}",
+                    $"Lv{KingdomHeartsPlugin.Ot.LocalPlayer?.Level}",
                     drawPosition + new Vector2(KingdomHeartsPlugin.Ui.Configuration.LevelTextX, KingdomHeartsPlugin.Ui.Configuration.LevelTextY) * KingdomHeartsPlugin.Ui.Configuration.Scale,
                     new Vector4(249 / 255f, 247 / 255f, 232 / 255f, 0.9f),
                     new Vector4(96 / 255f, 78 / 255f, 23 / 255f, 0.25f), 3,

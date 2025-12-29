@@ -77,18 +77,18 @@ namespace KingdomHeartsPlugin.UIElements.Experience
 
         public static void Draw(float healthY)
         {
-            if (KingdomHeartsPlugin.Cs.LocalPlayer == null) return;
+            if (KingdomHeartsPlugin.Ot.LocalPlayer == null) return;
 
             var drawList = ImGui.GetWindowDrawList();
             var drawPosition = new Vector2(KingdomHeartsPlugin.Ui.Configuration.PortraitX, KingdomHeartsPlugin.Ui.Configuration.PortraitY + healthY * KingdomHeartsPlugin.Ui.Configuration.Scale);
             var damagedAlpha = KingdomHeartsPlugin.Ui.Configuration.PortraitRedWhenDamaged ? KingdomHeartsPlugin.Ui.HealthFrame.DamagedHealthAlpha : 0;
             var realDamagedAlpha = KingdomHeartsPlugin.Ui.HealthFrame.DamagedHealthAlpha;
             var lowHealthAlpha = KingdomHeartsPlugin.Ui.Configuration.PortraitRedWhenDanger ? KingdomHeartsPlugin.Ui.HealthFrame.LowHealthAlpha : 0;
-            var dangerStatus = KingdomHeartsPlugin.Cs.LocalPlayer.CurrentHp <= KingdomHeartsPlugin.Cs.LocalPlayer.MaxHp * (KingdomHeartsPlugin.Ui.Configuration.LowHpPercent / 100f);
+            var dangerStatus = KingdomHeartsPlugin.Ot.LocalPlayer.CurrentHp <= KingdomHeartsPlugin.Ot.LocalPlayer.MaxHp * (KingdomHeartsPlugin.Ui.Configuration.LowHpPercent / 100f);
             var portraitDangerAlpha = KingdomHeartsPlugin.Ui.Configuration.PortraitRedWhenDanger && dangerStatus ? 1 : 0;
-            var inCombat = (KingdomHeartsPlugin.Cs.LocalPlayer.StatusFlags & StatusFlags.InCombat) == StatusFlags.InCombat;
+            var inCombat = (KingdomHeartsPlugin.Ot.LocalPlayer.StatusFlags & StatusFlags.InCombat) == StatusFlags.InCombat;
 
-            //ImGuiAdditions.TextShadowedDrawList(drawList,24, $"{KingdomHeartsPlugin.Cs.LocalPlayer.StatusFlags}", ImGui.GetItemRectMin() + new Vector2(0,0), new Vector4(1, 1, 1, 1), new Vector4(0,0,0,1));
+            //ImGuiAdditions.TextShadowedDrawList(drawList,24, $"{KingdomHeartsPlugin.Ot.LocalPlayer.StatusFlags}", ImGui.GetItemRectMin() + new Vector2(0,0), new Vector4(1, 1, 1, 1), new Vector4(0,0,0,1));
 
             if (realDamagedAlpha > 0.595f && PortraitHurt != "")
             {
