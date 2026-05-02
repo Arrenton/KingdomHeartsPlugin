@@ -113,7 +113,7 @@ namespace KingdomHeartsPlugin
             Ui.Configuration.Save();
         }
 
-        private void OnTerritoryChange(ushort e)
+        private void OnTerritoryChange(uint e)
         {
             IsInPvp = GetTerritoryPvP(e);
         }
